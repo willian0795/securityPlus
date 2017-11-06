@@ -66,6 +66,7 @@
     }
 
     function iniciar(){
+        $("#cnt-tabla").load("<?php echo site_url(); ?>/usuarios/tablausuarios");
         tablausuarios();        
     }
 
@@ -81,21 +82,7 @@
     }
 
     function tablausuarios(){        
-        if(window.XMLHttpRequest){// code for IE7+, Firefox, Chrome, Opera, Safari
-            xmlhttpB=new XMLHttpRequest();
-        }else{// code for IE6, IE5
-            xmlhttpB=new ActiveXObject("Microsoft.XMLHTTPB");
-        }
-        
-        xmlhttpB.onreadystatechange=function(){
-            if (xmlhttpB.readyState==4 && xmlhttpB.status==200){
-                  document.getElementById("cnt-tabla").innerHTML=xmlhttpB.responseText;
-                  $('#myTable').DataTable();
-            }
-        }
-        
-        xmlhttpB.open("GET","<?php echo site_url(); ?>/usuarios/tablausuarios",true);
-        xmlhttpB.send();
+        $("#cnt-tabla").load("<?php echo site_url(); ?>/usuarios/tablausuarios");
     }
 
     function show_contra(id){

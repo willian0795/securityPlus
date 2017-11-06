@@ -1,6 +1,6 @@
 <h5>Dependencia: <span class="text-danger">*</span></h5>
-                                <select id="dependencia" name="dependencia" class="form-control custom-select" style="width: 100%">
-                                    <option value="0">[Ninguna]</option>
+<select id="dependencia" name="dependencia" class="form-control custom-select" style="width: 100%">
+    <option value="0">[Ninguna]</option>
 <?php
         $id_sistema = $_GET["id_sistema"];
         $modelo = $this->db->query("SELECT * FROM org_modulo WHERE (dependencia = '' OR dependencia = 0 OR dependencia IS NULL) AND id_sistema = $id_sistema ORDER BY orden");
@@ -24,4 +24,4 @@
             }
         }
     ?>
-                                </select>
+</select>

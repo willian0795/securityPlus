@@ -16,6 +16,10 @@ class Sistema extends CI_Controller {
 		$this->load->view('templates/footer');
 	}
 
+	public function tabla_sistema(){
+		$this->load->view('sistemas/tabla_sistema');
+	}
+
 	public function gestionar_sistemas(){		
 
 		if($this->input->post('band') == "save"){

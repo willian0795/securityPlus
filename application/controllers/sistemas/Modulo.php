@@ -16,6 +16,18 @@ class modulo extends CI_Controller {
 		$this->load->view('templates/footer');
 	}
 
+	public function combo_modulo(){
+		$this->load->view('sistemas/combo_modulo');
+	}
+
+	public function tabla_modulo(){
+		$this->load->view('sistemas/tabla_modulo');
+	}
+
+	public function tabla_modulo2(){
+		$this->load->view('sistemas/tabla_modulo2');
+	}
+
 	public function gestionar_modulos(){
 		if($this->input->post('band') == "save"){
 			$data = array(
