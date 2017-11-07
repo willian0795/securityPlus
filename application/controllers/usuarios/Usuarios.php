@@ -16,6 +16,10 @@ class Usuarios extends CI_Controller {
 		$this->load->view('templates/footer');
 	}
 
+	public function tabla_usuario(){
+		$this->load->view('usuarios/tabla_usuarios');
+	}
+
 	public function gestionar_usuarios(){
 		if($this->input->post('estado') == 'on'){
 			$estado = 1;

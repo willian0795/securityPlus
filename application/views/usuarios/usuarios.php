@@ -66,7 +66,6 @@
     }
 
     function iniciar(){
-        $("#cnt-tabla").load("<?php echo site_url(); ?>/usuarios/tablausuarios");
         tablausuarios();        
     }
 
@@ -82,7 +81,7 @@
     }
 
     function tablausuarios(){        
-        $("#cnt-tabla").load("<?php echo site_url(); ?>/usuarios/tablausuarios");
+        $("#cnt-tabla").load("<?php echo site_url(); ?>/usuarios/usuarios/tabla_usuario");
     }
 
     function show_contra(id){
