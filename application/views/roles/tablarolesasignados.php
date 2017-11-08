@@ -27,11 +27,22 @@
                            echo "<td>".$fila->id_usuario_rol."</td>";
 
                            $this->db->where("id_usuario",$fila->id_usuario);
-                            $queryUsu = $this->db->get("org_usuario");
-                            foreach ($queryUsu->result() as $queryFilaUsu) {}
-                           echo "<td>".$queryFilaUsu->nombre_completo."</td>";
-                       
-                           echo "<td>".$fila->id_rol."</td>";
+                           $queryUsu = $this->db->get("org_usuario");
+                           if(is_null($queryUsu)){
+                            echo "--";
+                           }else{
+                                foreach ($queryUsu->result() as $queryFilaUsu) {
+                                    echo "<td>".$queryFilaUsu->nombre_completo."</td>";
+                                }
+                            }
+                            $this->db->where("id_rol",$fila->id_rol);
+                            $queryRol = $this->db->get("org_rol");
+                          
+                                foreach ($queryRol->result() as $queryFilaRol) {
+                                    echo "<td>".$queryFilaRol->nombre_rol."</td>";
+                                }
+                         
+                           
                            
                            
                            $array = array($fila->id_usuario_rol, $fila->id_usuario, $fila->id_rol);

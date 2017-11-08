@@ -8,9 +8,9 @@ class Rolesasignado_model extends CI_Model {
 		$this->load->database();
 	}
 
-	function insertar_rol($data){
+	function insertar_usuario_rol($data){
 		//$id = $this->obtener_ultimo_id("vyp_oficinas","id_oficina");
-		if($this->db->insert('org_rol', array('nombre_rol' => $data['nombre_rol'], 'descripcion_rol' => $data['descripcion_rol']))){
+		if($this->db->insert('org_usuario_rol', array('id_usuario' => $data['id_usuario'], 'id_rol' => $data['id_rol']))){
 			return "exito";
 		}else{
 			return "fracaso";
@@ -33,18 +33,29 @@ class Rolesasignado_model extends CI_Model {
         $query->free_result();
         return $data;
 	}
+	function mostrar_roles(){
+		 $data = array();
+        $query = $this->db->get('org_rol');
+        if ($query->num_rows() > 0) {
+            foreach ($query->result_array() as $row){
+                    $data[] = $row;
+                }
+        }
+        $query->free_result();
+        return $data;
+	}
 
-	function editar_rol($data){
-		$this->db->where("id_rol",$data["id_rol"]);
-		if($this->db->update('org_rol', array('nombre_rol' => $data['nombre_rol'], 'descripcion_rol' => $data['descripcion_rol']))){
+	function editar_usuario_rol($data){
+		$this->db->where("id_usuario_rol",$data["id_usuario_rol"]);
+		if($this->db->update('org_usuario_rol', array('id_usuario' => $data['id_usuario'], 'id_rol' => $data['id_rol']))){
 			return "exito";
 		}else{
 			return "fracaso";
 		}
 	}
 
-	function eliminar_rol($data){
-		if($this->db->delete("org_rol",array('id_rol' => $data['id_rol']))){
+	function eliminar_usuario_rol($data){
+		if($this->db->delete("org_usuario_rol",array('id_usuario_rol' => $data['id_usuario_rol']))){
 			return "exito";
 		}else{
 			return "fracaso";

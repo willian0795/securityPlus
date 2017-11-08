@@ -13,34 +13,35 @@ class Asignar_rol extends CI_Controller {
 	public function index(){
 		$this->load->view('templates/header');
 		$data['usuarios_list'] = $this->rolesasignado_model->mostrar_usuarios();
+		$data['rol_list'] = $this->rolesasignado_model->mostrar_roles();
 		$this->load->view('roles/asignar',$data);
 		$this->load->view('templates/footer');
 	}
 
 
-	public function gestionar_rol(){
+	public function gestionar_usuario_rol(){
 		if($this->input->post('band') == "save"){
 			$data = array(
-			'nombre_rol' => $this->input->post('nombre_rol'), 
-			'descripcion_rol' => $this->input->post('descripcion_rol')
+			'id_usuario' => $this->input->post('id_usuario'), 
+			'id_rol' => $this->input->post('id_rol')
 			);
-			echo $this->roles_model->insertar_rol($data);
+			echo $this->rolesasignado_model->insertar_usuario_rol($data);
 
 		}else if($this->input->post('band') == "edit"){
 
 			$data = array(
-			'id_rol' => $this->input->post('id_rol'), 
-			'nombre_rol' => $this->input->post('nombre_rol'), 
-			'descripcion_rol' => $this->input->post('descripcion_rol')
+			'id_usuario_rol' => $this->input->post('id_usuario_rol'), 
+			'id_usuario' => $this->input->post('id_usuario'), 
+			'id_rol' => $this->input->post('id_rol')
 			);
-			echo $this->roles_model->editar_rol($data);
+			echo $this->rolesasignado_model->editar_usuario_rol($data);
 
 		}else if($this->input->post('band') == "delete"){
 
 			$data = array(
-			'id_rol' => $this->input->post('id_rol')
+			'id_usuario_rol' => $this->input->post('id_usuario_rol')
 			);
-			echo $this->roles_model->eliminar_rol($data);
+			echo $this->rolesasignado_model->eliminar_usuario_rol($data);
 
 		}
 	}

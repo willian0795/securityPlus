@@ -26,10 +26,10 @@
       }
     </style>
 <script type="text/javascript">
-    function cambiar_editar(id_rol,nombre_rol,descripcion_rol){
+    function cambiar_editar(id_usuario_rol,id_usuario,id_rol){
+         $("#id_usuario_rol").val(id_usuario_rol);
+         $("#id_usuario").val(id_usuario);
          $("#id_rol").val(id_rol);
-         $("#nombre_rol").val(nombre_rol);
-         $("#descripcion_rol").val(descripcion_rol);
          
 
         $("#ttl_form").removeClass("bg-success");
@@ -40,12 +40,12 @@
 
         $("#cnt-tabla").hide(0);
         $("#cnt_form").show(0);
-        $("#ttl_form").children("h4").html("<span class='fa fa-wrench'></span> Editar Rol");
+        $("#ttl_form").children("h4").html("<span class='fa fa-wrench'></span> Editar asignación");
     }
 
     function cambiar_nuevo(){
-        $("#nombre_rol").val("");
-         $("#descripcion_rol").val("");
+        $("#id_usuario").val("");
+         $("#id_rol").val("");
          
         $("#band").val("save");
 
@@ -58,13 +58,13 @@
         $("#cnt-tabla").hide(0);
         $("#cnt_form").show(0);
 
-        $("#ttl_form").children("h4").html("<span class='mdi mdi-plus'></span> Nuevo Rol");
+        $("#ttl_form").children("h4").html("<span class='mdi mdi-plus'></span> Nueva asignación");
     }
 
 
     function cerrar_mantenimiento(){
-        $("#nombre_rol").val("");
-        $("#descripcion_rol").val("");
+        $("#id_usuario").val("");
+        $("#id_rol").val("");
 
         $("#cnt-tabla").show(0);
         $("#cnt_form").hide(0);
@@ -156,13 +156,13 @@
                         <div class="card-actions text-white">
                             <a style="font-size: 16px;" onclick="cerrar_mantenimiento();"><i class="mdi mdi-window-close"></i></a>
                         </div>
-                        <h4 class="card-title m-b-0 text-white">Listado de Roles</h4>
+                        <h4 class="card-title m-b-0 text-white">Listado de Roles Asignados</h4>
                     </div>
                     <div class="card-body b-t">
 
                         <?php echo form_open('', array('id' => 'formajax', 'style' => 'margin-top: 0px;', 'class' => 'm-t-40', 'novalidate' => '')); ?>
                             <input type="hidden" id="band" name="band" value="save">
-                            <input type="hidden" id="id_rol" name="id_rol">
+                            <input type="hidden" id="id_usuario_rol" name="id_usuario_rol">
                             
 
 
@@ -170,25 +170,27 @@
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label for="id_usuario" class="font-weight-bold">Nombre del usuario: <span class="text-danger">*</span></label>
-                                        
-                                            
-                                                <?php  echo "<input name='' id='' class='form-control' list='usu'>";
-                                                echo "<datalist id='usu'>";
+                                                <?php  echo "<select class='form-control' name='id_usuario' id='id_usuario'>";
                                                     echo "<option value=''>[Seleccione]</option>";
                                                     foreach ($usuarios_list as $list) {
                                                         echo "<option value='". $list['id_usuario'] . "'>" . $list['nombre_completo'] . "</option>";
                                                     }
-                                                echo "</datalist>"; 
+                                                echo "</select><br/>"; 
                                             ?>
-                                           
                                        <div class="help-block"></div>
                                     </div>
 
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label for="descripcion_rol" class="font-weight-bold">Descripción del rol :<span class="text-danger">*</span></label>
-                                        <input type="text" class="form-control" id="descripcion_rol" name="descripcion_rol" required="" placeholder="Descripción del rol" data-validation-required-message="Este campo es requerido">
+                                        <label for="id_rol" class="font-weight-bold">Nombre del rol :<span class="text-danger">*</span></label>
+                                       <?php  echo "<select class='form-control' name='id_rol' id='id_rol'>";
+                                                    echo "<option value=''>[Seleccione]</option>";
+                                                    foreach ($rol_list as $list) {
+                                                        echo "<option value='". $list['id_rol'] . "'>" . $list['nombre_rol'] . "</option>";
+                                                    }
+                                                echo "</select><br/>"; 
+                                            ?>
                                         <div class="help-block"></div> </div>
                                 </div>
                             </div>
@@ -235,7 +237,7 @@ $(function(){
         formData.append("dato", "valor");
 
         $.ajax({
-            url: "<?php echo site_url(); ?>/roles/roles/gestionar_rol",
+            url: "<?php echo site_url(); ?>/roles/asignar_rol/gestionar_usuario_rol",
             type: "post",
             dataType: "html",
             data: formData,
