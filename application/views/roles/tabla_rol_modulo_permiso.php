@@ -48,7 +48,7 @@
                                 echo "<td>Desactivado</td>";
                             }
                             
-                           $array = array($fila->id_rol_permiso,$fila->id_rol, $fila->id_modulo, $fila->id_permiso,$fila->estado);
+                           $array = array($fila->id_rol_permiso,$fila->id_rol,$queryFilaMod->id_sistema, $fila->id_modulo, $fila->id_permiso,$fila->estado);
                            echo boton_tabla($array,"cambiar_editar");
                            echo "</tr>";
                         }

@@ -43,5 +43,17 @@ class Combox_rol_modulo_permiso_model extends CI_Model {
         $query->free_result();
         return $data;
     }
+    function getPermiso() {
+        $data = array();
+    
+        $query = $this->db->get('org_permiso');
+        if ($query->num_rows() > 0) {
+            foreach ($query->result_array() as $row){
+                    $data[] = $row;
+                }
+        }
+        $query->free_result();
+        return $data;
+    }
 
 }

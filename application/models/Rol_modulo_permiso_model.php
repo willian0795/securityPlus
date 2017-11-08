@@ -8,9 +8,9 @@ class Rol_modulo_permiso_model extends CI_Model {
 		$this->load->database();
 	}
 
-	function insertar_rol($data){
+	function insertar_rol_modulo_permiso($data){
 		//$id = $this->obtener_ultimo_id("vyp_oficinas","id_oficina");
-		if($this->db->insert('org_rol', array('nombre_rol' => $data['nombre_rol'], 'descripcion_rol' => $data['descripcion_rol']))){
+		if($this->db->insert('org_rol_modulo_permiso', array('id_rol' => $data['id_rol'], 'id_modulo' => $data['id_modulo'],'id_permiso' => $data['id_permiso'],'estado' => $data['estado']))){
 			return "exito";
 		}else{
 			return "fracaso";
@@ -23,17 +23,17 @@ class Rol_modulo_permiso_model extends CI_Model {
 		else return false;
 	}
 
-	function editar_rol($data){
-		$this->db->where("id_rol",$data["id_rol"]);
-		if($this->db->update('org_rol', array('nombre_rol' => $data['nombre_rol'], 'descripcion_rol' => $data['descripcion_rol']))){
+	function editar_rol_modulo_permiso($data){
+		$this->db->where("id_rol_permiso",$data["id_rol_permiso"]);
+		if($this->db->update('org_rol_modulo_permiso', array('id_rol' => $data['id_rol'], 'id_modulo' => $data['id_modulo'],'id_permiso' => $data['id_permiso'],'estado' => $data['estado']))){
 			return "exito";
 		}else{
 			return "fracaso";
 		}
 	}
 
-	function eliminar_rol($data){
-		if($this->db->delete("org_rol",array('id_rol' => $data['id_rol']))){
+	function eliminar_rol_modulo_permiso($data){
+		if($this->db->delete("org_rol_modulo_permiso",array('id_rol_permiso' => $data['id_rol_permiso']))){
 			return "exito";
 		}else{
 			return "fracaso";

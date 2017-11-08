@@ -26,10 +26,14 @@
       }
     </style>
 <script type="text/javascript">
-    function cambiar_editar(id_rol,nombre_rol,descripcion_rol){
+    function cambiar_editar(id_rol_permiso,id_rol,id_sistema,id_modulo,id_permiso,estado){
+        $("#id_rol_permiso").val(id_rol_permiso);
          $("#id_rol").val(id_rol);
-         $("#nombre_rol").val(nombre_rol);
-         $("#descripcion_rol").val(descripcion_rol);
+         $("#id_sistema").val(id_sistema);
+         comboModulo(id_sistema,id_modulo);
+         //$("#id_modulo").val(id_modulo);
+         $("#id_permiso").val(id_permiso);
+         $("#estado").val(estado);
          
 
         $("#ttl_form").removeClass("bg-success");
@@ -40,12 +44,17 @@
 
         $("#cnt-tabla").hide(0);
         $("#cnt_form").show(0);
-        $("#ttl_form").children("h4").html("<span class='fa fa-wrench'></span> Editar Rol");
+        $("#ttl_form").children("h4").html("<span class='fa fa-wrench'></span> Editar Permiso Rol");
     }
 
     function cambiar_nuevo(){
-        $("#nombre_rol").val("");
-         $("#descripcion_rol").val("");
+        $("#id_rol_permiso").val("");
+         $("#id_rol").val("");
+         $("#id_sistema").val("");
+         
+         $("#id_modulo").val("");
+         $("#id_permiso").val("");
+         $("#estado").val("");
          
         $("#band").val("save");
 
@@ -70,12 +79,12 @@
         $("#cnt_form").hide(0);
     }
 
-    function editar_rol(obj){
+    function editar_rol_modulo_permiso(obj){
         $("#band").val("edit");
         $("#submit").click();
     }
 
-    function eliminar_rol(obj){
+    function eliminar_rol_modulo_permiso(obj){
         $("#band").val("delete");
         swal({
             title: "¿Está seguro?",
@@ -91,7 +100,7 @@
     }
 
     function iniciar(){
-        tablaroles();
+        tabla_rol_modulo_permiso();
     }
 
     function objetoAjax(){
@@ -105,7 +114,7 @@
         return xmlhttp;
     }
 
-    function tablaroles(){
+    function tabla_rol_modulo_permiso(){
         if(window.XMLHttpRequest){// code for IE7+, Firefox, Chrome, Opera, Safari
             xmlhttpB=new XMLHttpRequest();
         }else{// code for IE6, IE5
@@ -122,7 +131,7 @@
         xmlhttpB.open("GET","<?php echo site_url(); ?>/roles/tabla_rol_modulo_permiso",true);
         xmlhttpB.send();
     }
-    function comboModulo(id_sistema){
+    function comboModulo(id_sistema,seleccionado){
         if(window.XMLHttpRequest){// code for IE7+, Firefox, Chrome, Opera, Safari
             xmlhttpM=new XMLHttpRequest();
         }else{// code for IE6, IE5
@@ -136,7 +145,7 @@
             }
         }
 
-        xmlhttpM.open("GET","<?php echo site_url(); ?>/roles/rol_modulo_permiso/buscarModulo/"+id_sistema,true);
+        xmlhttpM.open("GET","<?php echo site_url(); ?>/roles/rol_modulo_permiso/buscarModulo/"+id_sistema+"/"+seleccionado,true);
         xmlhttpM.send();
     }
     
@@ -179,7 +188,7 @@
 
                         <?php echo form_open('', array('id' => 'formajax', 'style' => 'margin-top: 0px;', 'class' => 'm-t-40', 'novalidate' => '')); ?>
                             <input type="hidden" id="band" name="band" value="save">
-                            <input type="hidden" id="id_rol" name="id_rol">
+                            <input type="hidden" id="id_rol_permiso" name="id_rol_permiso">
                             
 
 
@@ -187,7 +196,7 @@
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label for="nombre_rol" class="font-weight-bold">Seleccione el Rol: <span class="text-danger">*</span></label>
-                                           <?php  echo "<select class='form-control' name='id' id='id'>";
+                                           <?php  echo "<select class='form-control' name='id_rol' id='id_rol'>";
                                                     echo "<option value=''>[Seleccione]</option>";
                                                     foreach ($rol as $list) {
                                                         echo "<option value='". $list['id_rol'] . "'>" . $list['nombre_rol'] . "</option>";
@@ -201,7 +210,7 @@
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label for="descripcion_rol" class="font-weight-bold">Seleccione el sistema :<span class="text-danger">*</span></label>
-                                        <?php  echo "<select class='form-control' name='id' id='id'>";
+                                        <?php  echo "<select class='form-control' name='id_sistema' id='id_sistema'>";
                                                     echo "<option value=''>[Seleccione]</option>";
                                                     foreach ($sistema as $list) {
                                                         echo "<option value='". $list['id_sistema'] . "' onclick='comboModulo(".$list['id_sistema'].")'>" . $list['nombre_sistema'] . "</option>";
@@ -211,17 +220,41 @@
                                         <div class="help-block"></div> </div>
                                 </div>
                             </div>
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="form-group" id="cnt-modulo">
+                            <div class="row" >
+                                <div class="col-md-4" >
+                                    <div class="form-group" >
                                         <label for="nombre_rol" class="font-weight-bold">Seleccione el modulo: <span class="text-danger">*</span></label>
-                                           <?php  echo "<select class='form-control' name='id' id='id'>";
+                                           <div id="cnt-modulo">
+                                               <select class="form-control">
+                                                   <option>[Seleccione]</option>
+                                               </select>
+                                           </div>
+                                       <div class="help-block"></div>
+                                    </div>
+
+                                </div>
+                                <div class="col-md-4" >
+                                    <div class="form-group" >
+                                        <label for="nombre_rol" class="font-weight-bold">Seleccione el permiso: <span class="text-danger">*</span></label>
+                                                <?php  echo "<select class='form-control' name='id_permiso' id='id_permiso'>";
                                                     echo "<option value=''>[Seleccione]</option>";
-                                                    foreach ($modulo as $list) {
-                                                        echo "<option value='". $list['id_modulo'] . "'>" . $list['nombre_modulo'] . "</option>";
+                                                    foreach ($permiso as $list) {
+                                                       echo "<option value='". $list['id_permiso'] . "'>" . $list['permiso'] . "</option>";
                                                     }
                                                 echo "</select><br/>"; 
                                             ?>
+                                       <div class="help-block"></div>
+                                    </div>
+
+                                </div>
+                                <div class="col-md-4" >
+                                    <div class="form-group" >
+                                        <label for="nombre_rol" class="font-weight-bold">Seleccione el estado: <span class="text-danger">*</span></label>
+                                            <select class="form-control" id="estado" name="estado">
+                                                <option>[Seleccione]</option>
+                                                <option value="1">Activado</option>
+                                                <option value="0">Desactivado</option>
+                                            </select>
                                        <div class="help-block"></div>
                                     </div>
 
@@ -237,8 +270,8 @@
                             </div>
                             <div align="right" id="btnedit" style="display: none;">
                                 <button type="reset" class="btn waves-effect waves-light btn-success"><i class="mdi mdi-delete"></i> Limpiar</button>
-                                <button type="button" onclick="editar_rol(this)" class="btn waves-effect waves-light btn-info"><i class="mdi mdi-pencil"></i> Editar</button>
-                                <button type="button" onclick="eliminar_rol(this)" class="btn waves-effect waves-light btn-danger"><i class="mdi mdi-window-close"></i> Eliminar</button>
+                                <button type="button" onclick="editar_rol_modulo_permiso(this)" class="btn waves-effect waves-light btn-info"><i class="mdi mdi-pencil"></i> Editar</button>
+                                <button type="button" onclick="eliminar_rol_modulo_permiso(this)" class="btn waves-effect waves-light btn-danger"><i class="mdi mdi-window-close"></i> Eliminar</button>
                             </div>
 
                         <?php echo form_close(); ?>
@@ -270,7 +303,7 @@ $(function(){
         formData.append("dato", "valor");
 
         $.ajax({
-            url: "<?php echo site_url(); ?>/roles/roles/gestionar_rol",
+            url: "<?php echo site_url(); ?>/roles/rol_modulo_permiso/gestionar_rol_modulo_permiso",
             type: "post",
             dataType: "html",
             data: formData,
@@ -288,7 +321,7 @@ $(function(){
                 }else{
                     swal({ title: "¡Borrado exitoso!", type: "success", showConfirmButton: true });
                 }
-                tablaroles();$("#band").val('save');
+                tabla_rol_modulo_permiso();$("#band").val('save');
             }else{
                 swal({ title: "¡Ups! Error", text: "Intentalo nuevamente.", type: "error", showConfirmButton: true });
             }
