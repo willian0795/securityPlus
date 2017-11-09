@@ -9,8 +9,12 @@ class Usuarios_model extends CI_Controller {
 	}
 
 	function insertar_usuario($data){
+
+		$id_seccion = $this->obtener("SELECT id_seccion FROM sir_empleado_informacion_laboral WHERE id_empleado = ".$data['id_empleado'],"id_seccion");
+
 		$id = $this->obtener_ultimo_id("org_usuario","id_usuario");
-		if($this->db->insert('org_usuario', array('id_usuario' => $id, 'nombre_completo' => $data['nombre'], 'nr' => $data['nr'], 'sexo' => $data['genero'], 'usuario' => $data['usuario'], 'password' => $data['password'], 'id_seccion' => $data['id_seccion'], 'estado' => $data['estado']))){
+
+		if($this->db->insert('org_usuario', array('id_usuario' => $id, 'nombre_completo' => $data['nombre'], 'nr' => $data['nr'], 'sexo' => $data['genero'], 'usuario' => $data['usuario'], 'password' => $data['password'], 'id_seccion' => $id_seccion, 'estado' => $data['estado']))){
 			return "exito";
 		}else{
 			return "fracaso";
@@ -23,21 +27,34 @@ class Usuarios_model extends CI_Controller {
 		else return false;
 	}
 
-	function editar_horario($data){
+	function editar_usuario($data){
 		$this->db->where("id_usuario",$data["idusuario"]);
-		if($this->db->update('org_usuario', array('nombre_completo' => $data['nombre'], 'nr' => $data['nr'], 'sexo' => $data['genero'], 'usuario' => $data['usuario'], 'id_seccion' => $data['id_seccion'], 'estado' => $data['estado']))){
+		if($this->db->update('org_usuario', array('nombre_completo' => $data['nombre'], 'nr' => $data['nr'], 'sexo' => $data['genero'], 'usuario' => $data['usuario'], 'estado' => $data['estado']))){
 			return "exito";
 		}else{
 			return "fracaso";
 		}
 	}
 
-	function eliminar_horario($data){
+	function eliminar_usuario($data){
 		if($this->db->delete("org_usuario",array('id_usuario' => $data['idusuario']))){
 			return "exito";
 		}else{
 			return "fracaso";
 		}
+	}
+
+	function obtener($consulta,$nombreid){
+		$query = $this->db->query($consulta." ORDER BY ".$nombreid);
+		$ultimoid = "";
+		if($query->num_rows() > 0){
+			foreach ($query->result() as $fila) {
+				$ultimoid = $fila->$nombreid; 
+			}
+		}else{
+			$ultimoid = "0";
+		}
+		return $ultimoid;
 	}
 
 	function obtener_ultimo_id($tabla,$nombreid){

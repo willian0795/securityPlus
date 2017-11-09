@@ -10,11 +10,10 @@
             <table id="myTable" class="table table-bordered">
                 <thead class="bg-info text-white">
                     <tr>
-                        <th>#</th>
-                        <th>Descripción</th>
-                        <th>Monto</th>
-                        <th>Inicio</th>
-                        <th>Fin</th>
+                        <th>Id</th>
+                        <th>NR</th>
+                        <th>Nombre</th>
+                        <th>Estado</th>
                         <th>(*)</th>
                     </tr>
                 </thead>
@@ -25,10 +24,9 @@
                     if(!empty($usuarios)){
                         foreach ($usuarios->result() as $fila) {
                            echo "<tr>";
+                           echo "<td>".$fila->id_usuario."</td>";
                            echo "<td>".$fila->nr."</td>";
                            echo "<td>".$fila->nombre_completo."</td>";
-                           echo "<td>".$fila->nombre_completo."</td>";
-                           echo "<td>".$fila->id_seccion."</td>";
                            echo "<td>".$fila->estado."</td>";
                            
                            $array = array($fila->id_usuario, $fila->nombre_completo, $fila->nr, $fila->sexo, $fila->usuario, $fila->id_seccion, $fila->estado);
