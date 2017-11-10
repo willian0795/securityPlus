@@ -5,6 +5,7 @@ class Bitacora_model extends CI_Model {
 	
 	function __construct(){
 		parent::__construct();
+		date_default_timezone_set('America/El_Salvador');
 	}
 
 	function bitacora($data){
