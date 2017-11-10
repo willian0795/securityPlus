@@ -10,7 +10,7 @@
     <meta name="author" content="">
     <!-- Favicon icon -->
     <link rel="icon" type="image/png" sizes="16x16" href="<?php echo base_url(); ?>assets/images/logo_min.png">
-    <title>Login - Pago de Viáticos</title>
+    <title>Login - Seguridad MTPS</title>
     <script src="<?php echo base_url(); ?>assets/js/jquery-3.2.1.min.js"></script>
     <!--nestable CSS -->
     <link href="<?php echo base_url(); ?>assets/plugins/nestable/nestable.css" rel="stylesheet" type="text/css" />
@@ -88,7 +88,7 @@
     <!-- ============================================================== --> 
 
 
-    <section id="wrapper" class="login-register img-responsive login-sidebar" style="background-image:url(<?php echo base_url(); ?>assets/images/portadas/viaticos2.jpg);">
+    <section id="wrapper" class="login-register img-responsive login-sidebar" style="background-image:url(<?php echo base_url(); ?>assets/images/portadas/seguridad.jpg);">
     
   <div class="login-box card">
     <div class="card-body">
