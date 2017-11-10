@@ -6,6 +6,7 @@ class Login extends CI_Controller {
 	function __construct(){
 		parent::__construct();
 		$this->load->model('login_model');
+		$this->load->model('bitacora_model');
 	}
 
 	public function index()
@@ -39,6 +40,12 @@ class Login extends CI_Controller {
             );
 			$this->session->set_userdata($usuario_data);
 			echo "exito";
+			$bita = array(
+               'id_sistema' => "14",
+               'descripcion' => "yo inicié sesión jaja",
+               'id_accion' => "1"
+            );
+			$this->bitacora_model->bitacora($bita);
 		}else{
 			echo "fracaso";
 			$this->session->sess_destroy();

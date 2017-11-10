@@ -23,6 +23,21 @@ class Bitacora_model extends CI_Model {
 		}
 	}
 
+	function obtener_ultimo_id($tabla,$nombreid){
+		$this->db->order_by($nombreid, "asc");
+		$query = $this->db->get($tabla);
+		$ultimoid = 0;
+		if($query->num_rows() > 0){
+			foreach ($query->result() as $fila) {
+				$ultimoid = $fila->$nombreid; 
+			}
+			$ultimoid++;
+		}else{
+			$ultimoid = 1;
+		}
+		return $ultimoid;
+	}
+
 	public function get_real_ip(){
 
         if (isset($_SERVER["HTTP_CLIENT_IP"]))
