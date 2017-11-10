@@ -5,7 +5,6 @@ class Login extends CI_Controller {
 
 	function __construct(){
 		parent::__construct();
-		$this->load->helper(array('url','form','funciones_rapidas'));
 		$this->load->model('login_model');
 	}
 
@@ -27,7 +26,28 @@ class Login extends CI_Controller {
 		'usuario' => $this->input->post('usuario'),
 		'password' => $this->input->post('password')
 		);
-		echo $this->login_model->verificar_usuario($data);
+		$res = $this->login_model->verificar_usuario($data);
+
+		if($res->num_rows() > 0){
+			foreach ($res->result() as $fila) {
+			}
+			$usuario_data = array(
+               'id_usuario' => $fila->id_usuario,
+               'usuario' => $fila->usuario,
+               'nombre_usuario' => $fila->nombre_completo,
+               'sesion' => TRUE
+            );
+			$this->session->set_userdata($usuario_data);
+			echo "exito";
+		}else{
+			echo "fracaso";
+			$this->session->sess_destroy();
+		}
+	}
+
+	public function cerrar_sesion(){
+		$this->session->sess_destroy();
+		$this->index();
 	}
 }
 ?>

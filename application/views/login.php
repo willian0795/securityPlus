@@ -165,7 +165,6 @@ $(function(){
         })
         .done(function(res){
             if(res == "exito"){
-                swal({ title: "¡correcto!", type: "success", showConfirmButton: true });
                 location.href = "<?php echo base_url(); ?>";
             }else{
                 swal({ title: "¡Incorrecto!", text: "El nombre de usuario o contraseña es incorrecto.", type: "warning", showConfirmButton: true });
