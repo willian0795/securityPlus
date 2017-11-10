@@ -1,13 +1,10 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
-
-
 /***********************************
 	CREAR TABLA:	
 	Genera el body de una tabla, solicitando solamente los datos que conformaran la tabla 
 	y las conlumnas que se desean presentar (genera el botón para modificaciones automaticamente).
 ************************************/
-
 	function boton_tabla($fila,$nfuncion){
 		$cptabla = "<td>";
 		$var = "";
@@ -17,11 +14,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 		$var = substr($var, 0, -1);
 		$cptabla .= "<button type='button' class='btn waves-effect waves-light btn-rounded btn-sm btn-info' onClick='".$nfuncion."(".$var.");'><span class='fa fa-wrench'></span></button>";
 		$cptabla .= "</td>";
-
 		return $cptabla;
 	}
-
-
 /***********************************
 	CREAR NOTIFICACIONES:
 	Genera el codigo para mostrar una notificación, solicitando solamente la descripción del mensaje.
@@ -33,11 +27,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 		  $notificacion .= '</button>';
 		  $notificacion .= $descripcion;
 		$notificacion .= '</div>';
-
 		return $notificacion;
 	}
-
-
 	function crear_combo($titulo,$id, $lista,$datos,$funcion){
 		$combo = '<label for="'.$id.'">'.$titulo.':</label>';
 		$combo .= '<div class="input-group-btn">';
@@ -49,7 +40,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 				$combo .= "<option value='".$fila->$datos[0]."'>".$fila->$datos[1]."</option>";
 			}
 		}
-
 		$combo .= '</select>';
 		if(!empty($funcion)){
 			$combo .= '<span class="input-group-btn">';
@@ -58,7 +48,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 	      	$combo .= '</span>';
 	    }
 		$combo .= '</div><br>';
-
 		return $combo;
 	}
 ?>

@@ -1,12 +1,22 @@
 <script type="text/javascript">
     function cambiar_editar(id,nombre_completo,nr,sexo,usuario,seccion,estado){
+
+        $("#id_empleado").parent().parent().hide(0);
         $("#idusuario").val(id);
-        //$("#descripcion").val(descripcion);
         $("#nr").val(nr);
-        $("#sexo").val(sexo);
+        $("#nombre").val(nombre_completo);
+        $("#apellido").val(nombre_completo);
+        $("#nombre_completo").val(nombre_completo);
+        $("#genero"+sexo).attr('checked', true);
         $("#usuario").val(usuario);
-        $("#seccion").val(seccion);
-        $("#estado :checkbox").attr('checked',estado);
+        if(estado == 1){
+            $("#estado :checkbox").attr('checked',true);
+        }else{
+            $("#estado :checkbox").attr('checked',false);
+        }
+
+        $("#nombre0").hide(0);
+        $("#nombre1").show(0);
 
         $("#ttl_form").removeClass("bg-success");
         $("#ttl_form").addClass("bg-info");
@@ -21,11 +31,12 @@
     }
 
     function cambiar_nuevo(){
-        $("#idhorario").val("");
-        $("#descripcion").val("");
-        $("#hora_inicio").val("");
-        $("#hora_fin").val("");
-        $("#monto").val("");
+        $("#id_empleado").parent().parent().show(0);
+        $("#idusuario").val("");
+        $("#nr").val("");
+        $("#nombre_completo").val("");
+        $("#usuario").val("");
+        $("#estado :checkbox").attr('checked',true);
         $("#band").val("save");
 
         $("#ttl_form").addClass("bg-success");
@@ -45,12 +56,12 @@
         $("#cnt_form").hide(0);
     }
 
-    function editar_horario(obj){
+    function editar_usuario(obj){
         $("#band").val("edit");
         $("#submit").click();
     }
 
-    function eliminar_horario(obj){
+    function eliminar_usuario(obj){
         $("#band").val("delete");
         swal({   
             title: "¿Está seguro?",   
@@ -66,7 +77,6 @@
     }
 
     function iniciar(){
-        $("#cnt-tabla").load("<?php echo site_url(); ?>/usuarios/tablausuarios");
         tablausuarios();        
     }
 
@@ -82,7 +92,22 @@
     }
 
     function tablausuarios(){        
-        $("#cnt-tabla").load("<?php echo site_url(); ?>/usuarios/tablausuarios");
+        $("#cnt-tabla").load("<?php echo site_url(); ?>/usuarios/usuarios/tabla_usuario");
+    }
+
+    function formusuario(){  
+        id_empleado = $("#id_empleado").val();    
+        $("#empleado"+id_empleado).click();
+
+        if($("#id_empleado").val() == 0){
+            $("#nombre0").show(0);
+            $("#nombre1").hide(0);
+             $("#nr").val("");
+             $("#usuario").val("");
+        }else{
+            $("#nombre1").hide(0);
+            $("#nombre0").hide(0);
+        }
     }
 
     function show_contra(id){
@@ -104,10 +129,26 @@
 		apellido = res2[0];
 
     	$("#usuario").val(nombre+"."+apellido);
+        $("#nombre_completo").val(nombre+"."+apellido);
     }
 
     function cambiar_idgenero(){
     	$("#id_genero").val($('input:radio[name=genero]:checked').val());
+    }
+
+    function mostrar(id_empleado, nr, usuario, id_genero, nombre){
+        $("#nombre_completo").val(nombre)
+        $("#nr").val(nr);
+        $("#usuario").val(usuario);
+        $("#genero"+id_genero).attr('checked', true);
+    }
+
+    function cambiar_check(obj){
+        if( $(obj).prop('checked') ) {
+            $(obj).val('1')
+        }else{
+            $(obj).val('0')
+        }
     }
 
 </script>
@@ -145,51 +186,68 @@
                         <h4 class="card-title m-b-0 text-white">Listado de usuarios</h4>
                     </div>
                     <div class="card-body b-t">
-                        
+                        <div id="form_user"></div>
                         <?php echo form_open('', array('id' => 'formajax', 'style' => 'margin-top: 0px;', 'class' => 'm-t-40', 'novalidate' => '')); ?>
                             <input type="hidden" id="band" name="band" value="save">
                             <input type="hidden" id="idusuario" name="idusuario" value="">
-                            <div class="row">
-                            	<div class="form-group col-lg-6">
-                                    <h5>NR: <span class="text-danger">*</span></h5>
-                                    <div class="input-group">
-                                        <input type="text" id="nr" name="nr" class="form-control" data-mask="999*" required placeholder="Código de empleado" data-validation-required-message="Este campo es requerido">
-                                        <div class="input-group-addon" onclick="cargar_datos(this.value);" style="cursor: pointer;"><i class="mdi mdi-upload"></i></div>
-                                    </div>
-                                    <div class="help-block"></div>
-                                </div>
-                            	<div class="form-group col-lg-6">
-                                    <h5>Sección: <span class="text-danger">*</span></h5>
-                                    <select id="seccion" name="seccion" class="select2" style="width: 100%">
-                                        <option>Select</option>
-                                        <?php
-                                            $seccion = $this->db->get("org_seccion");
 
-                                            if(!empty($seccion)){
-                                                foreach ($seccion->result() as $fila) {
-                                                    echo '<option value="'.$fila->id_seccion.'">'.$fila->nombre_seccion.'</option>';
+                            <div class="row">
+                                <div class="form-group col-lg-6"> 
+                                    <h5>Empleado: <span class="text-danger">*</span></h5>                           
+                                    <select id="id_empleado" name="id_empleado" class="select2" onchange="formusuario();" style="width: 100%">
+                                        <option value="0">[Elija el empleado]</option>
+                                        <?php 
+                                            $empleado = $this->db->query("SELECT id_empleado, LOWER(CONCAT_WS(' ', primer_nombre, segundo_nombre, tercer_nombre, primer_apellido, segundo_apellido, apellido_casada)) AS nombre_completo,  LOWER(CONCAT_WS(' ', primer_nombre, segundo_nombre, tercer_nombre)) AS nombre, LOWER(CONCAT_WS(' ', primer_apellido, segundo_apellido, apellido_casada)) AS apellido, LOWER(CONCAT_WS('.',primer_nombre, primer_apellido)) AS usuario, nr, id_genero FROM sir_empleado");
+                                            if($empleado->num_rows() > 0){
+                                                foreach ($empleado->result() as $fila) {              
+                                                   echo '<option class="m-l-50" value="'.$fila->id_empleado.'">'.$fila->nombre_completo.'</option>';
+                                                   ?>
+                                                   <optgroup id="empleado<?php echo $fila->id_empleado; ?>" type="button" onclick="mostrar('<?php echo $fila->id_empleado; ?>','<?php echo $fila->nr; ?>','<?php echo $fila->usuario; ?>','<?php echo $fila->id_genero; ?>','<?php echo $fila->nombre_completo; ?>')"></optgroup>
+                                                   <?php
                                                 }
                                             }
                                         ?>
+
+                                        
                                     </select>
                                 </div>
                             </div>
-                            <div class="row">
+
+                            <div class="row" style="display: none;">
+                            	<div class="form-group col-lg-6">
+                                    <h5>NR: <span class="text-danger">*</span></h5>
+                                    <div class="input-group">
+                                        <input type="text" id="nr" name="nr" class="form-control">
+                                    </div>
+                                    <div class="help-block"></div>
+                                </div>
+                            </div>
+                            <div class="row" id="nombre0">
                                 <div class="form-group col-lg-6">
                                     <h5>Nombre: <span class="text-danger">*</span></h5>
                                     <div class="controls">
-                                        <input type="text" onkeyup="formar_usuario();" id="nombre" name="nombre" class="form-control" required="" placeholder="Ingrese el nombre" minlength="3" data-validation-required-message="Este campo es requerido">
+                                        <input type="text" onkeyup="formar_usuario();" id="nombre" name="nombre" class="form-control" placeholder="Ingrese el nombre">
                                         <div class="help-block"></div>
                                     </div>
                                 </div>
                                 <div class="form-group col-lg-6">
                                     <h5>Apellido: <span class="text-danger">*</span></h5>
                                     <div class="controls">
-                                        <input type="text" onkeyup="formar_usuario();" id="apellido" name="apellido" class="form-control" required="" placeholder="Ingrese el apellido" minlength="3" data-validation-required-message="Este campo es requerido">
+                                        <input type="text" onkeyup="formar_usuario();" id="apellido" name="apellido" class="form-control" placeholder="Ingrese el apellido">
                                         <div class="help-block"></div>
                                     </div>
                                 </div>
-                            </div>        
+                            </div> 
+
+                            <div class="row" id="nombre1" style="display: none;">
+                                <div class="form-group col-lg-12">
+                                    <h5>Nombre completo: <span class="text-danger">*</span></h5>
+                                    <div class="controls">
+                                        <input type="text" id="nombre_completo" name="nombre_completo" class="form-control" required="" placeholder="Ingrese el nombre completo" minlength="3" data-validation-required-message="Este campo es requerido">
+                                        <div class="help-block"></div>
+                                    </div>
+                                </div>
+                            </div>       
                                                
                             <div class="row">
                             	<div class="form-group col-lg-6">
@@ -200,10 +258,8 @@
 
 						                    if(!empty($genero)){
 						                        foreach ($genero->result() as $fila) {
-						                        	echo '<label class="custom-control custom-radio">';
-						                        	echo '<input type="radio" data-radio="iradio_square-blue" name="genero" value="'.strtolower($fila->id_genero).'" data-validation-required-message="Seleccione el genero" id="'.strtolower($fila->genero).'" class="check" required>';
-						                        	echo '<span class="custom-control-description" style="margin-left:10px;">'.ucfirst(strtolower($fila->genero)).'</span>';
-						                        	echo '</label>';
+						                        	echo '<input name="genero" type="radio" id="genero'.strtolower($fila->id_genero).'" value="'.strtolower($fila->id_genero).'" required>';
+						                        	echo '<label class="m-l-20" for="genero'.strtolower($fila->id_genero).'">'.ucfirst(strtolower($fila->genero)).'</label>';
 						                        }
 						                    }
 	                                	?>
@@ -242,7 +298,7 @@
                             	</div>
                             	<div align="right" class="form-group col-lg-6">
                                     <div class="checkbox checkbox-success">
-                                        <input id="estado" name="estado" type="checkbox" checked>
+                                        <input id="estado" name="estado" type="checkbox" value="1" checked onchange="cambiar_check(this)">
                                         <label for="estado"> Cuenta activa </label>
                                     </div>
                                 </div>
@@ -254,8 +310,8 @@
                                 <button type="submit" class="btn waves-effect waves-light btn-success2"><i class="mdi mdi-plus"></i> Guardar</button>
                             </div>
                             <div align="right" id="btnedit" style="display: none;">
-                                <button type="button" onclick="editar_horario(this)" class="btn waves-effect waves-light btn-info"><i class="mdi mdi-pencil"></i> Editar</button>
-                                <button type="button" onclick="eliminar_horario(this)" class="btn waves-effect waves-light btn-danger"><i class="mdi mdi-window-close"></i> Eliminar</button>
+                                <button type="button" onclick="editar_usuario(this)" class="btn waves-effect waves-light btn-info"><i class="mdi mdi-pencil"></i> Editar</button>
+                                <button type="button" onclick="eliminar_usuario(this)" class="btn waves-effect waves-light btn-danger"><i class="mdi mdi-window-close"></i> Eliminar</button>
                             </div>
 
                         <?php echo form_close(); ?>
@@ -314,7 +370,7 @@ $(function(){
                 }else{
                     swal({ title: "¡Borrado exitoso!", type: "success", showConfirmButton: true });
                 }
-                tablahorarios();
+                tablausuarios();
             }else{
                 swal({ title: "¡Ups! Error", text: "Intentalo nuevamente.", type: "error", showConfirmButton: true });
             }

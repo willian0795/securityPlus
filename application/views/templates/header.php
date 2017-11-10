@@ -1,6 +1,16 @@
+<?php
+    $user = $this->session->userdata('usuario');
+    if(empty($user)){
+        header("Location: ".site_url()."/login");
+        exit();
+    }
+    
+
+    $pos = strpos($user, ".")+1;
+    $inicialUser = strtoupper(substr($user,0,1).substr($user, $pos,1));    
+?>
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -10,8 +20,8 @@
     <meta name="author" content="">
     <!-- Favicon icon -->
     <link rel="icon" type="image/png" sizes="16x16" href="<?php echo base_url(); ?>assets/images/logo_min.png">
-    <script src="<?php echo base_url(); ?>assets/js/jquery-3.2.1.min.js"></script>
     <title>SIAMRECAD</title>
+    <script src="<?php echo base_url(); ?>assets/js/jquery-3.2.1.min.js"></script>
     <!--nestable CSS -->
     <link href="<?php echo base_url(); ?>assets/plugins/nestable/nestable.css" rel="stylesheet" type="text/css" />
     <!-- Bootstrap Core CSS -->
@@ -173,25 +183,24 @@
                         <!-- Profile -->
                         <!-- ============================================================== -->
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle text-muted waves-effect waves-dark" href="" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="round round-warning">US</span></a>
+                            <a class="nav-link dropdown-toggle text-muted waves-effect waves-dark" href="" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="round round-success"><?php echo $inicialUser; ?></span></a>
                             <div class="dropdown-menu dropdown-menu-right scale-up">
                                 <ul class="dropdown-user">
                                     <li>
                                         <div class="dw-user-box">
-                                            <div class="u-img"><img src="" alt="user"></div>
                                             <div class="u-text">
-                                                <h4>Steave Jobs</h4>
-                                                <p class="text-muted">varun@gmail.com</p><a href="profile.html" class="btn btn-rounded btn-danger btn-sm">View Profile</a></div>
+                                                <h4><?php echo $this->session->userdata('nombre_usuario'); ?></h4>
+                                                <p class="text-muted" align="right"><a href="profile.html" class="btn btn-rounded btn-danger btn-sm">Ver Perfil</a></p>
+                                            </div>
                                         </div>
                                     </li>
                                     <li role="separator" class="divider"></li>
-                                    <li><a href="#"><i class="ti-user"></i> My Profile</a></li>
-                                    <li><a href="#"><i class="ti-wallet"></i> My Balance</a></li>
+                                    <li><a href="#"><i class="ti-user"></i> Mi Perfil</a></li>
                                     <li><a href="#"><i class="ti-email"></i> Inbox</a></li>
                                     <li role="separator" class="divider"></li>
                                     <li><a href="#"><i class="ti-settings"></i> Account Setting</a></li>
                                     <li role="separator" class="divider"></li>
-                                    <li><a href="#"><i class="fa fa-power-off"></i> Logout</a></li>
+                                    <li><a href="<?php echo site_url(); ?>/login/cerrar_sesion"><i class="fa fa-power-off"></i> Salir</a></li>
                                 </ul>
                             </div>
                         </li>

@@ -1,13 +1,13 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class roles extends CI_Controller {
+class Roles extends CI_Controller {
 
 	function __construct(){
 		parent::__construct();
 		/************ Librerias para llamar funciones predefenidas **********/
 		$this->load->helper(array('url','form','funciones_rapidas'));
-		$this->load->model('modulos_model');
+		$this->load->model('roles_model');
 	}
 
 	public function index(){
@@ -17,43 +17,29 @@ class roles extends CI_Controller {
 	}
 
 
-	public function gestionar_modulos(){
+	public function gestionar_rol(){
 		if($this->input->post('band') == "save"){
 			$data = array(
-			'nombre' => ucfirst(strtolower($this->input->post('nombre'))), 
-			'icono' => $this->input->post('icono'),
-			'descripcion' => $this->input->post('descripcion'),
-			'url' => $this->input->post('url'),
-			'opciones' => $this->input->post('opciones'),
-			'orden' => $this->input->post('orden'),
-			'dependencia' => $this->input->post('dependencia'),
-			'id_sistema' => $this->input->post('id_sistema')
+			'nombre_rol' => $this->input->post('nombre_rol'), 
+			'descripcion_rol' => $this->input->post('descripcion_rol')
 			);
-			echo $this->modulos_model->insertar_modulo($data);
+			echo $this->roles_model->insertar_rol($data);
 
 		}else if($this->input->post('band') == "edit"){
 
 			$data = array(
-			'idmodulo' => $this->input->post('idmodulo'), 
-			'nombre' => ucfirst(strtolower($this->input->post('nombre'))), 
-			'icono' => $this->input->post('icono'),
-			'descripcion' => $this->input->post('descripcion'),
-			'url' => $this->input->post('url'),
-			'opciones' => $this->input->post('opciones'),
-			'orden' => $this->input->post('orden'),
-			'dependencia' => $this->input->post('dependencia'),
-			'id_sistema' => $this->input->post('id_sistema')
+			'id_rol' => $this->input->post('id_rol'), 
+			'nombre_rol' => $this->input->post('nombre_rol'), 
+			'descripcion_rol' => $this->input->post('descripcion_rol')
 			);
-			echo $this->modulos_model->editar_modulo($data);
+			echo $this->roles_model->editar_rol($data);
 
 		}else if($this->input->post('band') == "delete"){
 
 			$data = array(
-			'idmodulo' => $this->input->post('idmodulo'),
-			'dependencia' => $this->input->post('dependencia'),
-			'id_sistema' => $this->input->post('id_sistema')
+			'id_rol' => $this->input->post('id_rol')
 			);
-			echo $this->modulos_model->eliminar_modulo($data);
+			echo $this->roles_model->eliminar_rol($data);
 
 		}
 	}
