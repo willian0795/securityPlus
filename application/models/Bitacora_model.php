@@ -9,9 +9,6 @@ class Bitacora_model extends CI_Model {
 
 	function bitacora($data){
 
-		$data['id_sistema']
-		$data['descripcion'] 
-		$data['id_accion'] insert into sep_bitacora values 
         $user = $this->session->userdata('usuario');
         $fecha = date('Y-m-d h:i:s');
         $ip = $this->get_real_ip();
