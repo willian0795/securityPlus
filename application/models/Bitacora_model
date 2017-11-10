@@ -1,0 +1,35 @@
+	<?php
+	defined('BASEPATH') OR exit('No direct script access allowed');
+
+	class Bitacora_model extends CI_Model {
+		
+		function __construct(){
+			parent::__construct();
+		}
+
+		function bitacora($data){
+
+			$data['id_sistema']
+			$data['descripcion'] 
+			$data['id_accion'] insert into sep_bitacora values 
+            $user = $this->session->userdata('usuario');
+            $fecha = date('Y-m-d h:i:s');
+            
+			
+			$id = $this->obtener_ultimo_id("sep_bitacora","id_bitacora");
+
+			if($this->db->insert('sep_bitacora', array('id_bitacora' => $id, 'id_sistema' => $data['id_sistema'], 'id_usuario' => $user, 'descripcion' => $data['descripcion'], 'fecha' => $fecha, 'dependencia' => $data["dependencia"], 'url_modulo' => $data['url'], 'img_modulo' => $data['icono'], 'opciones_modulo' => $data['opciones']))){
+				return "exito";
+			}else{
+				return "fracaso";
+				}
+
+
+			$query = $this->db->query("SELECT * FROM org_usuario WHERE usuario = '".$data['usuario']."' AND password = '".md5($data['password'])."'");
+			return $query;
+		}
+
+
+
+
+	}
