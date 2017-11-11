@@ -4,8 +4,12 @@
     	tabla_bitacora();  
     }
 
-    function tabla_bitacora(){        
-        $("#cnt-tabla").load("<?php echo site_url(); ?>/bitacora/bitacora/tabla_bitacora");
+    function tabla_bitacora(){  
+        var usuario = $("#usuario").val();  
+        var accion = $("#accion").val();  
+        var sistema = $("#sistema").val(); 
+        
+        $("#cnt-tabla").load("<?php echo site_url(); ?>/bitacora/bitacora/tabla_bitacora?id_sistema="+sistema+"&id_accion="+accion+"&id_usuario="+usuario);
     }
 </script>
 
@@ -32,17 +36,22 @@
         <!-- ============================================================== -->
         <!-- Inicio del CUERPO DE LA SECCIÓN -->
         <!-- ============================================================== -->
+       
         <div class="row">
-
+ 
+       
 
             <!-- ============================================================== -->
             <!-- Inicio de la TABLA -->
             <!-- ============================================================== -->
-
+        
+          
+         
             <div class="col-lg-4" >
+<div class="card">
                 <div class="row">
                         <div class="form-group col-lg-12">                            
-                            <select id="sistema" name="sistema" class="select2" onchange="mostrarFormMenu()" style="width: 100%">
+                            <select id="sistema" name="sistema" class="select2" onchange="tabla_bitacora()" style="width: 100%">
                                 <option value="0">[Elija el sistema]</option>
                                 <?php 
                                     $sistemas = $this->db->get("org_sistema");
@@ -56,11 +65,11 @@
                         </div>
                     </div>
 
-
+<br>
 
                     <div class="row">
                         <div class="form-group col-lg-12">                            
-                            <select id="usuario" name="usuario" class="select2" onchange="mostrarFormMenu()" style="width: 100%">
+                            <select id="usuario" name="usuario" class="select2" onchange="tabla_bitacora()" style="width: 100%">
                                 <option value="0">[Elija el usuario]</option>
                                 <?php 
                                     $usuario = $this->db->get("org_usuario");
@@ -74,10 +83,10 @@
                         </div>
                     </div>
 
-
+<br>
                     <div class="row">
                         <div class="form-group col-lg-12">                            
-                            <select id="usuario" name="usuario" class="select2" onchange="mostrarFormMenu()" style="width: 100%">
+                            <select id="accion" name="accion" class="select2" onchange="tabla_bitacora()" style="width: 100%">
                                 <option value="0">[Elija la acción]</option>
                                 <?php 
                                     $accion = $this->db->get("sep_accion_bitacora");
@@ -91,8 +100,9 @@
                         </div>
                     </div>
 
-             </div>
-
+           
+     </div>        
+</div>
 
             <div class="col-lg-8" id="cnt-tabla">
 
@@ -101,6 +111,7 @@
             <!-- ============================================================== -->
             <!-- Fin de la TABLA -->
             <!-- ============================================================== -->
+        </div>
         </div>
         <!-- ============================================================== -->
         <!-- Fin CUERPO DE LA SECCIÓN -->
