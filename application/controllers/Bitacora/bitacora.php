@@ -16,6 +16,10 @@ class Bitacora extends CI_Controller {
 		$this->load->view('templates/footer');
 	}
 
-
+    public function tabla_bitacora(){
+		
+		$this->load->view('bitacora/tabla_bitacora');
+		
+	}
 }
 ?>
