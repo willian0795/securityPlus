@@ -77,10 +77,10 @@
           if (!moviendo) {
               // No ha habido movimiento desde hace un segundo, aquí tu codigo
                 $("#contador").text("-------------- Expira en: inomvil");
-                /*if(!$("#congelar").is(":visible")){
+                if(!$("#congelar").is(":visible")){
                     $("#congelar").show(0);
                     $("#darclic").click();
-                }*/
+                }
           } else {
               moviendo=false;
               $("#contador").text("-------------- Expira en: moviendo");
@@ -128,52 +128,8 @@
             <circle class="path" cx="50" cy="50" r="20" fill="none" stroke-width="2" stroke-miterlimit="10" /> </svg>
     </div>
 
-    <div class="card" id="congelar" align="center" style="display: none;">
-                            <div class="card-header">
-                                <div class="card-actions">
-                                    <a class="" data-action="collapse"><i class="ti-minus"></i></a>
-                                    <a class="btn-minimize" id="darclic" data-action="expand"><i class="mdi mdi-arrow-expand"></i></a>
-                                    <a class="btn-close" data-action="close"><i class="ti-close"></i></a>
-                                </div>
-                                <h4 class="card-title m-b-0">Discount</h4>
-                            </div>
-                            <div class="card-body collapse show bg-info">
-                                <div id="myCarousel" class="carousel slide" data-ride="carousel">
-                                    <!-- Carousel items -->
-                                    <div class="carousel-inner">
-                                        <div class="carousel-item flex-column">
-                                            <i class="fa fa-shopping-cart fa-2x text-white"></i>
-                                            <p class="text-white">25th Jan</p>
-                                            <h3 class="text-white font-light">Now Get <span class="font-bold">50% Off</span><br>
-                                      on buy</h3>
-                                            <div class="text-white m-t-20">
-                                                <i>- Ecommerce site</i>
-                                            </div>
-                                        </div>
-                                        <div class="carousel-item flex-column active">
-                                            <i class="fa fa-shopping-cart fa-2x text-white"></i>
-                                            <p class="text-white">25th Jan</p>
-                                            <h3 class="text-white font-light">Now Get <span class="font-bold">50% Off</span><br>
-                                      on buy</h3>
-                                            <div class="text-white m-t-20">
-                                                <i>- Ecommerce site</i>
-                                            </div>
-                                        </div>
-                                        <div class="carousel-item flex-column">
-                                            <i class="fa fa-shopping-cart fa-2x text-white"></i>
-                                            <p class="text-white">25th Jan</p>
-                                            <h3 class="text-white font-light">Now Get <span class="font-bold">50% Off</span><br>
-                                      on buy</h3>
-                                            <div class="text-white m-t-20">
-                                                <i>- Ecommerce site</i>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-<section id="wrapper">
-    <div class="login-register" style="background-image:url(../assets/images/background/login-register.jpg);">        
+<section id="wrapper" style="display: none;" id="congelar">
+    <div class="login-register" style="background-image:url(<?php echo base_url(); ?>assets/images/portadas/seguridad2.jpg);">        
         <div class="login-box card">
             <div class="card-body">
               <form class="form-horizontal form-material" id="loginform" action="index.html">
