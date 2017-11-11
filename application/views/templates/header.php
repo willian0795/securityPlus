@@ -68,25 +68,45 @@
 <script>
     var barra = setTimeout(function(){ $("#clic").click(); }, 500);
 
+    var expira = 60*10;
+
+    function hora(s){
+      var secs = s % 60;
+      s = (s - secs) / 60;
+      var mins = s % 60;
+      var hrs = (s - mins) / 60;
+
+      return addZ(hrs) + ':' + addZ(mins) + ':' + addZ(secs);
+    }
+    function addZ(n) {
+        return (n<10? '0':'') + n;
+    }
+
     var otra = (function(){
-       var moviendo= false;
-       document.onmousemove = function(){
-              moviendo= true;
-       };
-       setInterval (function() {
-          if (!moviendo) {
-              // No ha habido movimiento desde hace un segundo, aquí tu codigo
-                $("#contador").text("-------------- Expira en: inomvil");
-                if(!$("#congelar").is(":visible")){
-                    $("#congelar").show(0);
-                    $("#darclic").click();
+
+        var moviendo= false;
+        document.onmousemove = function(){
+            moviendo= true;
+        };
+        setInterval (function() {
+            if (!moviendo) {
+                // No ha habido movimiento desde hace un segundo, aquí tu codigo
+                $("#contador").text("-------------- Expira en: "+hora(expira));
+                if(expira == 0){
+                    bloquear_sesion();
                 }
-          } else {
-              moviendo=false;
-              $("#contador").text("-------------- Expira en: moviendo");
-          }
+                expira--;
+            } else {
+                moviendo=false;
+                $("#contador").text("-------------- Expira en: moviendo");
+            }
        }, 1000); // Cada segundo, pon el valor que quieras.
     })()
+
+    function bloquear_sesion(){
+        $("#congelar").show();
+        $("#main-wrapper").hide();
+    }
     
     /*var sessionTimeout = 60*1;
     var otro = setTimeout("DisplaySessionTimeout()", 1000);
@@ -118,7 +138,7 @@
     }
 ?>
 
-<h5 id="contador">slksajkdkajdklja</h5>
+<h5 id="contador" style="display: none;">slksajkdkajdklja</h5>
 
     <!-- ============================================================== -->
     <!-- Icono de cargando página... -->
@@ -128,10 +148,12 @@
             <circle class="path" cx="50" cy="50" r="20" fill="none" stroke-width="2" stroke-miterlimit="10" /> </svg>
     </div>
 
-<section id="wrapper" style="display: none;" id="congelar">
-    <div class="login-register" style="background-image:url(<?php echo base_url(); ?>assets/images/portadas/seguridad2.jpg);">        
+
+
+<section id="congelar" style="display: none;">
+    <div class="login-register" style="background-color: fff; background-image:url(<?php echo base_url(); ?>assets/images/portadas/seguridad2-copia.jpg);">        
         <div class="login-box card">
-            <div class="card-body">
+            <div class="card-body" style="z-index: 999;">
               <form class="form-horizontal form-material" id="loginform" action="index.html">
 
                 <div class="form-group">
