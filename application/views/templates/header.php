@@ -1,4 +1,5 @@
 <?php
+
     $user = $this->session->userdata('usuario');
     if(empty($user)){
         header("Location: ".site_url()."/login");
@@ -66,6 +67,44 @@
 </head>
 <script>
     var barra = setTimeout(function(){ $("#clic").click(); }, 500);
+
+    var otra = (function(){
+       var moviendo= false;
+       document.onmousemove = function(){
+              moviendo= true;
+       };
+       setInterval (function() {
+          if (!moviendo) {
+              // No ha habido movimiento desde hace un segundo, aquí tu codigo
+                $("#contador").text("-------------- Expira en: inomvil");
+                if(!$("#congelar").is(":visible")){
+                    $("#congelar").show(0);
+                    $("#darclic").click();
+                }
+          } else {
+              moviendo=false;
+              $("#contador").text("-------------- Expira en: moviendo");
+          }
+       }, 1000); // Cada segundo, pon el valor que quieras.
+    })()
+    
+    /*var sessionTimeout = 60*1;
+    var otro = setTimeout("DisplaySessionTimeout()", 1000);
+    function DisplaySessionTimeout(){
+        //assigning minutes left to session timeout to Label
+        
+        sessionTimeout = sessionTimeout - 1;
+        
+        //if session is not less than 0
+        if (sessionTimeout >= 0){
+            $("#contador").text("-------------- Expira en: "+(sessionTimeout)+" segundos");
+            setTimeout("DisplaySessionTimeout()", 1000);            
+        }else{
+            //show message box
+            alert("Your current Session is over.");
+        }
+    }*/
+
 </script>
 
 <body class="fix-header fix-sidebar card-no-border logo-center" onload="iniciar();">
@@ -78,6 +117,9 @@
         }
     }
 ?>
+
+<h5 id="contador">slksajkdkajdklja</h5>
+
     <!-- ============================================================== -->
     <!-- Icono de cargando página... -->
     <!-- ============================================================== -->
@@ -85,6 +127,51 @@
         <svg class="circular" viewBox="25 25 50 50">
             <circle class="path" cx="50" cy="50" r="20" fill="none" stroke-width="2" stroke-miterlimit="10" /> </svg>
     </div>
+
+    <div class="card" id="congelar" align="center" style="display: none;">
+                            <div class="card-header">
+                                <div class="card-actions">
+                                    <a class="" data-action="collapse"><i class="ti-minus"></i></a>
+                                    <a class="btn-minimize" id="darclic" data-action="expand"><i class="mdi mdi-arrow-expand"></i></a>
+                                    <a class="btn-close" data-action="close"><i class="ti-close"></i></a>
+                                </div>
+                                <h4 class="card-title m-b-0">Discount</h4>
+                            </div>
+                            <div class="card-body collapse show bg-info">
+                                <div id="myCarousel" class="carousel slide" data-ride="carousel">
+                                    <!-- Carousel items -->
+                                    <div class="carousel-inner">
+                                        <div class="carousel-item flex-column">
+                                            <i class="fa fa-shopping-cart fa-2x text-white"></i>
+                                            <p class="text-white">25th Jan</p>
+                                            <h3 class="text-white font-light">Now Get <span class="font-bold">50% Off</span><br>
+                                      on buy</h3>
+                                            <div class="text-white m-t-20">
+                                                <i>- Ecommerce site</i>
+                                            </div>
+                                        </div>
+                                        <div class="carousel-item flex-column active">
+                                            <i class="fa fa-shopping-cart fa-2x text-white"></i>
+                                            <p class="text-white">25th Jan</p>
+                                            <h3 class="text-white font-light">Now Get <span class="font-bold">50% Off</span><br>
+                                      on buy</h3>
+                                            <div class="text-white m-t-20">
+                                                <i>- Ecommerce site</i>
+                                            </div>
+                                        </div>
+                                        <div class="carousel-item flex-column">
+                                            <i class="fa fa-shopping-cart fa-2x text-white"></i>
+                                            <p class="text-white">25th Jan</p>
+                                            <h3 class="text-white font-light">Now Get <span class="font-bold">50% Off</span><br>
+                                      on buy</h3>
+                                            <div class="text-white m-t-20">
+                                                <i>- Ecommerce site</i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
     
 <div id="main-wrapper">
         <!-- ============================================================== -->

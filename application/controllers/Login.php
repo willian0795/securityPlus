@@ -45,7 +45,7 @@ class Login extends CI_Controller {
                'descripcion' => "yo inicié sesión jaja",
                'id_accion' => "1"
             );
-			$this->bitacora_model->bitacora($bita);
+			$this->bitacora_model->bitacora($bita);			
 		}else{
 			echo "fracaso";
 			$this->session->sess_destroy();

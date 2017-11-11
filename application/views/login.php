@@ -88,11 +88,11 @@
     <!-- ============================================================== --> 
 
 
-    <section id="wrapper" class="login-register img-responsive login-sidebar" style="background-image:url(<?php echo base_url(); ?>assets/images/portadas/seguridad.jpg);">
+    <section id="wrapper" class="login-register img-responsive login-sidebar" style="background-image:url(<?php echo base_url(); ?>assets/images/portadas/seguridad2.jpg);">
     
   <div class="login-box card">
     <div class="card-body">
-      <?php echo form_open('', array('id' => 'formajax', 'style' => 'margin-top: 0px;', 'class' => 'form-horizontal form-material')); ?>
+      <?php echo form_open('', array('id' => 'loginform', 'style' => 'margin-top: 0px;', 'class' => 'form-horizontal form-material')); ?>
         <a href="javascript:void(0)" class="text-center db"><img width="230px;" src="<?php echo base_url(); ?>assets/images/logo_completo.png" alt="Home" /></a>  
         
         <div class="form-group m-t-40">
@@ -120,6 +120,7 @@
           </div>
         </div>
       </form>
+
       <form class="form-horizontal" id="recoverform" action="index.html">
         <div class="form-group ">
           <div class="col-xs-12">
@@ -148,10 +149,10 @@
 <script>
 
 $(function(){     
-    $("#formajax").on("submit", function(e){
+    $("#loginform").on("submit", function(e){
         e.preventDefault();
         var f = $(this);
-        var formData = new FormData(document.getElementById("formajax"));
+        var formData = new FormData(document.getElementById("loginform"));
         formData.append("dato", "valor");
         
         $.ajax({
