@@ -1,10 +1,10 @@
+
  <div class="card">
 			    <div class="card-header">
 			        <h4 class="card-title m-b-0">Listado de sistemas</h4>
 			    </div>
 			    <div class="card-body b-t"  style="padding-top: 7px;">
-			        <div class="pull-right">
-			            <button type="button" onclick="cambiar_nuevo();" class="btn waves-effect waves-light btn-success2"><span class="mdi mdi-plus"></span> Nuevo registro</button>
+			       
 			        </div>
 			        <div class="table-responsive">
 			            <table id="myTable" class="table table-bordered">
@@ -18,7 +18,32 @@
 			                </thead>
 			                <tbody>
 			                <?php 
-			                    $bitacora = $this->db->get("sep_bitacora");
+			                function cambiar($variable){
+			                	if($variable == 0){
+			                		$variable = "vacio";
+			                	}
+			                	return $variable;
+			                }		
+			                	                
+			                $array = array('id_sistema' => cambiar($_GET["id_sistema"]), 'id_usuario' => cambiar($_GET["id_usuario"]), 'id_accion' => cambiar($_GET["id_accion"]));
+			                $conta = 1;
+			                $var = "";
+			                while ($otro = current($array)) {
+			                	if($otro != "vacio"){
+			                	
+			                		if($conta == 1){
+			                			$var = " WHERE ".key($array)." = ".$otro;
+			                		}else{
+			                			$var .= " AND ".key($array)." = ".$otro;
+			                		}
+			                		$conta++;
+			                	}
+			                
+			                	next($array);
+			                }
+
+			               
+			                    $bitacora = $this->db->query("SELECT * FROM sep_bitacora $var");
 			                    if(!empty($bitacora)){
 			                        foreach ($bitacora->result() as $fila) {
 			                           echo "<tr>";
