@@ -157,7 +157,7 @@
     </div>
     
 </section>
-<div id="main-wrapper" style="display: none;">
+<div id="main-wrapper" style="display: block;">
         <!-- ============================================================== -->
         <!-- Barra superior -->
         <!-- ============================================================== -->
