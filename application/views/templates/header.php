@@ -70,7 +70,7 @@
 
     $(document).ready(function() {
         if(hora() >= 60*minutos || localStorage["expira"] == "expirada"){
-            cerrar_sesion();
+            cerrar_sesion(0);
         }
     });
 
@@ -118,7 +118,7 @@
                 // No ha habido movimiento desde hace un segundo, aquí tu codigo
                 hora();
                 if(hora() >= 60*minutos){
-                    cerrar_sesion();
+                    cerrar_sesion(2000);
                 }
             } else {
                 moviendo=false;
@@ -129,9 +129,9 @@
        }, 1000); // Cada segundo, pon el valor que quieras.
     })()
 
-    function cerrar_sesion(){
-        $("#congelar").fadeIn(2000);
-        $("#main-wrapper").fadeOut(2000);
+    function cerrar_sesion(t){
+        $("#congelar").fadeIn(t);
+        $("#main-wrapper").fadeOut(t);
         localStorage["expira"] = "expirada";
     }
 
@@ -204,9 +204,10 @@
 
                 <div class="form-group">
                   <div class="col-xs-12 text-center">
-                    <div class="user-thumb text-center"> <h4 style="font-size: 70px; margin-bottom: 0;" class="text-info mdi mdi-account"></h4>
-                      <h3><?php echo ucwords(strtolower($this->session->userdata('nombre_usuario'))); ?></h3>
-                      <h4 class="text-warning"><span class="mdi mdi-information"></span> La sesión ha expirado</h4>
+                    <div class="user-thumb text-center"> 
+                        <h3 class="text-warning"><span class="mdi mdi-information"></span> La sesión ha expirado</h3>
+                        <h4 style="font-size: 70px; margin-bottom: 0;" class="text-info mdi mdi-account"></h4>
+                        <h4><?php echo ucwords(strtolower($this->session->userdata('nombre_usuario'))); ?></h4>
                     </div>
                   </div>
                 </div>
