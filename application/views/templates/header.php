@@ -66,18 +66,43 @@
 <![endif]-->
 </head>
 <script>
-    var barra = setTimeout(function(){ $("#clic").click(); }, 500);
+    var minutos = 10;
 
-    var expira = 60*10;
+    $(document).ready(function() {
+        if(hora() >= 60*minutos || localStorage["expira"] == "expirada"){
+            cerrar_sesion();
+        }
+    });
 
-    function hora(s){
-      var secs = s % 60;
-      s = (s - secs) / 60;
-      var mins = s % 60;
-      var hrs = (s - mins) / 60;
+    function cambiar_hora_expira(s){
+        if(localStorage["expira"] == "expirada"){
+            $("#contador").text("Expira: expirada");
+        }else{
+            s = (60*minutos) - s;
+            var secs = s % 60;
+            s = (s - secs) / 60;
+            var mins = s % 60;
+            var hrs = (s - mins) / 60;
+            horas = addZ(mins) + ':' + addZ(secs);
 
-      return addZ(hrs) + ':' + addZ(mins) + ':' + addZ(secs);
+            $("#contador").text("Expira: "+horas);
+        }
     }
+
+    window.onbeforeunload = function() {
+        //localStorage["expira"] = 0;
+    }
+
+    function hora(){
+        var c = new Date();
+        var a = new Date(c.getFullYear()+"-"+c.getMonth()+"-"+c.getDate()+" "+c.getHours()+":"+c.getMinutes()+":"+c.getSeconds());
+        var b = new Date(localStorage["expira"]);
+        //La diferencia se da en milisegundos así que debes dividir entre 1000
+        var result = ((a-b)/1000);
+        cambiar_hora_expira(result);
+        return result; // resultado 5;;
+    }
+
     function addZ(n) {
         return (n<10? '0':'') + n;
     }
@@ -89,41 +114,65 @@
             moviendo= true;
         };
         setInterval (function() {
-            if (!moviendo) {
+            if (!moviendo || localStorage["expira"] == "expirada") {
                 // No ha habido movimiento desde hace un segundo, aquí tu codigo
-                $("#contador").text("-------------- Expira en: "+hora(expira));
-                if(expira == 0){
-                    bloquear_sesion();
+                hora();
+                if(hora() >= 60*minutos){
+                    cerrar_sesion();
                 }
-                expira--;
             } else {
                 moviendo=false;
-                $("#contador").text("-------------- Expira en: moviendo");
+                var c = new Date();
+                localStorage["expira"] = new Date(c.getFullYear()+"-"+c.getMonth()+"-"+c.getDate()+" "+c.getHours()+":"+c.getMinutes()+":"+c.getSeconds());
+                hora();
             }
        }, 1000); // Cada segundo, pon el valor que quieras.
     })()
 
-    function bloquear_sesion(){
-        $("#congelar").show();
-        $("#main-wrapper").hide();
+    function cerrar_sesion(){
+        $("#congelar").fadeIn(2000);
+        $("#main-wrapper").fadeOut(2000);
+        localStorage["expira"] = "expirada";
     }
-    
-    /*var sessionTimeout = 60*1;
-    var otro = setTimeout("DisplaySessionTimeout()", 1000);
-    function DisplaySessionTimeout(){
-        //assigning minutes left to session timeout to Label
-        
-        sessionTimeout = sessionTimeout - 1;
-        
-        //if session is not less than 0
-        if (sessionTimeout >= 0){
-            $("#contador").text("-------------- Expira en: "+(sessionTimeout)+" segundos");
-            setTimeout("DisplaySessionTimeout()", 1000);            
-        }else{
-            //show message box
-            alert("Your current Session is over.");
+
+    function objetoAjax(){
+        var xmlhttp = false;
+        try {
+            xmlhttp = new ActiveXObject("Msxml2.XMLHTTP");
+        } catch (e) {
+            try { xmlhttp = new ActiveXObject("Microsoft.XMLHTTP"); } catch (E) { xmlhttp = false; }
         }
-    }*/
+        if (!xmlhttp && typeof XMLHttpRequest!='undefined') { xmlhttp = new XMLHttpRequest(); }
+        return xmlhttp;
+    }
+
+    function verificar_usuario2(){       
+        var usuario = $("#ususario_val").val();
+        var password = $("#password_val").val(); 
+
+        jugador = document.getElementById('jugador');
+        
+        ajax = objetoAjax();
+        ajax.open("POST", "<?php echo site_url(); ?>/login/verificar_usuario2", true);
+        ajax.onreadystatechange = function() {
+            if (ajax.readyState == 4){
+                jugador.value = (ajax.responseText);
+                if(jugador.value == "exito"){
+                    continuar_sesion();
+                }
+            }
+        } 
+
+        ajax.setRequestHeader("Content-Type","application/x-www-form-urlencoded"); 
+        ajax.send("&usuario="+usuario+"&password="+password)
+    }
+
+    function continuar_sesion(){
+        $("#congelar").fadeOut(2000);
+        $("#main-wrapper").fadeIn(2000);
+        var c = new Date();
+        localStorage["expira"] = new Date(c.getFullYear()+"-"+c.getMonth()+"-"+c.getDate()+" "+c.getHours()+":"+c.getMinutes()+":"+c.getSeconds());
+    }
 
 </script>
 
@@ -137,8 +186,7 @@
         }
     }
 ?>
-
-<h5 id="contador" style="display: none;">slksajkdkajdklja</h5>
+<input type="hidden" name="jugador" id="jugador">
 
     <!-- ============================================================== -->
     <!-- Icono de cargando página... -->
@@ -148,29 +196,29 @@
             <circle class="path" cx="50" cy="50" r="20" fill="none" stroke-width="2" stroke-miterlimit="10" /> </svg>
     </div>
 
-
-
 <section id="congelar" style="display: none;">
-    <div class="login-register" style="background-color: fff; background-image:url(<?php echo base_url(); ?>assets/images/portadas/seguridad2-copia.jpg);">        
+    <div class="login-register" style="background-color: rgb(238, 245, 249);" >        
         <div class="login-box card">
             <div class="card-body" style="z-index: 999;">
               <form class="form-horizontal form-material" id="loginform" action="index.html">
 
                 <div class="form-group">
                   <div class="col-xs-12 text-center">
-                    <div class="user-thumb text-center"> <img alt="thumbnail" class="img-circle" width="100" src="../assets/images/users/1.jpg">
-                      <h3>Genelia</h3>
+                    <div class="user-thumb text-center"> <h4 style="font-size: 70px; margin-bottom: 0;" class="text-info mdi mdi-account"></h4>
+                      <h3><?php echo ucwords(strtolower($this->session->userdata('nombre_usuario'))); ?></h3>
+                      <h4 class="text-warning"><span class="mdi mdi-information"></span> La sesión ha expirado</h4>
                     </div>
                   </div>
                 </div>
+                <input type="hidden" name="ususario_val" id="ususario_val" value="<?php echo $this->session->userdata('usuario') ?>">
                 <div class="form-group ">
                   <div class="col-xs-12">
-                    <input class="form-control" type="password" required="" placeholder="password">
+                    <input class="form-control" type="password" id="password_val" name="password_val" required="" placeholder="password">
                   </div>
                 </div>
                 <div class="form-group text-center">
                   <div class="col-xs-12">
-                    <button class="btn btn-info btn-lg btn-block text-uppercase waves-effect waves-light" type="submit">Login</button>
+                    <button class="btn btn-info btn-lg btn-block text-uppercase waves-effect waves-light" onclick="verificar_usuario2()" type="button">Continuar</button>
                   </div>
                 </div>
               </form>
@@ -226,6 +274,7 @@
                         <!-- ============================================================== -->
                         <!-- Comment -->
                         <!-- ============================================================== -->
+                        <li class="nav-item"> <a class="nav-link waves-effect waves-dark" href="javascript:void(0)"><span id="contador" style="display: block;">slksajkdkajdklja</span></a> </li>
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle text-muted text-muted waves-effect waves-dark" href="" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="mdi mdi-message"></i>
                                 <div class="notify"> <span class="heartbit"></span> <span class="point"></span> </div>
