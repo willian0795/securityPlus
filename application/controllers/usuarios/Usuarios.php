@@ -24,8 +24,20 @@ class Usuarios extends CI_Controller {
 		$this->load->view('usuarios/tabla_usuarios');
 	}
 
+	public function cambiar_checke($dato){
+		if(empty($dato)){
+			$dato = 0;
+		}
+		return $dato;
+	}
+
 	public function gestionar_usuarios(){
 		if($this->input->post('band') == "save"){
+			if($this->input->post('tipo_pass') == 1){
+				$pass = "";
+			}else{
+				$pass = md5($this->input->post('password'));
+			}
 			if($this->input->post('id_empleado') == 0){
 				$data = array(
 				'id_empleado' => $this->input->post('id_empleado'), 
@@ -33,8 +45,8 @@ class Usuarios extends CI_Controller {
 				'nombre' => $this->input->post('nombre')." ".$this->input->post('apellido'),
 				'genero' => $this->input->post('genero'),
 				'usuario' => $this->input->post('usuario'),
-				'password' => md5($this->input->post('password')),
-				'estado' => $this->input->post('estado')
+				'password' => $pass,
+				'estado' => $this->cambiar_checke($this->input->post('estado'))
 				);
 			}else{
 				$data = array(
@@ -43,8 +55,8 @@ class Usuarios extends CI_Controller {
 				'nombre' => strtolower($this->input->post('nombre_completo')),
 				'genero' => $this->input->post('genero'),
 				'usuario' => $this->input->post('usuario'),
-				'password' => md5($this->input->post('password')),
-				'estado' => $this->input->post('estado')
+				'password' => $pass,
+				'estado' => $this->cambiar_checke($this->input->post('estado'))
 				);
 			}
 			
@@ -59,7 +71,7 @@ class Usuarios extends CI_Controller {
 			'genero' => $this->input->post('genero'),
 			'usuario' => $this->input->post('usuario'),
 			'password' => md5($this->input->post('password')),
-			'estado' => $this->input->post('estado')
+			'estado' => $this->cambiar_checke($this->input->post('estado'))
 			);
 			echo $this->usuarios_model->editar_usuario($data);
 

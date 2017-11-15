@@ -7,13 +7,16 @@
         $("#nombre").val(nombre_completo);
         $("#apellido").val(nombre_completo);
         $("#nombre_completo").val(nombre_completo);
-        $("#genero"+sexo).attr('checked', true);
+        document.getElementById("genero"+sexo).checked = 1;
         $("#usuario").val(usuario);
         if(estado == 1){
-            $("#estado :checkbox").attr('checked',true);
+            document.getElementById("estado").checked = 1;
         }else{
-            $("#estado :checkbox").attr('checked',false);
+            document.getElementById("estado").checked = 0;
         }
+        cambiar_check("estado");
+        $("#password").val("");
+        $("#password2").val("");
 
         $("#nombre0").hide(0);
         $("#nombre1").show(0);
@@ -36,7 +39,10 @@
         $("#nr").val("");
         $("#nombre_completo").val("");
         $("#usuario").val("");
-        $("#estado :checkbox").attr('checked',true);
+        $("#password").val("");
+        $("#password2").val("");
+        document.getElementById("estado").checked = 1;
+        cambiar_check("estado");
         $("#band").val("save");
 
         $("#ttl_form").addClass("bg-success");
@@ -62,6 +68,8 @@
     }
 
     function eliminar_usuario(obj){
+        $("#password").val("ninguna");
+        $("#password2").val("ninguna");
         $("#band").val("delete");
         swal({   
             title: "¿Está seguro?",   
@@ -130,6 +138,8 @@
 
     	$("#usuario").val(nombre+"."+apellido);
         $("#nombre_completo").val(nombre+"."+apellido);
+        $("#nombre0").val("");
+        $("#nombre1").val("");
     }
 
     function cambiar_idgenero(){
@@ -140,14 +150,14 @@
         $("#nombre_completo").val(nombre)
         $("#nr").val(nr);
         $("#usuario").val(usuario);
-        $("#genero"+id_genero).attr('checked', true);
+        document.getElementById("genero"+id_genero).checked = 1;
     }
 
     function cambiar_check(obj){
-        if( $(obj).prop('checked') ) {
-            $(obj).val('1')
+        if( $("#"+obj).prop('checked') ) {
+            $("#"+obj).val('1');
         }else{
-            $(obj).val('0')
+            $("#"+obj).val('0');
         }
     }
 
@@ -210,6 +220,13 @@
 
                                         
                                     </select>
+                                </div>
+                                <div class="form-group col-lg-6">
+                                    <h5>Tipo contraseña <span class="text-danger">*</span></h5>
+                                    <div class="controls">
+                                        <label class="custom-control custom-checkbox">
+                                            <input type="checkbox" value="0" onchange="cambiar_check(this.id)" name="tipo_pass" id="tipo_pass" class="custom-control-input"> <span class="custom-control-indicator"></span> <span class="custom-control-description">¿Contraseña NULL?</span> </label>
+                                    <div class="help-block"></div></div>
                                 </div>
                             </div>
 
@@ -274,7 +291,7 @@
                                 </div>
                             </div>
 
-                            <div class="row">
+                            <div class="row" id="div_pass">
                             	<div class="form-group col-lg-6">
                                     <h5>Contraseña <span class="text-danger">*</span></h5>
                                     <div class="input-group">
@@ -294,14 +311,16 @@
                             </div>      
 
                             <div class="row">
-                            	<div class="form-group col-lg-6">
-                            	</div>
-                            	<div align="right" class="form-group col-lg-6">
-                                    <div class="checkbox checkbox-success">
-                                        <input id="estado" name="estado" type="checkbox" value="1" checked onchange="cambiar_check(this)">
-                                        <label for="estado"> Cuenta activa </label>
-                                    </div>
+                                <div class="form-group col-lg-6">
                                 </div>
+                                <div align="right" class="form-group col-lg-6">
+                                    <h5>Estado de la cuenta: <span class="text-danger">*</span></h5>
+                                    <div class="controls">
+                                        <label class="custom-control custom-checkbox">
+                                            <input type="checkbox" value="0" onchange="cambiar_check(this.id)" name="estado" id="estado" class="custom-control-input"> <span class="custom-control-indicator"></span> <span class="custom-control-description">Cuenta activa?</span> </label>
+                                    <div class="help-block"></div></div>
+                                </div>
+                            	
                             </div>                              
 
 
@@ -360,7 +379,6 @@ $(function(){
             processData: false
         })
         .done(function(res){
-        	alert(res)
             if(res == "exito"){
                 cerrar_mantenimiento();
                 if($("#band").val() == "save"){
@@ -371,6 +389,8 @@ $(function(){
                     swal({ title: "¡Borrado exitoso!", type: "success", showConfirmButton: true });
                 }
                 tablausuarios();
+            }else if(res == "existe"){
+                swal({ title: "¡Ya existe!", text: "El usuario ya posee una cuenta", type: "warning", showConfirmButton: true });
             }else{
                 swal({ title: "¡Ups! Error", text: "Intentalo nuevamente.", type: "error", showConfirmButton: true });
             }

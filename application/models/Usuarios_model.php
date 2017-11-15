@@ -10,21 +10,20 @@ class Usuarios_model extends CI_Model {
 
 	function insertar_usuario($data){
 
-		$id_seccion = $this->obtener("SELECT id_seccion FROM sir_empleado_informacion_laboral WHERE id_empleado = ".$data['id_empleado'],"id_seccion");
-
-		$id = $this->obtener_ultimo_id("org_usuario","id_usuario");
-
-		if($this->db->insert('org_usuario', array('id_usuario' => $id, 'nombre_completo' => $data['nombre'], 'nr' => $data['nr'], 'sexo' => $data['genero'], 'usuario' => $data['usuario'], 'password' => $data['password'], 'id_seccion' => $id_seccion, 'estado' => $data['estado']))){
-			return "exito";
+		$query = $this->db->query("SELECT * FROM org_usuario WHERE usuario = '".$data['usuario']."'");
+		if($query->num_rows() > 0){
+			return "existe";
 		}else{
-			return "fracaso";
-		}
-	}
+			$id_seccion = $this->obtener("SELECT id_seccion FROM sir_empleado_informacion_laboral WHERE id_empleado = ".$data['id_empleado'],"id_seccion");
 
-	function mostrar_horario(){
-		$query = $this->db->get("cvr_horario_viatico");
-		if($query->num_rows() > 0) return $query;
-		else return false;
+			$id = $this->obtener_ultimo_id("org_usuario","id_usuario");
+
+			if($this->db->insert('org_usuario', array('id_usuario' => $id, 'nombre_completo' => $data['nombre'], 'nr' => $data['nr'], 'sexo' => $data['genero'], 'usuario' => $data['usuario'], 'password' => $data['password'], 'id_seccion' => $id_seccion, 'estado' => $data['estado']))){
+				return "exito";
+			}else{
+				return "fracaso";
+			}
+		}
 	}
 
 	function editar_usuario($data){

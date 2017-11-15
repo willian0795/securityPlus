@@ -23,15 +23,21 @@
 
                     if(!empty($usuarios)){
                         foreach ($usuarios->result() as $fila) {
-                           echo "<tr>";
-                           echo "<td>".$fila->id_usuario."</td>";
-                           echo "<td>".$fila->nr."</td>";
-                           echo "<td>".$fila->nombre_completo."</td>";
-                           echo "<td>".$fila->estado."</td>";
+                            echo "<tr>";
+                            echo "<td>".$fila->id_usuario."</td>";
+                            echo "<td>".$fila->nr."</td>";
+                            echo "<td>".$fila->nombre_completo."</td>";
+                            if($fila->estado == 1){ 
+                                echo "<td><div class='btn btn-rounded btn-sm btn-success' style='cursor:default;'><i class='ti-user'></i></div>"; 
+                            }else{ 
+                                echo "<td><div class='btn btn-rounded btn-sm btn-danger' style='cursor:default;'><i class='ti-user'></i></div>"; 
+                            }
+
+                            echo"</td>";
                            
-                           $array = array($fila->id_usuario, $fila->nombre_completo, $fila->nr, $fila->sexo, $fila->usuario, $fila->id_seccion, $fila->estado);
-                           echo boton_tabla($array,"cambiar_editar");
-                           echo "</tr>";
+                            $array = array($fila->id_usuario, $fila->nombre_completo, $fila->nr, $fila->sexo, $fila->usuario, $fila->id_seccion, $fila->estado);
+                            echo boton_tabla($array,"cambiar_editar");
+                            echo "</tr>";
                         }
                     }
                 ?>
