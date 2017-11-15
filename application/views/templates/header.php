@@ -1,5 +1,4 @@
 <?php
-    echo "----------------------------".md5("roberto.henriquez");
     $user = $this->session->userdata('usuario');
     if(empty($user)){
         header("Location: ".site_url()."/login");
