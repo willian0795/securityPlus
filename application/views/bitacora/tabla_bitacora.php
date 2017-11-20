@@ -53,7 +53,12 @@
 
 			                           echo "<td>".$fila->descripcion."</td>";
 			                           echo "<td>".date('d/m/Y h:i:s', strtotime($fila->fecha))."</td>";
-			                            echo "<td>".$fila->ip."</td>";
+			                            echo "<td>";
+			                            if($fila->ip == '::1'){
+			                            	echo "Servidor</td>";
+			                            }else{
+			                            	echo $fila->ip."</td>";
+			                            }
 			                       
 			                           echo "</tr>";
 			                        }

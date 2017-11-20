@@ -24,6 +24,10 @@ class Usuarios extends CI_Controller {
 		$this->load->view('usuarios/tabla_usuarios');
 	}
 
+	public function tabla_roles(){
+		$this->load->view('usuarios/tabla_roles');
+	}
+
 	public function cambiar_checke($dato){
 		if(empty($dato)){
 			$dato = 0;
@@ -41,7 +45,7 @@ class Usuarios extends CI_Controller {
 			if($this->input->post('id_empleado') == 0){
 				$data = array(
 				'id_empleado' => $this->input->post('id_empleado'), 
-				'nr' => $this->input->post('nr'), 
+				'nr' => NULL, 
 				'nombre' => $this->input->post('nombre')." ".$this->input->post('apellido'),
 				'genero' => $this->input->post('genero'),
 				'usuario' => $this->input->post('usuario'),
@@ -49,15 +53,20 @@ class Usuarios extends CI_Controller {
 				'estado' => $this->cambiar_checke($this->input->post('estado'))
 				);
 			}else{
-				$data = array(
-				'id_empleado' => $this->input->post('id_empleado'), 
-				'nr' => $this->input->post('nr'), 
-				'nombre' => strtolower($this->input->post('nombre_completo')),
-				'genero' => $this->input->post('genero'),
-				'usuario' => $this->input->post('usuario'),
-				'password' => $pass,
-				'estado' => $this->cambiar_checke($this->input->post('estado'))
-				);
+				$empleado = $this->db->query("SELECT UPPER(CONCAT_WS(' ', primer_nombre, segundo_nombre, tercer_nombre, primer_apellido, segundo_apellido, apellido_casada)) AS nombre_completo,  LOWER(CONCAT_WS(' ', primer_nombre, segundo_nombre, tercer_nombre)) AS nombre, LOWER(CONCAT_WS(' ', primer_apellido, segundo_apellido, apellido_casada)) AS apellido, LOWER(CONCAT_WS('.',primer_nombre, primer_apellido)) AS usuario, nr, id_genero FROM sir_empleado WHERE id_empleado = '".$this->input->post('id_empleado')."'");
+		        if($empleado->num_rows() > 0){
+		            foreach ($empleado->result() as $fila) {  
+		            	$data = array(
+						'id_empleado' => $this->input->post('id_empleado'), 
+						'nr' => $fila->nr, 
+						'nombre' => $fila->nombre_completo,
+						'genero' => $fila->id_genero,
+						'usuario' => $fila->usuario,
+						'password' => $pass,
+						'estado' => $this->cambiar_checke($this->input->post('estado'))
+						);            
+		            }
+		        }				
 			}
 			
 			echo $this->usuarios_model->insertar_usuario($data);
@@ -68,7 +77,7 @@ class Usuarios extends CI_Controller {
 			'idusuario' => $this->input->post('idusuario'), 
 			'nr' => $this->input->post('nr'), 
 			'nombre' => strtolower($this->input->post('nombre_completo')),
-			'genero' => $this->input->post('genero'),
+			'genero' => $fila->id_genero,
 			'usuario' => $this->input->post('usuario'),
 			'password' => md5($this->input->post('password')),
 			'estado' => $this->cambiar_checke($this->input->post('estado'))

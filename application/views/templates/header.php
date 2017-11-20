@@ -66,10 +66,11 @@
 </head>
 <script>
     var minutos = 10;
-    var warning = 7;
+    var warning = 9;
     var danger = 3;
 
     $(document).ready(function() {
+        $("#password_val").val("");
         if(hora() >= 60*minutos || localStorage["expira"] == "expirada"){
             cerrar_sesion(0);
         }
@@ -175,6 +176,9 @@
                 jugador.value = (ajax.responseText);
                 if(jugador.value == "exito"){
                     continuar_sesion();
+                }else{
+                    swal({ title: "¡Error!", text: "la contraseña no es válida", type: "warning", showConfirmButton: true });
+                    $("#password_val").val("");
                 }
             }
         } 
@@ -186,7 +190,6 @@
     function continuar_sesion(){
         $("#congelar").fadeOut(1000);
         $("#main-wrapper").fadeIn(1000);
-        $("#ususario_val").val("");
         var c = new Date();
         localStorage["expira"] = new Date(c.getFullYear()+"-"+c.getMonth()+"-"+c.getDate()+" "+c.getHours()+":"+c.getMinutes()+":"+c.getSeconds());
     }
@@ -277,7 +280,7 @@
     </div>
 
 <section id="congelar" style="display: none;">
-    <div class="login-register" style="background-color: rgb(238, 245, 249);" >        
+    <div class="login-register" style="background-image: url(<?php echo base_url()."assets/images/portadas/seguridad7.jpg"; ?>); background-color: rgb(238, 245, 249);" >        
         <div class="login-box card">
             <div class="card-body" style="z-index: 999;">
                 <div class="form-group">
@@ -352,7 +355,7 @@
                         <!-- ============================================================== -->
                         <!-- Comment -->
                         <!-- ============================================================== -->
-                        <li class="nav-item"> <a id="initial_user" class="nav-link waves-effect waves-dark" href="javascript:void(0)"><span id="contador" style="display: none;"></span></a> </li>
+                        <li class="nav-item"> <a id="initial_user" style="display: none;" class="nav-link waves-effect waves-dark" href="javascript:void(0)"><span id="contador"></span></a> </li>
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle text-muted text-muted waves-effect waves-dark" href="" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="mdi mdi-message"></i>
                                 <div class="notify"> <span class="heartbit"></span> <span class="point"></span> </div>

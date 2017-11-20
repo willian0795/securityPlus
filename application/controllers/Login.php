@@ -40,12 +40,11 @@ class Login extends CI_Controller {
             );
 			$this->session->set_userdata($usuario_data);
 			echo "exito";
-			$bita = array(
+			$this->bitacora_model->bitacora(array(
                'id_sistema' => "14",
-               'descripcion' => "yo inicié sesión jaja",
+               'descripcion' => "El usuario ".$this->input->post('usuario')." inició sesión",
                'id_accion' => "1"
-            );
-			$this->bitacora_model->bitacora($bita);			
+            ));			
 		}else{
 			echo "fracaso";
 			$this->session->sess_destroy();
@@ -71,13 +70,8 @@ class Login extends CI_Controller {
             );
 			$this->session->set_userdata($usuario_data);
 			echo "exito";
-			$bita = array(
-               'id_sistema' => "14",
-               'descripcion' => "yo inicié sesión jaja",
-               'id_accion' => "1"
-            );
-			$this->bitacora_model->bitacora($bita);			
 		}else{
+			echo $this->input->post('usuario');
 			echo "fracaso";
 		}
 	}

@@ -1,25 +1,24 @@
 <script type="text/javascript">
-    function cambiar_editar(id,nombre_completo,nr,sexo,usuario,seccion,estado){
+    function cambiar_editar(id,nombre,sexo,usuario,estado){
 
         $("#id_empleado").parent().parent().hide(0);
-        $("#idusuario").val(id);
-        $("#nr").val(nr);
-        $("#nombre").val(nombre_completo);
-        $("#apellido").val(nombre_completo);
-        $("#nombre_completo").val(nombre_completo);
-        document.getElementById("genero"+sexo).checked = 1;
-        $("#usuario").val(usuario);
+        $("#idusuario").val(id);        
+
+        $("#form_nusuario").hide(0);
+        $("#form_eusuario").show(0);
+
         if(estado == 1){
             document.getElementById("estado").checked = 1;
         }else{
             document.getElementById("estado").checked = 0;
         }
         cambiar_check("estado");
+
+        $("#l_nombre").val(nombre);
+        $("#l_usuario").val(usuario);
+
         $("#password").val("");
         $("#password2").val("");
-
-        $("#nombre0").hide(0);
-        $("#nombre1").show(0);
 
         $("#ttl_form").removeClass("bg-success");
         $("#ttl_form").addClass("bg-info");
@@ -36,8 +35,6 @@
     function cambiar_nuevo(){
         $("#id_empleado").parent().parent().show(0);
         $("#idusuario").val("");
-        $("#nr").val("");
-        $("#nombre_completo").val("");
         $("#usuario").val("");
         $("#password").val("");
         $("#password2").val("");
@@ -47,6 +44,8 @@
 
         $("#ttl_form").addClass("bg-success");
         $("#ttl_form").removeClass("bg-info");
+
+        $("#form_eusuario").hide(0);
 
         $("#btnadd").show(0);
         $("#btnedit").hide(0);
@@ -100,7 +99,22 @@
     }
 
     function tablausuarios(){        
-        $("#cnt-tabla").load("<?php echo site_url(); ?>/usuarios/usuarios/tabla_usuario");
+        $("#cnt-tabla").load("<?php echo site_url(); ?>/usuarios/usuarios/tabla_usuario", function() {
+            tablaroles();
+        });
+    }
+
+    function tablaroles(){          
+        $( "#tabla_roles" ).load("<?php echo site_url(); ?>/usuarios/usuarios/tabla_roles", function() {
+            multi_select();
+        });  
+    }
+
+    function multi_select(){
+        $('#pre-selected-options').multiSelect();
+        $('#optgroup').multiSelect({
+            selectableOptgroup: true
+        });
     }
 
     function formusuario(){  
@@ -108,13 +122,10 @@
         $("#empleado"+id_empleado).click();
 
         if($("#id_empleado").val() == 0){
-            $("#nombre0").show(0);
-            $("#nombre1").hide(0);
-             $("#nr").val("");
+            $("#form_nusuario").show(0);        
              $("#usuario").val("");
         }else{
-            $("#nombre1").hide(0);
-            $("#nombre0").hide(0);
+            $("#form_nusuario").hide(0);
         }
     }
 
@@ -137,7 +148,6 @@
 		apellido = res2[0];
 
     	$("#usuario").val(nombre+"."+apellido);
-        $("#nombre_completo").val(nombre+"."+apellido);
         $("#nombre0").val("");
         $("#nombre1").val("");
     }
@@ -146,9 +156,7 @@
     	$("#id_genero").val($('input:radio[name=genero]:checked').val());
     }
 
-    function mostrar(id_empleado, nr, usuario, id_genero, nombre){
-        $("#nombre_completo").val(nombre)
-        $("#nr").val(nr);
+    function mostrar(id_empleado, usuario, id_genero){
         $("#usuario").val(usuario);
         document.getElementById("genero"+id_genero).checked = 1;
     }
@@ -207,13 +215,10 @@
                                     <select id="id_empleado" name="id_empleado" class="select2" onchange="formusuario();" style="width: 100%">
                                         <option value="0">[Elija el empleado]</option>
                                         <?php 
-                                            $empleado = $this->db->query("SELECT id_empleado, LOWER(CONCAT_WS(' ', primer_nombre, segundo_nombre, tercer_nombre, primer_apellido, segundo_apellido, apellido_casada)) AS nombre_completo,  LOWER(CONCAT_WS(' ', primer_nombre, segundo_nombre, tercer_nombre)) AS nombre, LOWER(CONCAT_WS(' ', primer_apellido, segundo_apellido, apellido_casada)) AS apellido, LOWER(CONCAT_WS('.',primer_nombre, primer_apellido)) AS usuario, nr, id_genero FROM sir_empleado");
+                                            $empleado = $this->db->query("SELECT id_empleado, UPPER(CONCAT_WS(' ', primer_nombre, segundo_nombre, tercer_nombre, primer_apellido, segundo_apellido, apellido_casada)) AS nombre_completo FROM sir_empleado");
                                             if($empleado->num_rows() > 0){
                                                 foreach ($empleado->result() as $fila) {              
                                                    echo '<option class="m-l-50" value="'.$fila->id_empleado.'">'.$fila->nombre_completo.'</option>';
-                                                   ?>
-                                                   <optgroup id="empleado<?php echo $fila->id_empleado; ?>" type="button" onclick="mostrar('<?php echo $fila->id_empleado; ?>','<?php echo $fila->nr; ?>','<?php echo $fila->usuario; ?>','<?php echo $fila->id_genero; ?>','<?php echo $fila->nombre_completo; ?>')"></optgroup>
-                                                   <?php
                                                 }
                                             }
                                         ?>
@@ -226,67 +231,61 @@
                                     <div class="controls">
                                         <label class="custom-control custom-checkbox">
                                             <input type="checkbox" value="0" onchange="cambiar_check(this.id)" name="tipo_pass" id="tipo_pass" class="custom-control-input"> <span class="custom-control-indicator"></span> <span class="custom-control-description">¿Contraseña NULL?</span> </label>
-                                    <div class="help-block"></div></div>
+                                    </div>
                                 </div>
                             </div>
-
-                            <div class="row" style="display: none;">
-                            	<div class="form-group col-lg-6">
-                                    <h5>NR: <span class="text-danger">*</span></h5>
-                                    <div class="input-group">
-                                        <input type="text" id="nr" name="nr" class="form-control">
+                            <div id="form_eusuario">
+                                <div class="row">
+                                    <div class="form-group col-lg-6">
+                                        <h5>Nombre: <span class="text-danger">*</span></h5>
+                                        <div class="controls">
+                                            <input type="text" id="l_nombre" name="l_nombre" class="form-control" readonly="">
+                                        </div>
                                     </div>
-                                    <div class="help-block"></div>
+                                    <div class="form-group col-lg-6">
+                                        <h5>Usuario: <span class="text-danger">*</span></h5>
+                                        <div class="controls">
+                                            <input type="text" id="l_usuario" name="l_usuario" class="form-control" readonly="">
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="row" id="nombre0">
-                                <div class="form-group col-lg-6">
-                                    <h5>Nombre: <span class="text-danger">*</span></h5>
-                                    <div class="controls">
-                                        <input type="text" onkeyup="formar_usuario();" id="nombre" name="nombre" class="form-control" placeholder="Ingrese el nombre">
-                                        <div class="help-block"></div>
+                            <div id="form_nusuario">
+                                <div class="row">
+                                    <div class="form-group col-lg-6">
+                                        <h5>Nombre: <span class="text-danger">*</span></h5>
+                                        <div class="controls">
+                                            <input type="text" onkeyup="formar_usuario();" id="nombre" name="nombre" class="form-control" placeholder="Ingrese el nombre">
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="form-group col-lg-6">
-                                    <h5>Apellido: <span class="text-danger">*</span></h5>
-                                    <div class="controls">
-                                        <input type="text" onkeyup="formar_usuario();" id="apellido" name="apellido" class="form-control" placeholder="Ingrese el apellido">
-                                        <div class="help-block"></div>
+                                    <div class="form-group col-lg-6">
+                                        <h5>Apellido: <span class="text-danger">*</span></h5>
+                                        <div class="controls">
+                                            <input type="text" onkeyup="formar_usuario();" id="apellido" name="apellido" class="form-control" placeholder="Ingrese el apellido">
+                                        </div>
                                     </div>
-                                </div>
-                            </div> 
+                                </div>                                                
+                                <div class="row">
+                                	<div class="form-group col-lg-6">
+                                        <h5>Genero: <span class="text-danger">*</span></h5>
+                                        <fieldset class="controls">
+                                            <?php
+    	                                		$genero = $this->db->get("org_genero");
 
-                            <div class="row" id="nombre1" style="display: none;">
-                                <div class="form-group col-lg-12">
-                                    <h5>Nombre completo: <span class="text-danger">*</span></h5>
-                                    <div class="controls">
-                                        <input type="text" id="nombre_completo" name="nombre_completo" class="form-control" required="" placeholder="Ingrese el nombre completo" minlength="3" data-validation-required-message="Este campo es requerido">
-                                        <div class="help-block"></div>
-                                    </div>
-                                </div>
-                            </div>       
-                                               
-                            <div class="row">
-                            	<div class="form-group col-lg-6">
-                                    <h5>Genero: <span class="text-danger">*</span></h5>
-                                    <fieldset class="controls">
-                                        <?php
-	                                		$genero = $this->db->get("org_genero");
-
-						                    if(!empty($genero)){
-						                        foreach ($genero->result() as $fila) {
-						                        	echo '<input name="genero" type="radio" id="genero'.strtolower($fila->id_genero).'" value="'.strtolower($fila->id_genero).'" required>';
-						                        	echo '<label class="m-l-20" for="genero'.strtolower($fila->id_genero).'">'.ucfirst(strtolower($fila->genero)).'</label>';
-						                        }
-						                    }
-	                                	?>
-                                    </fieldset>
-                                </div> 
-                                <div class="form-group col-lg-6">
-                                    <h5>Usuario: <span class="text-danger">*</span></h5>
-                                    <div class="controls">
-                                        <input type="text" id="usuario" name="usuario" class="form-control" required="" placeholder="Nombre de usuario" minlength="3" readonly>
-                                        <div class="help-block"></div>
+    						                    if(!empty($genero)){
+    						                        foreach ($genero->result() as $fila) {
+    						                        	echo '<input name="genero" type="radio" id="genero'.strtolower($fila->id_genero).'" value="'.strtolower($fila->id_genero).'">';
+    						                        	echo '<label class="m-l-20" for="genero'.strtolower($fila->id_genero).'">'.ucfirst(strtolower($fila->genero)).'</label>';
+    						                        }
+    						                    }
+    	                                	?>
+                                        </fieldset>
+                                    </div> 
+                                    <div class="form-group col-lg-6">
+                                        <h5>Usuario: <span class="text-danger">*</span></h5>
+                                        <div class="controls">
+                                            <input type="text" id="usuario" name="usuario" class="form-control" placeholder="Nombre de usuario" minlength="3" readonly>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -295,7 +294,7 @@
                             	<div class="form-group col-lg-6">
                                     <h5>Contraseña <span class="text-danger">*</span></h5>
                                     <div class="input-group">
-                                        <input type="password" name="password" id="password" class="form-control" required data-validation-required-message="Este campo es requerido">
+                                        <input type="password" name="password" id="password" class="form-control" data-validation-required-message="Este campo es requerido">
                                         <div class="input-group-addon" id="pwd1" onmousedown="show_contra('password')" onmouseup="hide_contra('password')" style="cursor: pointer;"><i class="mdi mdi-looks"></i></div>
                                     </div>
                                     <div class="help-block"></div>
@@ -303,14 +302,14 @@
                                 <div class="form-group col-lg-6">
                                     <h5>Confirmar contraseña <span class="text-danger">*</span></h5>
                                     <div class="input-group">
-                                        <input type="password" name="password2" id="password2" data-validation-match-match="password" class="form-control" required>
+                                        <input type="password" name="password2" id="password2" data-validation-match-match="password" class="form-control">
                                         <div class="input-group-addon" id="pwd2" onmousedown="show_contra('password2')" onmouseup="hide_contra('password2')" style="cursor: pointer;"><i class="mdi mdi-looks"></i></div> 
                                     </div>
                                     <div class="help-block"></div>
                                 </div>
                             </div>      
 
-                            <div class="row">
+                            <div class="row" style="display: none;">
                                 <div class="form-group col-lg-6">
                                 </div>
                                 <div align="right" class="form-group col-lg-6">
@@ -320,9 +319,11 @@
                                             <input type="checkbox" value="0" onchange="cambiar_check(this.id)" name="estado" id="estado" class="custom-control-input"> <span class="custom-control-indicator"></span> <span class="custom-control-description">Cuenta activa?</span> </label>
                                     <div class="help-block"></div></div>
                                 </div>
-                            	
                             </div>                              
 
+                            <div id="tabla_roles">
+                                
+                            </div>
 
                             <button id="submit" type="submit" style="display: none;"></button>
                             <div align="right" id="btnadd">

@@ -35,7 +35,7 @@
 
                             echo"</td>";
                            
-                            $array = array($fila->id_usuario, $fila->nombre_completo, $fila->nr, $fila->sexo, $fila->usuario, $fila->id_seccion, $fila->estado);
+                            $array = array($fila->id_usuario, $fila->nombre_completo, $fila->sexo, $fila->usuario, $fila->estado);
                             echo boton_tabla($array,"cambiar_editar");
                             echo "</tr>";
                         }

@@ -88,7 +88,7 @@
     <!-- ============================================================== --> 
 
 
-    <section id="wrapper" class="login-register img-responsive login-sidebar" style="background-image:url(<?php echo base_url(); ?>assets/images/portadas/seguridad2.jpg);">
+    <section id="wrapper" class="login-register img-responsive login-sidebar" style="background-image:url(<?php echo base_url(); ?>assets/images/portadas/seguridad6.jpg);">
     
   <div class="login-box card">
     <div class="card-body">
