@@ -122,7 +122,36 @@
         xmlhttpB.open("GET","<?php echo site_url(); ?>/roles/tablaroles",true);
         xmlhttpB.send();
     }
-    
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
+    /* script de asignacion permisos a rol*/
+    /////////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    function mostrar_form_permisos(id){
+        tabla_rol_modulo_permiso(id);   
+    }
+    function tabla_rol_modulo_permiso(id){
+        if(window.XMLHttpRequest){// code for IE7+, Firefox, Chrome, Opera, Safari
+            xmlhttpB=new XMLHttpRequest();
+        }else{// code for IE6, IE5
+            xmlhttpB=new ActiveXObject("Microsoft.XMLHTTPB");
+        }
+
+        xmlhttpB.onreadystatechange=function(){
+            if (xmlhttpB.readyState==4 && xmlhttpB.status==200){
+                  document.getElementById("cnt-tabla").innerHTML=xmlhttpB.responseText;
+                  $('#myTable').DataTable();
+            }
+        }
+
+        xmlhttpB.open("GET","<?php echo site_url(); ?>/roles/tabla_rol_modulo_permiso/index/"+id,true);
+        xmlhttpB.send();
+    }
+
+
+
 </script>
 
 <!-- ============================================================== -->

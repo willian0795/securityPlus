@@ -17,7 +17,8 @@ class Rol_modulo_permiso_model extends CI_Model {
 		}
 	}
 
-	function mostrar_rol_modulo_permiso(){
+	function mostrar_rol_modulo_permiso($id){
+		$this->db->where("id_rol",$id);
 		$query = $this->db->get("org_rol_modulo_permiso");
 		if($query->num_rows() > 0) return $query;
 		else return false;
