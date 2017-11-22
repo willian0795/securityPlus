@@ -9,6 +9,16 @@
         </div>
         <div class="table-responsive">
             <table id="myTable" class="table table-bordered">
+                <?php
+                         $this->db->where("id_rol",$roles);
+                            $this->db->group_by('id_modulo'); 
+                            $query = $this->db->get("org_rol_modulo_permiso");
+
+                            $this->db->where("id_rol",$roles);
+                            $query2 = $this->db->get("org_rol");
+                            foreach ($query2->result() as $query2F) {}
+                            echo "<td colspan='4'><b>"."Rol: ".$query2F->nombre_rol."</b></td>";
+                    ?>
                 <thead class="bg-info text-white">
                     <tr>
                         <th>#</th>
@@ -20,21 +30,18 @@
                 <tbody>
                 <?php 
 
-                  
-                         
-                           
-                        
 
-                           
-                           $this->db->where("id_rol",$roles);
-                            $this->db->group_by('id_modulo'); 
-                            $query = $this->db->get("org_rol_modulo_permiso");
                             foreach ($query->result() as $queryFila) {
                                 echo "<tr>";
                                     $this->db->where("id_modulo",$queryFila->id_modulo);
                                     $queryMod = $this->db->get("org_modulo");
                                     foreach ($queryMod->result() as $queryModFila) {
-                                        echo "<td colspan='4'>"."Módulo: ".$queryModFila->nombre_modulo."</td>";
+                                        $this->db->where("id_sistema",$queryModFila->id_sistema);
+                                        $querySis = $this->db->get("org_sistema");
+                                        foreach ($querySis->result() as  $querySisF) {
+                                            # code...
+                                        }
+                                        echo "<td colspan='4'><b>"."Sistema: ".$querySisF->nombre_sistema." <br>Módulo: ".$queryModFila->nombre_modulo."</b></td>";
 
                                        
                                     }
@@ -46,8 +53,21 @@
                                         foreach ($queryrolMod->result() as $queryrolModFila) {
                                             echo "<tr>";
                                             echo "<td>".$queryrolModFila->id_rol_permiso."</td>";
-                                            echo "<td>".$queryrolModFila->id_permiso."</td>";
-                                            echo "<td>".$queryrolModFila->estado."</td>";
+                                            
+                                            $this->db->where("id_permiso",$queryrolModFila->id_permiso);
+                                            $queryP = $this->db->get("org_permiso");
+                                            foreach ($queryP->result() as $queryPFila) {
+                                                echo "<td>".$queryPFila->permiso."</td>";
+                                            }
+                                           
+                                            
+                                            if($queryrolModFila->estado=="1"){
+                                                echo "<td>Activado</td>";
+                                            }else{
+                                                 echo "<td>Desactivado</td>";
+                                            }
+                                            $array= array($queryrolModFila->id_rol_permiso,$querySisF->id_sistema,$queryModFila->id_modulo,$queryPFila->id_permiso,$queryrolModFila->estado);
+                                            echo boton_tabla($array,"cambiar_editar");
                                             echo "</tr>";
                                         }
                                  
