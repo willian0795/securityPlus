@@ -16,6 +16,21 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 		$cptabla .= "</td>";
 		return $cptabla;
 	}
+
+	function boton_tabla2($fila,$mfuncion){
+		$cptabla = "<td>";
+		$var = "";
+		foreach ($fila as $otro) {
+			$var .= '"'.$otro.'",';
+		}
+
+		$var = substr($var, 0, -1);
+		$cptabla .= "<button type='button' class='btn waves-effect waves-light btn-rounded btn-sm btn-info' onClick='".$mfuncion."(".$var.',"edit"'.");'><span class='fa fa-wrench'></span></button>&nbsp";
+		$cptabla .= "<button type='button' class='btn waves-effect waves-light btn-rounded btn-sm btn-danger' onClick='".$mfuncion."(".$var.',"delete"'.");'><span class='fa fa-times'></span></button>";
+		$cptabla .= "</td>";
+		return $cptabla;
+	}
+
 	function boton_tabla1($fila,$nfuncion){
 		$cptabla = "<td>";
 		$var = "";
