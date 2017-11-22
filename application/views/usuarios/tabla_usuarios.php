@@ -7,36 +7,35 @@
             <button type="button" onclick="cambiar_nuevo();" class="btn btn-rounded btn-success2"><span class="mdi mdi-plus"></span> Nuevo registro</button>
         </div>
         <div class="table-responsive">
-            <table id="myTable" class="table table-bordered">
+            <table id="myTable" class="table table-hover product-overview">
                 <thead class="bg-info text-white">
-                    <tr>
-                        <th>Id</th>
-                        <th>NR</th>
+                    <tr>                        
                         <th>Nombre</th>
+                        <th>Usuario</th>
                         <th>Estado</th>
                         <th>(*)</th>
                     </tr>
                 </thead>
                 <tbody>
-                <?php 
+                <?php
+                    $this->db->order_by("nombre_completo", "asc");
                     $usuarios = $this->db->get("org_usuario");
 
                     if(!empty($usuarios)){
                         foreach ($usuarios->result() as $fila) {
                             echo "<tr>";
-                            echo "<td>".$fila->id_usuario."</td>";
-                            echo "<td>".$fila->nr."</td>";
                             echo "<td>".$fila->nombre_completo."</td>";
+                            echo "<td>".$fila->usuario."</td>";
                             if($fila->estado == 1){ 
-                                echo "<td><div class='btn btn-rounded btn-sm btn-success' style='cursor:default;'><i class='ti-user'></i></div>"; 
+                                echo '<td><span class="label label-success">Activo</span></div>'; 
                             }else{ 
-                                echo "<td><div class='btn btn-rounded btn-sm btn-danger' style='cursor:default;'><i class='ti-user'></i></div>"; 
+                                echo '<td><span class="label label-danger">Inactivo</span></div>'; 
                             }
 
                             echo"</td>";
                            
                             $array = array($fila->id_usuario, $fila->nombre_completo, $fila->sexo, $fila->usuario, $fila->estado);
-                            echo boton_tabla($array,"cambiar_editar");
+                            echo boton_tabla2($array,"cambiar_editar","cambiar_eliminar");
                             echo "</tr>";
                         }
                     }

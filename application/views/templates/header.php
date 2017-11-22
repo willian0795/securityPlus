@@ -66,7 +66,7 @@
 </head>
 <script>
     var minutos = 10;
-    var warning = 9;
+    var warning = 9.90;
     var danger = 3;
 
     $(document).ready(function() {

@@ -35,6 +35,29 @@ class Usuarios extends CI_Controller {
 		return $dato;
 	}
 
+	public function gestionar_roles(){
+		$data = array(
+			'usuario' => $this->input->post('usuario'), 
+			'id_rol' => $this->input->post('id_rol')
+		);
+
+		if($this->input->post('bandera') == "insertar"){
+			echo $this->usuarios_model->insertar_roles($data);
+		}else{
+			echo $this->usuarios_model->eliminar_roles($data);
+		};
+		
+	}
+
+	public function obtener_usuario(){
+		$empleado = $this->db->query("SELECT UPPER(CONCAT_WS(' ', primer_nombre, segundo_nombre, tercer_nombre, primer_apellido, segundo_apellido, apellido_casada)) AS nombre_completo,  LOWER(CONCAT_WS(' ', primer_nombre, segundo_nombre, tercer_nombre)) AS nombre, LOWER(CONCAT_WS(' ', primer_apellido, segundo_apellido, apellido_casada)) AS apellido, LOWER(CONCAT_WS('.',primer_nombre, primer_apellido)) AS usuario, nr, id_genero FROM sir_empleado WHERE id_empleado = '".$this->input->post('id_empleado')."'");
+		        if($empleado->num_rows() > 0){
+		            foreach ($empleado->result() as $fila) {  		            
+		            }
+		        }
+		echo $fila->usuario;
+	}
+
 	public function gestionar_usuarios(){
 		if($this->input->post('band') == "save"){
 			if($this->input->post('tipo_pass') == 1){
@@ -75,10 +98,6 @@ class Usuarios extends CI_Controller {
 
 			$data = array(
 			'idusuario' => $this->input->post('idusuario'), 
-			'nr' => $this->input->post('nr'), 
-			'nombre' => strtolower($this->input->post('nombre_completo')),
-			'genero' => $fila->id_genero,
-			'usuario' => $this->input->post('usuario'),
 			'password' => md5($this->input->post('password')),
 			'estado' => $this->cambiar_checke($this->input->post('estado'))
 			);

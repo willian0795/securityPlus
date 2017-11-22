@@ -1,5 +1,5 @@
 <script type="text/javascript">
-    function cambiar_editar(id,nombre,sexo,usuario,estado){
+    function cambiar_editar(id,nombre,sexo,usuario,estado,bandera){
 
         $("#id_empleado").parent().parent().hide(0);
         $("#idusuario").val(id);        
@@ -15,21 +15,24 @@
         cambiar_check("estado");
 
         $("#l_nombre").val(nombre);
+        $("#usuario").val(usuario);
         $("#l_usuario").val(usuario);
 
         $("#password").val("");
         $("#password2").val("");
 
-        $("#ttl_form").removeClass("bg-success");
-        $("#ttl_form").addClass("bg-info");
-
-        $("#btnadd").hide(0);
-        $("#btnedit").show(0);
-
-        $("#cnt-tabla").hide(0);
-        $("#cnt_form").show(0);
-
-        $("#ttl_form").children("h4").html("<span class='fa fa-wrench'></span> Editar usuario");
+        if(bandera == "edit"){
+            $("#cnt-tabla").hide(0);
+            $("#cnt_form").show(0);
+            $("#ttl_form").children("h4").html("<span class='fa fa-wrench'></span> Editar usuario");
+            $("#ttl_form").removeClass("bg-success");
+            $("#ttl_form").addClass("bg-info");
+            $("#btnadd").hide(0);
+            $("#btnedit").show(0);
+            tablaroles();
+        }else{
+            eliminar_usuario();
+        }
     }
 
     function cambiar_nuevo(){
@@ -41,6 +44,7 @@
         document.getElementById("estado").checked = 1;
         cambiar_check("estado");
         $("#band").val("save");
+        tablaroles();
 
         $("#ttl_form").addClass("bg-success");
         $("#ttl_form").removeClass("bg-info");
@@ -61,18 +65,19 @@
         $("#cnt_form").hide(0);
     }
 
-    function editar_usuario(obj){
+    function editar_usuario(){
         $("#band").val("edit");
         $("#submit").click();
     }
 
-    function eliminar_usuario(obj){
+    function eliminar_usuario(){
         $("#password").val("ninguna");
         $("#password2").val("ninguna");
         $("#band").val("delete");
+        var nombre = $("#l_usuario").val();
         swal({   
             title: "¿Está seguro?",   
-            text: "¡Desea eliminar el registro!",   
+            text: "¡Desea eliminar al usuario: << "+nombre+" >>!",   
             type: "warning",   
             showCancelButton: true,   
             confirmButtonColor: "#fc4b6c",   
@@ -100,12 +105,14 @@
 
     function tablausuarios(){        
         $("#cnt-tabla").load("<?php echo site_url(); ?>/usuarios/usuarios/tabla_usuario", function() {
+            $('[data-toggle="tooltip"]').tooltip();
             tablaroles();
         });
     }
 
-    function tablaroles(){          
-        $( "#tabla_roles" ).load("<?php echo site_url(); ?>/usuarios/usuarios/tabla_roles", function() {
+    function tablaroles(){
+        var user = $("#idusuario").val(); 
+        $( "#tabla_roles" ).load("<?php echo site_url(); ?>/usuarios/usuarios/tabla_roles?id_usuario="+user, function() {
             multi_select();
         });  
     }
@@ -123,9 +130,13 @@
 
         if($("#id_empleado").val() == 0){
             $("#form_nusuario").show(0);        
-             $("#usuario").val("");
+            $("#usuario").val("");
+            document.getElementById("tipo_pass").checked = 0;
+            cambiar_check2("tipo_pass");
+            $("#div_tipo_pass").hide(0);
         }else{
             $("#form_nusuario").hide(0);
+            $("#div_tipo_pass").show(0);
         }
     }
 
@@ -169,6 +180,76 @@
         }
     }
 
+    function cambiar_check2(obj){
+        if( $("#"+obj).prop('checked') ) {
+            $("#"+obj).val('1');
+            $("#div_pass").hide(0);
+        }else{
+            $("#"+obj).val('0');
+            $("#div_pass").show(0);
+        }
+    }
+
+    function recorrer_roles(){
+        var roles = $("#pre-selected-options").children("option");
+        var usuario = $("#usuario").val();
+
+        for(i=0; i<roles.length; i++){
+            if($(roles[i]).is(':selected')){
+                gestionar_roles($(roles[i]).val(),usuario,"insertar");
+            }else{
+                gestionar_roles($(roles[i]).val(),usuario,"eliminar");
+            }
+            
+        }
+    }
+
+    function gestionar_roles(id_rol, usuario,band){       
+
+        jugador = document.getElementById('jugador');
+        
+        ajax = objetoAjax();
+        ajax.open("POST", "<?php echo site_url(); ?>/usuarios/usuarios/gestionar_roles", true);
+        ajax.onreadystatechange = function() {
+            if (ajax.readyState == 4){
+                jugador.value = (ajax.responseText);
+            }
+        } 
+        ajax.setRequestHeader("Content-Type","application/x-www-form-urlencoded"); 
+        ajax.send("&id_rol="+id_rol+"&usuario="+usuario+"&bandera="+band)
+    }
+
+    function obtener_usuario(){       
+        var id_empleado = $("#id_empleado").val();
+        jugador = document.getElementById('jugador');
+        
+        ajax = objetoAjax();
+        ajax.open("POST", "<?php echo site_url(); ?>/usuarios/usuarios/obtener_usuario", true);
+        ajax.onreadystatechange = function() {
+            if (ajax.readyState == 4){
+                $("#usuario").val(ajax.responseText);
+                recorrer_roles2();
+            }
+        } 
+        ajax.setRequestHeader("Content-Type","application/x-www-form-urlencoded"); 
+        ajax.send("&id_empleado="+id_empleado)
+    }
+
+    function recorrer_roles2(){
+        var roles = $("#pre-selected-options").children("option");
+        var usuario = $("#usuario").val();
+
+        for(i=0; i<roles.length; i++){
+            if($(roles[i]).is(':selected')){
+                gestionar_roles($(roles[i]).val(),usuario,"insertar");
+            }else{
+                gestionar_roles($(roles[i]).val(),usuario,"eliminar");
+            }
+            
+        }
+        tablausuarios();
+    }
+
 </script>
 
 <!-- ============================================================== -->
@@ -176,6 +257,7 @@
 <!-- ============================================================== -->
 <div class="page-wrapper">
     <div class="container-fluid">
+        <input type="hidden" name="jugador" id="jugador">
         <!-- ============================================================== -->
         <!-- TITULO de la página de sección -->
         <!-- ============================================================== -->
@@ -226,11 +308,12 @@
                                         
                                     </select>
                                 </div>
-                                <div class="form-group col-lg-6">
-                                    <h5>Tipo contraseña <span class="text-danger">*</span></h5>
+                                <div class="form-group col-lg-6" style="display: block;" id="div_tipo_pass">
+                                    <h5>¿Usuario sin contraseña?<span class="text-danger">*</span></h5>
                                     <div class="controls">
-                                        <label class="custom-control custom-checkbox">
-                                            <input type="checkbox" value="0" onchange="cambiar_check(this.id)" name="tipo_pass" id="tipo_pass" class="custom-control-input"> <span class="custom-control-indicator"></span> <span class="custom-control-description">¿Contraseña NULL?</span> </label>
+                                        <div class="switch">
+                                            <label>Desactivado<input type="checkbox" value="0" onchange="cambiar_check2(this.id)" name="tipo_pass" id="tipo_pass"><span class="lever"></span>Activado</label>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -294,7 +377,7 @@
                             	<div class="form-group col-lg-6">
                                     <h5>Contraseña <span class="text-danger">*</span></h5>
                                     <div class="input-group">
-                                        <input type="password" name="password" id="password" class="form-control" data-validation-required-message="Este campo es requerido">
+                                        <input type="password" name="password" id="password" class="form-control">
                                         <div class="input-group-addon" id="pwd1" onmousedown="show_contra('password')" onmouseup="hide_contra('password')" style="cursor: pointer;"><i class="mdi mdi-looks"></i></div>
                                     </div>
                                     <div class="help-block"></div>
@@ -302,7 +385,7 @@
                                 <div class="form-group col-lg-6">
                                     <h5>Confirmar contraseña <span class="text-danger">*</span></h5>
                                     <div class="input-group">
-                                        <input type="password" name="password2" id="password2" data-validation-match-match="password" class="form-control">
+                                        <input type="password" name="password2" id="password2" class="form-control">
                                         <div class="input-group-addon" id="pwd2" onmousedown="show_contra('password2')" onmouseup="hide_contra('password2')" style="cursor: pointer;"><i class="mdi mdi-looks"></i></div> 
                                     </div>
                                     <div class="help-block"></div>
@@ -327,11 +410,11 @@
 
                             <button id="submit" type="submit" style="display: none;"></button>
                             <div align="right" id="btnadd">
-                                <button type="submit" class="btn waves-effect waves-light btn-success2"><i class="mdi mdi-plus"></i> Guardar</button>
+                                <button type="input" class="btn waves-effect waves-light btn-success2"><i class="mdi mdi-plus"></i> Guardar</button>
                             </div>
                             <div align="right" id="btnedit" style="display: none;">
-                                <button type="button" onclick="editar_usuario(this)" class="btn waves-effect waves-light btn-info"><i class="mdi mdi-pencil"></i> Editar</button>
-                                <button type="button" onclick="eliminar_usuario(this)" class="btn waves-effect waves-light btn-danger"><i class="mdi mdi-window-close"></i> Eliminar</button>
+                                <button type="button" onclick="editar_usuario()" class="btn waves-effect waves-light btn-info"><i class="mdi mdi-pencil"></i> Editar</button>
+                                <button type="button" onclick="eliminar_usuario()" class="btn waves-effect waves-light btn-danger"><i class="mdi mdi-window-close"></i> Eliminar</button>
                             </div>
 
                         <?php echo form_close(); ?>
@@ -369,7 +452,7 @@ $(function(){
         var f = $(this);
         var formData = new FormData(document.getElementById("formajax"));
         formData.append("dato", "valor");
-        
+
         $.ajax({
             url: "<?php echo site_url(); ?>/usuarios/usuarios/gestionar_usuarios",
             type: "post",
@@ -384,12 +467,14 @@ $(function(){
                 cerrar_mantenimiento();
                 if($("#band").val() == "save"){
                     swal({ title: "¡Registro exitoso!", type: "success", showConfirmButton: true });
+                    obtener_usuario();
                 }else if($("#band").val() == "edit"){
                     swal({ title: "¡Modificación exitosa!", type: "success", showConfirmButton: true });
+                    recorrer_roles();
                 }else{
                     swal({ title: "¡Borrado exitoso!", type: "success", showConfirmButton: true });
+                    tablausuarios();
                 }
-                tablausuarios();
             }else if(res == "existe"){
                 swal({ title: "¡Ya existe!", text: "El usuario ya posee una cuenta", type: "warning", showConfirmButton: true });
             }else{
