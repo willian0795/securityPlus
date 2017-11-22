@@ -10,9 +10,9 @@ class Tabla_rol_modulo_permiso extends CI_Controller {
 		$this->load->model('rol_modulo_permiso_model');
 	}
 
-	public function index(){
-		$objeto =  new stdClass();
-		$objeto->roles = $roles = $this->rol_modulo_permiso_model->mostrar_rol_modulo_permiso();
+	public function index($id){
+		
+		$objeto['roles'] = $id;
 		
 		$this->load->view('roles/tabla_rol_modulo_permiso',$objeto);
 	}
