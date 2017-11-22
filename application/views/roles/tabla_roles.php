@@ -13,6 +13,7 @@
                         <th>#</th>
                         <th>Nombre</th>
                         <th>Descripción</th>
+                        <th>Permisos</th>
                         <th>(*)</th>
                     </tr>
                 </thead>
@@ -27,6 +28,8 @@
                            echo "<td>".$fila->descripcion_rol."</td>";
                            
                            $array = array($fila->id_rol, $fila->nombre_rol, $fila->descripcion_rol);
+                           $arrayPermiso = array($fila->id_rol);
+                           echo boton_tabla1($arrayPermiso,"mostrar_form_permisos");
                            echo boton_tabla($array,"cambiar_editar");
                            echo "</tr>";
                         }

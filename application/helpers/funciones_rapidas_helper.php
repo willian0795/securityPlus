@@ -16,6 +16,17 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 		$cptabla .= "</td>";
 		return $cptabla;
 	}
+	function boton_tabla1($fila,$nfuncion){
+		$cptabla = "<td>";
+		$var = "";
+		foreach ($fila as $otro) {
+			$var .= '"'.$otro.'",';
+		}
+		$var = substr($var, 0, -1);
+		$cptabla .= "<button type='button' class='btn waves-effect waves-light btn-rounded btn-sm btn-info' onClick='".$nfuncion."(".$var.");'><span class='mdi mdi-lan'></span></button>";
+		$cptabla .= "</td>";
+		return $cptabla;
+	}
 /***********************************
 	CREAR NOTIFICACIONES:
 	Genera el codigo para mostrar una notificación, solicitando solamente la descripción del mensaje.
