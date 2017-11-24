@@ -169,8 +169,18 @@ $(function(){
                 var c = new Date();
                 localStorage["expira"] = c.getFullYear()+"-"+c.getMonth()+"-"+c.getDate()+" "+c.getHours()+":"+c.getMinutes()+":"+c.getSeconds();
                 location.href = "<?php echo base_url(); ?>";
+            }else if(res == "usuario"){
+                swal({ title: "¡Usuario no existe!", text: "El usuario que intenta identificar no exíste.", type: "warning", showConfirmButton: true });
+            }else if(res == "estado"){
+                swal({ title: "¡Cuenta inactiva!", text: "La cuenta de este usuario esta deshabilitada.", type: "warning", showConfirmButton: true });
+            }else if(res == "password"){
+                swal({ title: "¡Clave no válida!", text: "La clave ingresada no es válida.", type: "warning", showConfirmButton: true });
+            }else if(res == "activeDirectory"){
+                swal({ title: "¡No encontrado en Active Directory!", text: "Usurio o contraseña no encontrado en Active Directory.", type: "warning", showConfirmButton: true });
+            }else if(res == "sesion"){
+                swal({ title: "¡Ocurrió un error!", text: "Falló el inicio de sesión. Por favor intentelo nuevamente.", type: "error", showConfirmButton: true });
             }else{
-                swal({ title: "¡Incorrecto!", text: "El nombre de usuario o contraseña es incorrecto.", type: "warning", showConfirmButton: true });
+                swal({ title: "¡Ocurrió un error!", text: "El usuario o contraseña son incorrectos, o no se logró conectar a Active Directory.", type: "error", showConfirmButton: true });
             }
         });
             

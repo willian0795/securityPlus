@@ -13,7 +13,7 @@
                         <th>Nombre</th>
                         <th>Usuario</th>
                         <th>Estado</th>
-                        <th>(*)</th>
+                        <th style="min-width: 85px;">(*)</th>
                     </tr>
                 </thead>
                 <tbody>

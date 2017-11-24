@@ -49,7 +49,48 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | Examples:	my-controller/index	-> my_controller/index
 |		my-controller/my-method	-> my_controller/my_method
 */
+
+/**********************************************************************************************
+		INICIO DE LA APLIACIÓN
+***********************************************************************************************/
 $route['default_controller'] = 'inicio';
+
+/**********************************************************************************************
+		LOGIN - SESIONES
+***********************************************************************************************/
+$route['cerrar_sesion'] = '/login/cerrar_sesion';
+
+/**********************************************************************************************
+		MODULO DE SISTEMAS
+***********************************************************************************************/
+$route['sistemas'] = '/sistemas/sistema';
+$route['sistemas/tabla_sistema'] = '/sistemas/sistema/tabla_sistema';
+$route['sistemas/gestionar_sistemas'] = '/sistemas/sistema/gestionar_sistemas';
+
+$route['modulos'] = '/sistemas/modulo';
+$route['modulos/gestionar_modulos'] = '/sistemas/modulo/gestionar_modulos';
+$route['modulos/ordenar_modulo'] = '/sistemas/modulo/ordenar_modulo';
+$route['modulos/tabla_modulo'] = '/sistemas/modulo/tabla_modulo';
+$route['modulos/tabla_modulo2'] = '/sistemas/modulo/tabla_modulo2';
+$route['modulos/combo_modulo'] = '/sistemas/modulo/combo_modulo';
+
+/**********************************************************************************************
+		MODULO DE USUARIOS
+***********************************************************************************************/
+$route['usuarios'] = '/usuarios/usuarios';
+$route['usuarios/gestionar_usuarios'] = '/usuarios/usuarios/gestionar_usuarios';
+$route['usuarios/obtener_usuario'] = '/usuarios/usuarios/obtener_usuario';
+$route['usuarios/gestionar_roles'] = '/usuarios/usuarios/gestionar_roles';
+$route['usuarios/tabla_usuario'] = '/usuarios/usuarios/tabla_usuario';
+$route['usuarios/tabla_roles'] = '/usuarios/usuarios/tabla_roles';
+
+/**********************************************************************************************
+		MODULO DE ROLES
+***********************************************************************************************/
+
+/**********************************************************************************************
+		MODULO DE BITÁCORA
+***********************************************************************************************/
 $route['mapa'] = 'mapa';
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;

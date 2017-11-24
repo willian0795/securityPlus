@@ -1,18 +1,20 @@
 <script type="text/javascript">
-    function cambiar_editar(id,nombre,base_url){
+    function cambiar_editar(id,nombre,base_url,bandera){
         $("#idb").val(id);
         $("#nombre").val(nombre);
         $("#base_url").val(base_url);
-        $("#ttl_form").removeClass("bg-success");
-        $("#ttl_form").addClass("bg-info");
 
-        $("#btnadd").hide(0);
-        $("#btnedit").show(0);
-
-        $("#cnt-tabla").hide(0);
-        $("#cnt_form").show(0);
-
-        $("#ttl_form").children("h4").html("<span class='fa fa-wrench'></span> Editar sistema");
+        if(bandera == "edit"){
+            $("#ttl_form").removeClass("bg-success");
+            $("#ttl_form").addClass("bg-info");
+            $("#btnadd").hide(0);
+            $("#btnedit").show(0);
+            $("#cnt-tabla").hide(0);
+            $("#cnt_form").show(0);
+            $("#ttl_form").children("h4").html("<span class='fa fa-wrench'></span> Editar sistema");
+        }else{
+            eliminar_sistema();
+        }
     }
 
     function cambiar_nuevo(){
@@ -37,12 +39,12 @@
         $("#cnt_form").hide(0);
     }
 
-    function editar_sistema(obj){
+    function editar_sistema(){
         $("#band").val("edit");
         $("#submit").click();
     }
 
-    function eliminar_sistema(obj){
+    function eliminar_sistema(){
         $("#band").val("delete");
         swal({   
             title: "¿Está seguro?",   
@@ -62,7 +64,7 @@
     }
 
     function tablasistemas(){        
-        $("#cnt-tabla").load("<?php echo site_url(); ?>/sistemas/sistema/tabla_sistema");
+        $("#cnt-tabla").load("<?php echo site_url(); ?>/sistemas/tabla_sistema");
     }
 
 </script>
@@ -130,8 +132,8 @@
                             </div>
                             <div align="right" id="btnedit" style="display: none;">
                                 <button type="reset" class="btn waves-effect waves-light btn-success"><i class="mdi mdi-delete"></i> Limpiar</button>
-                                <button type="button" onclick="editar_sistema(this)" class="btn waves-effect waves-light btn-info"><i class="mdi mdi-pencil"></i> Editar</button>
-                                <button type="button" onclick="eliminar_sistema(this)" class="btn waves-effect waves-light btn-danger"><i class="mdi mdi-window-close"></i> Eliminar</button>
+                                <button type="button" onclick="editar_sistema()" class="btn waves-effect waves-light btn-info"><i class="mdi mdi-pencil"></i> Editar</button>
+                                <button type="button" onclick="eliminar_sistema()" class="btn waves-effect waves-light btn-danger"><i class="mdi mdi-window-close"></i> Eliminar</button>
                             </div>
 
                         <?php echo form_close(); ?>
@@ -171,7 +173,7 @@ $(function(){
         formData.append("dato", "valor");
         
         $.ajax({
-            url: "<?php echo site_url(); ?>/sistemas/sistema/gestionar_sistemas",
+            url: "<?php echo site_url(); ?>/sistemas/gestionar_sistemas",
             type: "post",
             dataType: "html",
             data: formData,
