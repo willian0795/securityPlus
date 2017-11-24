@@ -16,10 +16,6 @@ class Usuarios extends CI_Controller {
 		$this->load->view('templates/footer');
 	}
 
-	public function form_usuario(){
-		$this->load->view('usuarios/form_usuarios');
-	}
-
 	public function tabla_usuario(){
 		$this->load->view('usuarios/tabla_usuarios');
 	}

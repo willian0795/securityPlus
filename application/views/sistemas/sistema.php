@@ -62,7 +62,7 @@
     }
 
     function tablasistemas(){        
-        $("#cnt-tabla").load("<?php echo site_url(); ?>/sistemas/sistema/tabla_sistema");
+        $("#cnt-tabla").load("<?php echo site_url(); ?>/sistemas/tabla_sistema");
     }
 
 </script>
@@ -171,7 +171,7 @@ $(function(){
         formData.append("dato", "valor");
         
         $.ajax({
-            url: "<?php echo site_url(); ?>/sistemas/sistema/gestionar_sistemas",
+            url: "<?php echo site_url(); ?>/sistemas/gestionar_sistemas",
             type: "post",
             dataType: "html",
             data: formData,

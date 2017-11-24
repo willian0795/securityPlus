@@ -104,7 +104,7 @@
     }
 
     function tablausuarios(){        
-        $("#cnt-tabla").load("<?php echo site_url(); ?>/usuarios/usuarios/tabla_usuario", function() {
+        $("#cnt-tabla").load("<?php echo site_url(); ?>/usuarios/tabla_usuario", function() {
             $('[data-toggle="tooltip"]').tooltip();
             tablaroles();
         });
@@ -112,7 +112,7 @@
 
     function tablaroles(){
         var user = $("#idusuario").val(); 
-        $( "#tabla_roles" ).load("<?php echo site_url(); ?>/usuarios/usuarios/tabla_roles?id_usuario="+user, function() {
+        $( "#tabla_roles" ).load("<?php echo site_url(); ?>/usuarios/tabla_roles?id_usuario="+user, function() {
             multi_select();
         });  
     }
@@ -209,7 +209,7 @@
         jugador = document.getElementById('jugador');
         
         ajax = objetoAjax();
-        ajax.open("POST", "<?php echo site_url(); ?>/usuarios/usuarios/gestionar_roles", true);
+        ajax.open("POST", "<?php echo site_url(); ?>/usuarios/gestionar_roles", true);
         ajax.onreadystatechange = function() {
             if (ajax.readyState == 4){
                 jugador.value = (ajax.responseText);
@@ -224,7 +224,7 @@
         jugador = document.getElementById('jugador');
         
         ajax = objetoAjax();
-        ajax.open("POST", "<?php echo site_url(); ?>/usuarios/usuarios/obtener_usuario", true);
+        ajax.open("POST", "<?php echo site_url(); ?>/usuarios/obtener_usuario", true);
         ajax.onreadystatechange = function() {
             if (ajax.readyState == 4){
                 $("#usuario").val(ajax.responseText);
@@ -454,7 +454,7 @@ $(function(){
         formData.append("dato", "valor");
 
         $.ajax({
-            url: "<?php echo site_url(); ?>/usuarios/usuarios/gestionar_usuarios",
+            url: "<?php echo site_url(); ?>/usuarios/gestionar_usuarios",
             type: "post",
             dataType: "html",
             data: formData,

@@ -89,19 +89,19 @@
 
     function combosistemas(){    
         var id_sistema = $("#sistema").val();
-        $("#combosistemas").load("<?php echo site_url(); ?>/sistemas/modulo/combo_modulo?id_sistema="+id_sistema);
+        $("#combosistemas").load("<?php echo site_url(); ?>/modulos/combo_modulo?id_sistema="+id_sistema);
     }
 
     function tablamodulos(){          
         var id_sistema = $("#sistema").val();
-        $( "#cnt_tabla" ).load("<?php echo site_url(); ?>/sistemas/modulo/tabla_modulo?id_sistema="+id_sistema, function() {
+        $( "#cnt_tabla" ).load("<?php echo site_url(); ?>/modulos/tabla_modulo?id_sistema="+id_sistema, function() {
             tablamodulos2();
         });  
     }
 
     function tablamodulos2(){  
         var id_sistema = $("#sistema").val();
-        $( "#cnt_tabla2" ).load("<?php echo site_url(); ?>/sistemas/modulo/tabla_modulo2?id_sistema="+id_sistema, function() {
+        $( "#cnt_tabla2" ).load("<?php echo site_url(); ?>/modulos/tabla_modulo2?id_sistema="+id_sistema, function() {
             $("#cnt_form").hide(500);
             combosistemas();
             var updateOutput = function(e) {
@@ -160,7 +160,7 @@
         jugador = document.getElementById('jugador');
         
         ajax = objetoAjax();
-        ajax.open("POST", "<?php echo site_url(); ?>/sistemas/modulo/ordenar_modulo", true);
+        ajax.open("POST", "<?php echo site_url(); ?>/modulos/ordenar_modulo", true);
         ajax.onreadystatechange = function() {
             if (ajax.readyState == 4){
                 jugador.value = (ajax.responseText);
@@ -368,7 +368,7 @@ $(function(){
         formData.append("dato", "valor");
         
         $.ajax({
-            url: "<?php echo site_url(); ?>/sistemas/modulo/gestionar_modulos",
+            url: "<?php echo site_url(); ?>/modulos/gestionar_modulos",
             type: "post",
             dataType: "html",
             data: formData,

@@ -33,7 +33,7 @@ class Sistema extends CI_Controller {
 			$data = array(
 			'idsistema' => $this->input->post('idb'), 
 			'nombre' => strtoupper($this->input->post('nombre')),
-			'base_url' => strtoupper($this->input->post('base_url'))
+			'base_url' => $this->input->post('base_url')
 			);
 			echo $this->sistemas_model->editar_sistema($data);
 
