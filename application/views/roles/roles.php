@@ -57,7 +57,7 @@
 
         $("#cnt-tabla").hide(0);
         $("#cnt_form").show(0);
-
+        tabla_rol_modulo_permiso2();
         $("#ttl_form").children("h4").html("<span class='mdi mdi-plus'></span> Nuevo Rol");
     }
 
@@ -149,8 +149,27 @@
         xmlhttpB.open("GET","<?php echo site_url(); ?>/roles/tabla_rol_modulo_permiso/index/"+id,true);
         xmlhttpB.send();
     }
+    function tabla_rol_modulo_permiso2(id){
+        if(window.XMLHttpRequest){// code for IE7+, Firefox, Chrome, Opera, Safari
+            xmlhttp_rol=new XMLHttpRequest();
+        }else{// code for IE6, IE5
+            xmlhttp_rol=new ActiveXObject("Microsoft.XMLHTTPB");
+        }
 
+        xmlhttp_rol.onreadystatechange=function(){
+            if (xmlhttp_rol.readyState==4 && xmlhttp_rol.status==200){
+                  document.getElementById("cnt-tabla-rol").innerHTML=xmlhttp_rol.responseText;
+                  
+            }
+        }
 
+        xmlhttp_rol.open("GET","<?php echo site_url(); ?>/roles/tabla_rol/index/"+id,true);
+        xmlhttp_rol.send();
+    }
+
+    function mostrarSistemas(id){
+            tabla_rol_modulo_permiso2(id);        
+    }
 
 </script>
 
@@ -211,8 +230,25 @@
                                         <div class="help-block"></div> </div>
                                 </div>
                             </div>
-                            
-                           
+                             <div class="row">
+                                <div class="form-group col-lg-12">   
+                                <label for="id_sistema" class="font-weight-bold">Seleccione Sistema :<span class="text-danger">*</span></label>                         
+                                    <select id="id_sistema" name="id_sistema" class="select2" onchange="mostrarSistemas(this.value)" style="width: 100%">
+                                        <option value="0">[Elija el sistema]</option>
+                                        <?php 
+                                            $sistemas = $this->db->get("org_sistema");
+                                            if($sistemas->num_rows() > 0){
+                                                foreach ($sistemas->result() as $fila) {              
+                                                   echo '<option class="m-l-50" value="'.$fila->id_sistema.'">'.$fila->nombre_sistema.'</option>';
+                                                }
+                                            }
+                                        ?>
+                                    </select>
+                                    </div>
+                                </div>
+                               <div>
+                                    <div id="cnt-tabla-rol"></div>
+                                </div>
 
                             <button id="submit" type="submit" style="display: none;"></button>
                             <div align="right" id="btnadd">
