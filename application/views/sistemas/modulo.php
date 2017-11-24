@@ -17,6 +17,8 @@
         $("#btnadd").hide(0);
         $("#btnedit").show(0);
 
+        vista_form_tabla();
+
         $("#cnt_form").show(500);
 
         $("#ttl_form").children("h4").html("<span class='fa fa-wrench'></span> Editar módulo");
@@ -41,13 +43,13 @@
 
         $("#dependencia").val(dependencia);
         $("#cnt_form").show(500);
-
         $("#ttl_form").children("h4").html("<span class='mdi mdi-plus'></span> Nuevo módulo");
+        vista_form_tabla();
     }
 
     function cerrar_mantenimiento(){
-        $("#cnt_tabla").show(0);
-        $("#cnt_form").hide(0);
+        $("#cnt_tabla").show(500);
+        $("#cnt_form").hide(500);
     }
 
     function editar_modulo(obj){
@@ -103,6 +105,7 @@
         var id_sistema = $("#sistema").val();
         $( "#cnt_tabla2" ).load("<?php echo site_url(); ?>/modulos/tabla_modulo2?id_sistema="+id_sistema, function() {
             $("#cnt_form").hide(500);
+            vista_solo_form();
             combosistemas();
             var updateOutput = function(e) {
                 var list = e.length ? e : $(e.target),
@@ -170,6 +173,35 @@
         ajax.send("&idmodulo="+id+"&dependencia="+dependencia+"&orden="+orden)
     }
 
+    function vista_solo_form(){
+        var divs = $("#cnt_content").children("div");
+
+        $("#cnt_content").removeClass("col-lg-6");
+        $("#cnt_content").addClass("col-lg-12");
+
+        $(divs[0]).addClass("col-lg-1");
+        $(divs[1]).addClass("col-lg-10");
+        $(divs[1]).removeClass("col-lg-12");
+        $(divs[2]).addClass("col-lg-1");
+    }
+
+    function vista_form_tabla(){
+        var divs = $("#cnt_content").children("div");
+
+        $("#cnt_content").removeClass("col-lg-12");
+        $("#cnt_content").addClass("col-lg-6");
+
+        $(divs[0]).removeClass("col-lg-1");
+        $(divs[1]).removeClass("col-lg-10");
+        $(divs[1]).addClass("col-lg-12");
+        $(divs[2]).removeClass("col-lg-1");
+
+        $("#cnt_form").removeClass("pulse animated");
+        $("html").animate({scrollTop:0}, '2000', function() {
+            $("#cnt_form").addClass("pulse animated");
+        });
+    }    
+
 </script>
 <style type="text/css">
 @media screen (min-width: 700px){
@@ -203,60 +235,64 @@
             <!-- ============================================================== -->
             <!-- Inicio de la TABLA -->
             <!-- ============================================================== -->
-            <div class="col-lg-6">
-            <div class="card" >
-                <div class="card-body p-b-0">
-                    <h4 class="card-title">Elija el sistema a editar:</h4>
-                    <div class="row">
-                        <div class="form-group col-lg-12">                            
-                            <select id="sistema" name="sistema" class="select2" onchange="mostrarFormMenu()" style="width: 100%">
-                                <option value="0">[Elija el sistema]</option>
-                                <?php 
-                                    $sistemas = $this->db->get("org_sistema");
-                                    if($sistemas->num_rows() > 0){
-                                        foreach ($sistemas->result() as $fila) {              
-                                           echo '<option class="m-l-50" value="'.$fila->id_sistema.'">'.$fila->nombre_sistema.'</option>';
+            <div class="col-lg-12 row" id="cnt_content">
+                <div class="col-lg-1"></div>
+                <div class="col-lg-10">
+                <div class="card">
+                    <div class="card-body p-b-0">
+                        <h4 class="card-title">Elija el sistema a editar:</h4>
+                        <div class="row">
+                            <div class="form-group col-lg-12">                            
+                                <select id="sistema" name="sistema" class="select2" onchange="mostrarFormMenu()" style="width: 100%">
+                                    <option value="0">[Elija el sistema]</option>
+                                    <?php 
+                                        $sistemas = $this->db->get("org_sistema");
+                                        if($sistemas->num_rows() > 0){
+                                            foreach ($sistemas->result() as $fila) {              
+                                               echo '<option class="m-l-50" value="'.$fila->id_sistema.'">'.$fila->nombre_sistema.'</option>';
+                                            }
                                         }
-                                    }
-                                ?>
-                            </select>
+                                    ?>
+                                </select>
+                            </div>
                         </div>
-                    </div>
-                <!-- Nav tabs -->
-                <ul class="nav nav-tabs customtab2 justify-content-end" role="tablist">
-                    <li class="nav-item" onclick="tablamodulos();"> 
-                        <a class="nav-link active" data-toggle="tab" href="#home7" role="tab" aria-expanded="true">
-                            <span class="hidden-sm-up">
-                                <i class="mdi mdi-pencil"></i>
-                            </span> 
-                            <span class="hidden-xs-down">
-                                <i class="mdi mdi-pencil"></i> Mantenimiento
-                            </span>
-                        </a> 
-                    </li>
-                    <li class="nav-item" onclick="tablamodulos2();">
-                        <a class="nav-link" data-toggle="tab" href="#profile7" role="tab" aria-expanded="false">
-                            <span class="hidden-sm-up">
-                                <i class="ti-user"></i>
-                            </span>
-                            <span class="hidden-xs-down">
-                                <i class="mdi mdi-cursor-move"></i> Ordenar
-                            </span>
-                        </a> 
-                    </li>
-                </ul>
-                <!-- Tab panes -->
-                <div class="tab-content">
-                    <div class="tab-pane active p-10" id="home7" role="tabpanel" aria-expanded="true">
-                        <div id="cnt_tabla">
+                    <!-- Nav tabs -->
+                    <ul class="nav nav-tabs customtab2 justify-content-end" role="tablist">
+                        <li class="nav-item" onclick="tablamodulos();"> 
+                            <a class="nav-link active" data-toggle="tab" href="#home7" role="tab" aria-expanded="true">
+                                <span class="hidden-sm-up">
+                                    <i class="mdi mdi-pencil"></i>
+                                </span> 
+                                <span class="hidden-xs-down">
+                                    <i class="mdi mdi-pencil"></i> Mantenimiento
+                                </span>
+                            </a> 
+                        </li>
+                        <li class="nav-item" onclick="tablamodulos2();">
+                            <a class="nav-link" data-toggle="tab" href="#profile7" role="tab" aria-expanded="false">
+                                <span class="hidden-sm-up">
+                                    <i class="ti-user"></i>
+                                </span>
+                                <span class="hidden-xs-down">
+                                    <i class="mdi mdi-cursor-move"></i> Ordenar
+                                </span>
+                            </a> 
+                        </li>
+                    </ul>
+                    <!-- Tab panes -->
+                    <div class="tab-content">
+                        <div class="tab-pane active p-10" id="home7" role="tabpanel" aria-expanded="true">
+                            <div id="cnt_tabla">
+                            </div>
                         </div>
+                        <div class="tab-pane p-10" id="profile7" role="tabpanel" aria-expanded="false">
+                            <div id="cnt_tabla2"></div>
+                        </div>                    
                     </div>
-                    <div class="tab-pane p-10" id="profile7" role="tabpanel" aria-expanded="false">
-                        <div id="cnt_tabla2"></div>
-                    </div>                    
+                    </div>
                 </div>
-            </div>
-            </div>
+                </div>
+                <div class="col-lg-1"></div>
             </div>
             <div class="col-lg-6" style="display: none;" id="cnt_form">
                 <div class="card">
