@@ -88,24 +88,27 @@ class Login extends CI_Controller {
 	public function verificar_usuario2(){
 		$data = array(
 		'usuario' => $this->input->post('usuario'),
-		'password' => $this->input->post('password')
+		'password' => md5($this->input->post('password'))
 		);
-				
-		$res = $this->login_model->verificar_usuario_password($data);
 
-		if($res->num_rows() > 0){
-			foreach ($res->result() as $fila) {
+		$verificando = $this->login_model->verificar_usuario_password($data);
+		if($verificando == "existe"){
+			$res = $this->login_model->get_data_user($data);
+			if($res->num_rows() > 0){
+				foreach ($res->result() as $fila) {
+				}
+				$usuario_data = array(
+	               'id_usuario' => $fila->id_usuario,
+	               'usuario' => $fila->usuario,
+	               'nombre_usuario' => $fila->nombre_completo,
+	               'sesion' => TRUE
+	            );
+				$this->session->set_userdata($usuario_data);
+				echo "exito";
+			}else{
+				echo "fracaso";
 			}
-			$usuario_data = array(
-               'id_usuario' => $fila->id_usuario,
-               'usuario' => $fila->usuario,
-               'nombre_usuario' => $fila->nombre_completo,
-               'sesion' => TRUE
-            );
-			$this->session->set_userdata($usuario_data);
-			echo "exito";
 		}else{
-			echo $this->input->post('usuario');
 			echo "fracaso";
 		}
 	}
