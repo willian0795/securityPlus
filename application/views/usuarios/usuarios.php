@@ -392,7 +392,7 @@
                                 </div>
                             </div>      
 
-                            <div class="row" style="display: none;">
+                            <div class="row" style="display: block;">
                                 <div class="form-group col-lg-6">
                                 </div>
                                 <div align="right" class="form-group col-lg-6">

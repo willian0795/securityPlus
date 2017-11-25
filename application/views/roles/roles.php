@@ -150,25 +150,57 @@
         xmlhttpB.send();
     }
     function tabla_rol_modulo_permiso2(id){
-        if(window.XMLHttpRequest){// code for IE7+, Firefox, Chrome, Opera, Safari
-            xmlhttp_rol=new XMLHttpRequest();
-        }else{// code for IE6, IE5
-            xmlhttp_rol=new ActiveXObject("Microsoft.XMLHTTPB");
-        }
-
-        xmlhttp_rol.onreadystatechange=function(){
-            if (xmlhttp_rol.readyState==4 && xmlhttp_rol.status==200){
-                  document.getElementById("cnt-tabla-rol").innerHTML=xmlhttp_rol.responseText;
-                  
-            }
-        }
-
-        xmlhttp_rol.open("GET","<?php echo site_url(); ?>/roles/tabla_rol/index/"+id,true);
-        xmlhttp_rol.send();
+        $("#cnt-tabla-rol").load("<?php echo site_url(); ?>/roles/roles/tabla_rol/"+id, function() {
+            var updateOutput = function(e) {
+            var list = e.length ? e : $(e.target),
+                output = list.data('output');
+            };
+            $('#nestable').nestable({
+                group: 1
+            }).on('change', updateOutput);
+            updateOutput($('#nestable').data('output', $('#nestable-output')));
+        });
     }
+
+    
 
     function mostrarSistemas(id){
             tabla_rol_modulo_permiso2(id);        
+    }
+
+    function recorrer(){
+        var grupos_de_inputs = $("#nestable").find(".input-group"); // Recuperando agrupaciones de inputs cada agrupacion contiene 5 inputs
+        var test = "";
+        var idmodulo, seleccionar, insertar, modificar, eliminar;
+        
+        for(var i=0; i<grupos_de_inputs.length; i++){
+            var inputs = $(grupos_de_inputs[i]).find("input"); // Sacando inputs de 5 en 5. (Cinco por cada agrupación)
+            
+            idmodulo    = $(inputs[0]).val();
+            seleccionar = $(inputs[1]).val();
+            insertar    = $(inputs[2]).val();
+            modificar   = $(inputs[3]).val();
+            eliminar    = $(inputs[4]).val();
+
+            
+            //guardar_rol(idmodulo,seleccionar,insertar,modificar,eliminar); 
+            //por aquí puede mandar la funcion de guardado papayito
+
+            /* si quiere vea el ejemplo que está en: "views/sistemas/modulo" 
+            la función se llama: << ordenando_modulo() >>*/
+
+            test += idmodulo+" - "+seleccionar+" - "+insertar+" - "+modificar+" - "+eliminar+"\n";
+        }
+
+        alert(test)
+    }
+
+    function cambiar_check(obj){
+        if( $(obj).prop('checked') ) {
+            $(obj).val('1');
+        }else{
+            $(obj).val('0');
+        }
     }
 
 </script>

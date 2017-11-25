@@ -16,6 +16,11 @@ class Roles extends CI_Controller {
 		$this->load->view('templates/footer');
 	}
 
+	public function tabla_rol($id){
+		$objeto['id_sistema'] = $id;
+		$this->load->view('roles/tabla_modulos',$objeto);
+	}
+
 
 	public function gestionar_rol(){
 		if($this->input->post('band') == "save"){
