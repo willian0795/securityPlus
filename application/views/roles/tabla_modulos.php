@@ -42,11 +42,18 @@ if($id_sistema != 0){
                                 <i class="ti-marker-alt"></i>
                             </span>
                         </label>
-                        <label class="custom-control custom-checkbox m-0" data-toggle="tooltip" title="Eliminar">
+                        <label class="custom-control custom-checkbox" data-toggle="tooltip" title="Eliminar" style="margin-right: 5px;">
                             <input type="checkbox" class="custom-control-input" value="0" onchange="cambiar_check(this)">
                             <span class="custom-control-indicator" style="width: 20px; height: 20px;"></span>
                             <span style="position: absolute; left: -5px; top:-5px; display: inline-flex;">
                                 <i class="fa fa-close"></i>
+                            </span>
+                        </label>
+                        <label class="custom-control custom-checkbox m-0" data-toggle="tooltip" title="Seleccionar todos">
+                            <input type="checkbox" class="custom-control-input" value="0" onchange="marcar_check(this)">
+                            <span class="custom-control-indicator" style="width: 20px; height: 20px;"></span>
+                            <span style="position: absolute; left: 12px; top:-5px; display: inline-flex;">
+                                <i class="fa fa-check-circle-o"></i>
                             </span>
                         </label>
                     </div>
@@ -54,7 +61,7 @@ if($id_sistema != 0){
             <?php
                 }
             ?>
-       
+
         <li class="dd-item">
           <div class="dd-handle" id="no-drag" style="cursor: auto; pointer-events: none;"><span class="<?php echo $fila->img_modulo; ?>"></span> <?php echo $fila->nombre_modulo; ?></div>
 

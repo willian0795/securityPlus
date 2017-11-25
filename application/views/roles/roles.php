@@ -1,30 +1,3 @@
- <style>
-
-      html, body {
-        height: 100%;
-        margin: 0;
-        padding: 0;
-
-      }
-
-      @media screen and (max-width: 770px) {
-        .otro {
-            height: 500px;
-        }
-      }
-
-      #divider {
-          height: 89%;
-      }
-
-      #map {
-        height: 100%;
-      }
-
-      #output {
-        font-size: 14px;
-      }
-    </style>
 <script type="text/javascript">
     function cambiar_editar(id_rol,nombre_rol,descripcion_rol){
          $("#id_rol").val(id_rol);
@@ -159,6 +132,7 @@
                 group: 1
             }).on('change', updateOutput);
             updateOutput($('#nestable').data('output', $('#nestable-output')));
+            //$('[data-toggle="tooltip"]').tooltip();
         });
     }
 
@@ -184,7 +158,7 @@
 
             
             //guardar_rol(idmodulo,seleccionar,insertar,modificar,eliminar); 
-            //por aquí puede mandar la funcion de guardado papayito
+            //por aquí puede mandar la funcion de guardado papayito y recorda que solo los que esten chequeados vas a guardar
 
             /* si quiere vea el ejemplo que está en: "views/sistemas/modulo" 
             la función se llama: << ordenando_modulo() >>*/
@@ -203,6 +177,21 @@
         }
     }
 
+    function marcar_check(obj){
+        var labels = $(obj).parent().siblings('label');
+        var hijo;
+        for(i=0; i<4;i++){
+            hijo = $(labels[i]).children('input');
+            if( $(obj).prop('checked') ) {
+                hijo[0].checked = 1;
+                cambiar_check(hijo[0]);
+            }else{
+                hijo[0].checked = 0;
+                cambiar_check(hijo[0]);
+            }
+        }
+    }
+
 </script>
 
 <!-- ============================================================== -->
@@ -210,7 +199,6 @@
 <!-- ============================================================== -->
 <div class="page-wrapper">
     <div class="container-fluid">
-        <button id="notificacion" style="display: none;" class="tst1 btn btn-success2">Info Message</button>
         <!-- ============================================================== -->
         <!-- TITULO de la página de sección -->
         <!-- ============================================================== -->
@@ -299,15 +287,10 @@
                 </div>
             </div>
             <div class="col-lg-1"></div>
-                <div class="col-lg-12" id="cnt-tabla">
+            <div class="col-lg-12" id="cnt-tabla">
             </div>
 
         </div>
-
-
-
-
-
 
     </div>
 </div>
