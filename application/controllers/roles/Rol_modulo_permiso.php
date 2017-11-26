@@ -9,6 +9,7 @@ class Rol_modulo_permiso extends CI_Controller {
 		$this->load->helper(array('url','form','funciones_rapidas'));
 		$this->load->model('rol_modulo_permiso_model');
 		$this->load->model('combox_rol_modulo_permiso_model');
+		$this->load->model('roles_model');
 	}
 
 	public function index(){
@@ -29,11 +30,12 @@ class Rol_modulo_permiso extends CI_Controller {
 	public function gestionar_rol_modulo_permiso(){
 		if($this->input->post('band') == "save"){
 			$data = array(
-			'id_rol' => $this->input->post('id_rol'), 
+			'id_rol' => $this->roles_model->mostrar_rol_por($this->input->post('nombre_rol')), 
 			'id_modulo' => $this->input->post('id_modulo'),
 			'id_permiso' => $this->input->post('id_permiso'),
 			'estado' => $this->input->post('estado')
 			);
+
 			echo $this->rol_modulo_permiso_model->insertar_rol_modulo_permiso($data);
 
 		}else if($this->input->post('band') == "edit"){

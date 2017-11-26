@@ -54,5 +54,15 @@ class Roles_model extends CI_Model {
 		}
 		return $ultimoid;
 	}
-
+	 function mostrar_rol_por($data){
+		 $this->db->where("nombre_rol",$data);
+        $query = $this->db->get('org_rol');
+        if ($query->num_rows() > 0) {
+            foreach ($query->result_array() as $row){
+                    $data = $row['id_rol'];
+                }
+        }
+        $query->free_result();
+        return $data;
+	}
 }

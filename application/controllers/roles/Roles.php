@@ -24,8 +24,9 @@ class Roles extends CI_Controller {
 
 	public function gestionar_rol(){
 		if($this->input->post('band') == "save"){
+			$nombre=$this->input->post('nombre_rol');
 			$data = array(
-			'nombre_rol' => $this->input->post('nombre_rol'), 
+			'nombre_rol' => $nombre, 
 			'descripcion_rol' => $this->input->post('descripcion_rol')
 			);
 			echo $this->roles_model->insertar_rol($data);

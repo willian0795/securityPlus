@@ -106,6 +106,13 @@ if($id_sistema != 0){
                                 <i class="fa fa-close"></i>
                             </span>
                         </label>
+                        <label class="custom-control custom-checkbox m-0" data-toggle="tooltip" title="Seleccionar todos">
+                            <input type="checkbox" class="custom-control-input" value="0" onchange="marcar_check(this)">
+                            <span class="custom-control-indicator" style="width: 20px; height: 20px;"></span>
+                            <span style="position: absolute; left: 12px; top:-5px; display: inline-flex;">
+                                <i class="fa fa-check-circle-o"></i>
+                            </span>
+                        </label>
                     </div>
                 </div>
             <?php
@@ -150,6 +157,13 @@ if($id_sistema != 0){
                             <span class="custom-control-indicator" style="width: 20px; height: 20px;"></span>
                             <span style="position: absolute; left: -5px; top:-5px; display: inline-flex;">
                                 <i class="fa fa-close"></i>
+                            </span>
+                        </label>
+                        <label class="custom-control custom-checkbox m-0" data-toggle="tooltip" title="Seleccionar todos">
+                            <input type="checkbox" class="custom-control-input" value="0" onchange="marcar_check(this)">
+                            <span class="custom-control-indicator" style="width: 20px; height: 20px;"></span>
+                            <span style="position: absolute; left: 12px; top:-5px; display: inline-flex;">
+                                <i class="fa fa-check-circle-o"></i>
                             </span>
                         </label>
                     </div>

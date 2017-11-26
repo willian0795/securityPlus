@@ -7,7 +7,7 @@
 
         $("#ttl_form").removeClass("bg-success");
         $("#ttl_form").addClass("bg-info");
-
+        $("#band").val("edit");
         $("#btnadd").hide(0);
         $("#btnedit").show(0);
 
@@ -148,6 +148,8 @@
         var idmodulo, seleccionar, insertar, modificar, eliminar;
         var permisos= new Array();
         
+        agregar_rol("save",$("#nombre_rol").val(),$("#descripcion_rol").val());
+
         for(var i=0; i<grupos_de_inputs.length; i++){
             var inputs = $(grupos_de_inputs[i]).find("input"); // Sacando inputs de 5 en 5. (Cinco por cada agrupación)
             
@@ -160,11 +162,25 @@
 
             test += idmodulo+" - "+seleccionar+" - "+insertar+" - "+modificar+" - "+eliminar+"\n";
 */
-            for (var n = 0; n<5; n++) {
-                permisos[n]=$(inputs[n]).val();
+            
+            if($(inputs[1]).val()=="1"){
+                agregar_permisos_a_rol("save",$("#nombre_rol").val(),$(inputs[0]).val(),$(inputs[1]).val(),"1");
+                
+            }
+            if($(inputs[2]).val()=="1"){
+                agregar_permisos_a_rol("save",$("#nombre_rol").val(),$(inputs[0]).val(),"2","1");
+                
+            }
+            if($(inputs[3]).val()=="1"){
+                agregar_permisos_a_rol("save",$("#nombre_rol").val(),$(inputs[0]).val(),"4","1");
+                
+            }
+            if($(inputs[4]).val()=="1"){
+                agregar_permisos_a_rol("save",$("#nombre_rol").val(),$(inputs[0]).val(),"3","1");
+                
             }
             for (var n = 0; n<5; n++) {
-                test+=permisos[n];
+                test+=$(inputs[n]).val();
             }
 
             test += "\n";
@@ -194,6 +210,63 @@
                 cambiar_check(hijo[0]);
             }
         }
+    }
+    function agregar_permisos_a_rol(band,nombre_rol,id_modulo,id_permiso,estado){
+            
+      var formData = new FormData();
+      formData.append("band", band);
+      formData.append("nombre_rol", nombre_rol);
+      formData.append("id_modulo", id_modulo);
+      formData.append("id_permiso", id_permiso);
+      formData.append("estado", estado);
+
+        $.ajax({
+            url: "<?php echo site_url(); ?>/roles/rol_modulo_permiso/gestionar_rol_modulo_permiso",
+            type: "post",
+            dataType: "html",
+            data: formData,
+            cache: false,
+            contentType: false,
+            processData: false
+        })
+        .done(function(res){
+            if(res == "exito"){
+                cerrar_mantenimiento();
+                if($("#band").val() == "save"){
+                    swal({ title: "¡Registro exitoso!", type: "success", showConfirmButton: true });
+                }else if($("#band").val() == "edit"){
+                    swal({ title: "¡Modificación exitosa!", type: "success", showConfirmButton: true });
+                }else{
+                    swal({ title: "¡Borrado exitoso!", type: "success", showConfirmButton: true });
+                }
+                tablaroles();$("#band").val('save');
+            }else{
+                swal({ title: "¡Ups! Error", text: "Intentalo nuevamente.", type: "error", showConfirmButton: true });
+            }
+        });
+    }
+    function agregar_rol(band,nombre_rol,descripcion_rol){
+        var formData = new FormData();
+        formData.append("band", band);
+        formData.append("nombre_rol",nombre_rol);
+        formData.append("descripcion_rol", descripcion_rol);
+
+        $.ajax({
+            url: "<?php echo site_url(); ?>/roles/roles/gestionar_rol",
+            type: "post",
+            dataType: "html",
+            data: formData,
+            cache: false,
+            contentType: false,
+            processData: false
+        })
+        .done(function(res){
+            if(res == "fracaso"){
+                swal({ title: "¡Ups! Error", text: "Intentalo nuevamente.", type: "error", showConfirmButton: true });
+            }else{
+                 
+            }
+        });
     }
 
 </script>
@@ -233,8 +306,9 @@
                     <div class="card-body b-t">
 
                         <?php echo form_open('', array('id' => 'formajax', 'style' => 'margin-top: 0px;', 'class' => 'm-t-40', 'novalidate' => '')); ?>
-                            <input type="hidden" id="band" name="band" value="save">
-                            <input type="hidden" id="id_rol" name="id_rol">
+                            <input type="text" id="band" name="band" value="save" placeholder="band">
+                           
+                            <input type="text" id="id_rol" name="id_rol" placeholder="id_rol">
                             
 
 
@@ -305,33 +379,7 @@ $(function(){
     $("#formajax").on("submit", function(e){
         e.preventDefault();
         var f = $(this);
-        var formData = new FormData(document.getElementById("formajax"));
-        formData.append("dato", "valor");
-
-        $.ajax({
-            url: "<?php echo site_url(); ?>/roles/roles/gestionar_rol",
-            type: "post",
-            dataType: "html",
-            data: formData,
-            cache: false,
-            contentType: false,
-            processData: false
-        })
-        .done(function(res){
-            if(res == "exito"){
-                cerrar_mantenimiento();
-                if($("#band").val() == "save"){
-                    swal({ title: "¡Registro exitoso!", type: "success", showConfirmButton: true });
-                }else if($("#band").val() == "edit"){
-                    swal({ title: "¡Modificación exitosa!", type: "success", showConfirmButton: true });
-                }else{
-                    swal({ title: "¡Borrado exitoso!", type: "success", showConfirmButton: true });
-                }
-                tablaroles();$("#band").val('save');
-            }else{
-                swal({ title: "¡Ups! Error", text: "Intentalo nuevamente.", type: "error", showConfirmButton: true });
-            }
-        });
+        
 
     });
 
