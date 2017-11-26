@@ -146,24 +146,28 @@
         var grupos_de_inputs = $("#nestable").find(".input-group"); // Recuperando agrupaciones de inputs cada agrupacion contiene 5 inputs
         var test = "";
         var idmodulo, seleccionar, insertar, modificar, eliminar;
+        var permisos= new Array();
         
         for(var i=0; i<grupos_de_inputs.length; i++){
             var inputs = $(grupos_de_inputs[i]).find("input"); // Sacando inputs de 5 en 5. (Cinco por cada agrupación)
             
-            idmodulo    = $(inputs[0]).val();
+  /*          idmodulo    = $(inputs[0]).val();
             seleccionar = $(inputs[1]).val();
             insertar    = $(inputs[2]).val();
             modificar   = $(inputs[3]).val();
             eliminar    = $(inputs[4]).val();
 
-            
-            //guardar_rol(idmodulo,seleccionar,insertar,modificar,eliminar); 
-            //por aquí puede mandar la funcion de guardado papayito y recorda que solo los que esten chequeados vas a guardar
-
-            /* si quiere vea el ejemplo que está en: "views/sistemas/modulo" 
-            la función se llama: << ordenando_modulo() >>*/
 
             test += idmodulo+" - "+seleccionar+" - "+insertar+" - "+modificar+" - "+eliminar+"\n";
+*/
+            for (var n = 0; n<5; n++) {
+                permisos[n]=$(inputs[n]).val();
+            }
+            for (var n = 0; n<5; n++) {
+                test+=permisos[n];
+            }
+
+            test += "\n";
         }
 
         alert(test)
