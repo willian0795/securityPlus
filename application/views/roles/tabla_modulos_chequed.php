@@ -22,7 +22,7 @@ if($id_sistema != 0){
             ?>
                 <div class="pull-right">
                     <div class="input-group" style="z-index: 1; font-size: 16px;">
-                        <input type="text" value="<?php echo $fila->id_modulo; ?>" style="width: 30px; margin-right: 10px;">
+                        <input type="hidden" value="<?php echo $fila->id_modulo; ?>" style="width: 30px; margin-right: 10px;">
                         <label class="custom-control custom-checkbox" data-toggle="tooltip" title="Consultar" style="margin-right: 5px;">
                             <input type="checkbox" <?php if($row1['id_permiso'][0]==1){?> checked value="1" id=<?php echo $row1['id_rol_permiso'];?> <?php $row1 = $datosChequeados1->next_row('array'); }else{?> id="" value="0" <?php }?>  class="custom-control-input"  onchange="cambiar_check(this)">
                             <span class="custom-control-indicator" style="width: 20px; height: 20px;"></span>
@@ -82,7 +82,7 @@ if($id_sistema != 0){
             ?>
                 <div class="pull-right">
                     <div class="input-group" style="z-index: 1; font-size: 16px;">
-                        <input type="text" value="<?php echo $fila2->id_modulo; ?>" style="width: 30px; margin-right: 10px;">
+                        <input type="hidden" value="<?php echo $fila2->id_modulo; ?>" style="width: 30px; margin-right: 10px;">
                         <label class="custom-control custom-checkbox" data-toggle="tooltip" title="Consultar" style="margin-right: 5px;">
                             <input type="checkbox" <?php if($row['id_permiso'][0]==1){?> checked value="1" id=<?php echo $row['id_rol_permiso'];?><?php $row = $datosChequeados->next_row('array'); }else{?> id="" value="0" <?php }?> class="custom-control-input"  onchange="cambiar_check(this)">
                              
@@ -140,7 +140,7 @@ if($id_sistema != 0){
                 
                 <div class="pull-right">
                     <div class="input-group" style="z-index: 1; font-size: 16px;">
-                        <input type="text" value="<?php echo $fila3->id_modulo; ?>" style="width: 30px; margin-right: 10px;">
+                        <input type="hidden" value="<?php echo $fila3->id_modulo; ?>" style="width: 30px; margin-right: 10px;">
                         <label class="custom-control custom-checkbox" data-toggle="tooltip" title="Consultar" style="margin-right: 5px;">
                             <input type="checkbox" <?php  if($row2['id_permiso'][0]==1){?> checked value="1" id=<?php echo $row1['id_rol_permiso'];?><?php $row2 = $datosChequeados2->next_row('array'); }else{?> id="" value="0" <?php }?> class="custom-control-input"  onchange="cambiar_check(this)">
                             <span class="custom-control-indicator" style="width: 20px; height: 20px;"></span>

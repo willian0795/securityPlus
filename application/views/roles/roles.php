@@ -169,9 +169,17 @@
         var test = "";
         var idmodulo, seleccionar, insertar, modificar, eliminar;
         var permisos= new Array();
-        
+        var sentinela=0;
         if($("#band").val()=="save"){
-            agregar_rol("save",$("#nombre_rol").val(),$("#descripcion_rol").val());
+            if($("#nombre_rol").val()!=""){
+                mantto_rol("","save",$("#nombre_rol").val(),$("#descripcion_rol").val());
+                sentinela=1;
+            }
+        }else if($("#band").val()=="edit"){
+            if($("#nombre_rol").val()!=""){
+                mantto_rol($("#id_rol").val(),"edit",$("#nombre_rol").val(),$("#descripcion_rol").val());
+                sentinela=1;
+            }
         }
         for(var i=0; i<grupos_de_inputs.length; i++){
             var inputs = $(grupos_de_inputs[i]).find("input"); // Sacando inputs de 5 en 5. (Cinco por cada agrupación)
@@ -219,7 +227,7 @@
 
             test += "\n";
         }
-        cerrar_mantenimiento();
+        if(sentinela==1)cerrar_mantenimiento();
     }
 
     function cambiar_check(obj){
@@ -279,9 +287,10 @@
             }
         });
     }
-    function agregar_rol(band,nombre_rol,descripcion_rol){
+    function mantto_rol(id_rol,band,nombre_rol,descripcion_rol){
         var formData = new FormData();
         formData.append("band", band);
+        formData.append("id_rol", id_rol);
         formData.append("nombre_rol",nombre_rol);
         formData.append("descripcion_rol", descripcion_rol);
 
