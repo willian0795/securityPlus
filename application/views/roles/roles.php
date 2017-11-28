@@ -38,9 +38,12 @@
     function cerrar_mantenimiento(){
         $("#nombre_rol").val("");
         $("#descripcion_rol").val("");
+        mostrarSistemas();
+        $("#id_sistema").val("");
 
         $("#cnt-tabla").show(0);
         $("#cnt_form").hide(0);
+        tablaroles();
     }
 
     function editar_rol(obj){
@@ -135,11 +138,30 @@
             //$('[data-toggle="tooltip"]').tooltip();
         });
     }
+    function tabla_rol_modulo_permiso3(id,id_rol){
+        id+="x"+id_rol;
+
+        $("#cnt-tabla-rol").load("<?php echo site_url(); ?>/roles/roles/tabla_rol_chequed/"+id, function() {
+            var updateOutput = function(e) {
+            var list = e.length ? e : $(e.target),
+                output = list.data('output');
+            };
+            $('#nestable').nestable({
+                group: 1
+            }).on('change', updateOutput);
+            updateOutput($('#nestable').data('output', $('#nestable-output')));
+            //$('[data-toggle="tooltip"]').tooltip();
+        });
+    }
 
     
 
-    function mostrarSistemas(id){
+    function mostrarSistemas(id,id_rol){
+        if($("#band").val()=="save"){
             tabla_rol_modulo_permiso2(id);        
+        }else{
+            tabla_rol_modulo_permiso3(id,id_rol);
+        }
     }
 
     function recorrer(){
@@ -148,8 +170,9 @@
         var idmodulo, seleccionar, insertar, modificar, eliminar;
         var permisos= new Array();
         
-        agregar_rol("save",$("#nombre_rol").val(),$("#descripcion_rol").val());
-
+        if($("#band").val()=="save"){
+            agregar_rol("save",$("#nombre_rol").val(),$("#descripcion_rol").val());
+        }
         for(var i=0; i<grupos_de_inputs.length; i++){
             var inputs = $(grupos_de_inputs[i]).find("input"); // Sacando inputs de 5 en 5. (Cinco por cada agrupación)
             
@@ -163,30 +186,40 @@
             test += idmodulo+" - "+seleccionar+" - "+insertar+" - "+modificar+" - "+eliminar+"\n";
 */
             
-            if($(inputs[1]).val()=="1"){
-                agregar_permisos_a_rol("save",$("#nombre_rol").val(),$(inputs[0]).val(),$(inputs[1]).val(),"1");
+            if($(inputs[1]).val()=="1" && ($(inputs[1]).attr('id')=="")){
+                permisos_a_rol("","save",$("#nombre_rol").val(),$(inputs[0]).val(),$(inputs[1]).val(),"1");
                 
+            }else if($(inputs[1]).val()=="0" && ($(inputs[1]).attr('id'))){
+                permisos_a_rol($(inputs[1]).attr('id'),"delete",$("#nombre_rol").val(),$(inputs[0]).val(),"1","1");
             }
-            if($(inputs[2]).val()=="1"){
-                agregar_permisos_a_rol("save",$("#nombre_rol").val(),$(inputs[0]).val(),"2","1");
+
+            if($(inputs[2]).val()=="1"  && ($(inputs[2]).attr('id')=="")){
+                permisos_a_rol("","save",$("#nombre_rol").val(),$(inputs[0]).val(),"2","1");
                 
+            }else if($(inputs[2]).val()=="0"  && ($(inputs[2]).attr('id'))){
+                permisos_a_rol($(inputs[2]).attr('id'),"delete",$("#nombre_rol").val(),$(inputs[0]).val(),"2","1");
             }
-            if($(inputs[3]).val()=="1"){
-                agregar_permisos_a_rol("save",$("#nombre_rol").val(),$(inputs[0]).val(),"4","1");
-                
+
+            if($(inputs[3]).val()=="1"  && ($(inputs[3]).attr('id')=="")){
+                permisos_a_rol("","save",$("#nombre_rol").val(),$(inputs[0]).val(),"3","1");
+            }else if($(inputs[3]).val()=="0"  && ($(inputs[3]).attr('id'))){
+                permisos_a_rol($(inputs[3]).attr('id'),"delete",$("#nombre_rol").val(),$(inputs[0]).val(),"4","1");
             }
-            if($(inputs[4]).val()=="1"){
-                agregar_permisos_a_rol("save",$("#nombre_rol").val(),$(inputs[0]).val(),"3","1");
-                
+
+            if($(inputs[4]).val()=="1"  && ($(inputs[4]).attr('id')=="")){
+                permisos_a_rol("","save",$("#nombre_rol").val(),$(inputs[0]).val(),"4","1");
+            }else if($(inputs[4]).val()=="0"  && ($(inputs[4]).attr('id'))){
+                permisos_a_rol($(inputs[4]).attr('id'),"delete",$("#nombre_rol").val(),$(inputs[0]).val(),"3","1");
             }
+            
+
             for (var n = 0; n<5; n++) {
                 test+=$(inputs[n]).val();
             }
 
             test += "\n";
         }
-
-        alert(test)
+        cerrar_mantenimiento();
     }
 
     function cambiar_check(obj){
@@ -211,10 +244,11 @@
             }
         }
     }
-    function agregar_permisos_a_rol(band,nombre_rol,id_modulo,id_permiso,estado){
+    function permisos_a_rol(id_rol_permiso,band,nombre_rol,id_modulo,id_permiso,estado){
             
       var formData = new FormData();
       formData.append("band", band);
+      formData.append("id_rol_permiso", id_rol_permiso);
       formData.append("nombre_rol", nombre_rol);
       formData.append("id_modulo", id_modulo);
       formData.append("id_permiso", id_permiso);
@@ -231,7 +265,7 @@
         })
         .done(function(res){
             if(res == "exito"){
-                cerrar_mantenimiento();
+                 
                 if($("#band").val() == "save"){
                     swal({ title: "¡Registro exitoso!", type: "success", showConfirmButton: true });
                 }else if($("#band").val() == "edit"){
@@ -239,7 +273,7 @@
                 }else{
                     swal({ title: "¡Borrado exitoso!", type: "success", showConfirmButton: true });
                 }
-                tablaroles();$("#band").val('save');
+                 $("#band").val('save');
             }else{
                 swal({ title: "¡Ups! Error", text: "Intentalo nuevamente.", type: "error", showConfirmButton: true });
             }
@@ -306,9 +340,9 @@
                     <div class="card-body b-t">
 
                         <?php echo form_open('', array('id' => 'formajax', 'style' => 'margin-top: 0px;', 'class' => 'm-t-40', 'novalidate' => '')); ?>
-                            <input type="text" id="band" name="band" value="save" placeholder="band">
+                            <input type="hidden" id="band" name="band" value="save" placeholder="band">
                            
-                            <input type="text" id="id_rol" name="id_rol" placeholder="id_rol">
+                            <input type="hidden" id="id_rol" name="id_rol" placeholder="id_rol">
                             
 
 
@@ -331,7 +365,7 @@
                              <div class="row">
                                 <div class="form-group col-lg-12">   
                                 <label for="id_sistema" class="font-weight-bold">Seleccione Sistema :<span class="text-danger">*</span></label>                         
-                                    <select id="id_sistema" name="id_sistema" class="select2" onchange="mostrarSistemas(this.value)" style="width: 100%">
+                                    <select id="id_sistema" name="id_sistema" class="select2" onchange="mostrarSistemas(this.value,$('#id_rol').val())" style="width: 100%">
                                         <option value="0">[Elija el sistema]</option>
                                         <?php 
                                             $sistemas = $this->db->get("org_sistema");
@@ -351,12 +385,12 @@
                             <button id="submit" type="submit" style="display: none;"></button>
                             <div align="right" id="btnadd">
                                 <button type="reset" class="btn waves-effect waves-light btn-success"><i class="mdi mdi-delete"></i> Limpiar</button>
-                                <button type="submit" class="btn waves-effect waves-light btn-success2"><i class="mdi mdi-plus"></i> Guardar</button>
+                                <button type="button" onclick="recorrer()" class="btn waves-effect waves-light btn-success2"><i class="mdi mdi-plus"></i> Guardar</button>
                             </div>
                             <div align="right" id="btnedit" style="display: none;">
-                                <button type="reset" class="btn waves-effect waves-light btn-success"><i class="mdi mdi-delete"></i> Limpiar</button>
-                                <button type="button" onclick="editar_rol(this)" class="btn waves-effect waves-light btn-info"><i class="mdi mdi-pencil"></i> Editar</button>
-                                <button type="button" onclick="eliminar_rol(this)" class="btn waves-effect waves-light btn-danger"><i class="mdi mdi-window-close"></i> Eliminar</button>
+                                
+                                <button type="button" onclick="recorrer()" class="btn waves-effect waves-light btn-info"><i class="mdi mdi-pencil"></i> Editar</button>
+                                
                             </div>
 
                         <?php echo form_close(); ?>

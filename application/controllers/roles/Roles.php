@@ -20,6 +20,12 @@ class Roles extends CI_Controller {
 		$objeto['id_sistema'] = $id;
 		$this->load->view('roles/tabla_modulos',$objeto);
 	}
+	public function tabla_rol_chequed($ids){
+		$objeto = explode("x", $ids);
+		$nuevo['id_sistema']=$objeto[0];
+		$nuevo['id_rol']=$objeto[1];
+		$this->load->view('roles/tabla_modulos_chequed',$nuevo);
+	}
 
 
 	public function gestionar_rol(){
