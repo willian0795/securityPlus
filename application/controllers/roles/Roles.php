@@ -39,7 +39,6 @@ class Roles extends CI_Controller {
 		$this->load->view('roles/tabla_rol_modulo_permiso',$objeto);
 	}
 
-
 	public function gestionar_rol(){
 		if($this->input->post('band') == "save"){
 			$nombre=$this->input->post('nombre_rol');
@@ -68,13 +67,44 @@ class Roles extends CI_Controller {
 		}
 	}
 
-	public function ordenar_modulo(){
-		$data = array(
-			'idmodulo' => $this->input->post('idmodulo'), 
-			'orden' => $this->input->post('orden'),
-			'dependencia' => $this->input->post('dependencia')
-			);
-		echo $this->modulos_model->ordenar_modulo($data);
+	public function buscarModulo($id_sistema,$seleccionado){
+		$data['modulo'] = $this->roles_model->getModulo($id_sistema);
+		$data['seleccionado'] = $seleccionado;
+		$this->load->view('roles/combo_modulo',$data);
 	}
+
+	public function gestionar_rol_modulo_permiso(){
+		if($this->input->post('band') == "save"){
+			$miid = $this->roles_model->obtener_ultimo_id('org_rol','id_rol');
+			$data = array(
+			'id_rol' => $miid, 
+			'id_modulo' => $this->input->post('id_modulo'),
+			'id_permiso' => $this->input->post('id_permiso'),
+			'estado' => $this->input->post('estado')
+			);
+
+			echo $this->roles_model->insertar_rol_modulo_permiso($data);
+
+		}else if($this->input->post('band') == "edit"){
+
+			$data = array(
+			'id_rol_permiso' => $this->input->post('id_rol_permiso'),
+			'id_rol' => $this->input->post('id_rol'), 
+			'id_modulo' => $this->input->post('id_modulo'),
+			'id_permiso' => $this->input->post('id_permiso'),
+			'estado' => $this->input->post('estado')
+			);
+			echo $this->roles_model->editar_rol_modulo_permiso($data);
+
+		}else if($this->input->post('band') == "delete"){
+
+			$data = array(
+			'id_rol_permiso' => $this->input->post('id_rol_permiso')
+			);
+			echo $this->roles_model->eliminar_rol_modulo_permiso($data);
+
+		}
+	}
+
 }
 ?>

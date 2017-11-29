@@ -263,7 +263,7 @@
       formData.append("estado", estado);
 
         $.ajax({
-            url: "<?php echo site_url(); ?>/roles/rol_modulo_permiso/gestionar_rol_modulo_permiso",
+            url: "<?php echo site_url(); ?>/roles/roles/gestionar_rol_modulo_permiso",
             type: "post",
             dataType: "html",
             data: formData,
