@@ -5,24 +5,20 @@ class Rol_modulo_permiso extends CI_Controller {
 
 	function __construct(){
 		parent::__construct();
-		/************ Librerias para llamar funciones predefenidas **********/
-		$this->load->helper(array('url','form','funciones_rapidas'));
-		$this->load->model('rol_modulo_permiso_model');
-		$this->load->model('combox_rol_modulo_permiso_model');
 		$this->load->model('roles_model');
 	}
 
 	public function index(){
 		$this->load->view('templates/header');
-		$data['rol'] = $this->combox_rol_modulo_permiso_model->getRol();
-		$data['sistema'] = $this->combox_rol_modulo_permiso_model->getSistema();
-		$data['permiso'] = $this->combox_rol_modulo_permiso_model->getPermiso();
+		$data['rol'] = $this->roles_model->getRol();
+		$data['sistema'] = $this->roles_model->getSistema();
+		$data['permiso'] = $this->roles_model->getPermiso();
 		$this->load->view('roles/rol_modulo_permiso',$data);
 		
 		$this->load->view('templates/footer');
 	}
 	public function buscarModulo($id_sistema,$seleccionado){
-		$data['modulo'] = $this->combox_rol_modulo_permiso_model->getModulo($id_sistema);
+		$data['modulo'] = $this->roles_model->getModulo($id_sistema);
 		$data['seleccionado'] = $seleccionado;
 		$this->load->view('roles/combo_modulo',$data);
 	}
@@ -37,7 +33,7 @@ class Rol_modulo_permiso extends CI_Controller {
 			'estado' => $this->input->post('estado')
 			);
 
-			echo $this->rol_modulo_permiso_model->insertar_rol_modulo_permiso($data);
+			echo $this->roles_model->insertar_rol_modulo_permiso($data);
 
 		}else if($this->input->post('band') == "edit"){
 
@@ -48,14 +44,14 @@ class Rol_modulo_permiso extends CI_Controller {
 			'id_permiso' => $this->input->post('id_permiso'),
 			'estado' => $this->input->post('estado')
 			);
-			echo $this->rol_modulo_permiso_model->editar_rol_modulo_permiso($data);
+			echo $this->roles_model->editar_rol_modulo_permiso($data);
 
 		}else if($this->input->post('band') == "delete"){
 
 			$data = array(
 			'id_rol_permiso' => $this->input->post('id_rol_permiso')
 			);
-			echo $this->rol_modulo_permiso_model->eliminar_rol_modulo_permiso($data);
+			echo $this->roles_model->eliminar_rol_modulo_permiso($data);
 
 		}
 	}
