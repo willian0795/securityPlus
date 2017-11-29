@@ -38,8 +38,9 @@
     function cerrar_mantenimiento(){
         $("#nombre_rol").val("");
         $("#descripcion_rol").val("");
-        mostrarSistemas();
         $("#id_sistema").val("");
+        mostrarSistemas();
+        
 
         $("#cnt-tabla").show(0);
         $("#cnt_form").hide(0);
