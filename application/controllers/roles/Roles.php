@@ -27,6 +27,20 @@ class Roles extends CI_Controller {
 		$this->load->view('roles/tabla_modulos_chequed',$nuevo);
 	}
 
+	public function tablaroles(){
+		$objeto =  new stdClass();
+		$objeto->roles = $roles = $this->roles_model->mostrar_rol();
+		
+		$this->load->view('roles/tabla_roles',$objeto);
+	}
+
+	public function tabla_rol_modulo_permiso($id){
+		
+		$objeto['roles'] = $id;
+		
+		$this->load->view('roles/tabla_rol_modulo_permiso',$objeto);
+	}
+
 
 	public function gestionar_rol(){
 		if($this->input->post('band') == "save"){

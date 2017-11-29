@@ -69,7 +69,7 @@ class Usuarios extends CI_Controller {
 				'genero' => $this->input->post('genero'),
 				'usuario' => $this->input->post('usuario'),
 				'password' => $pass,
-				'estado' => $this->cambiar_checke($this->input->post('estado'))
+				'estado' => 1
 				);
 			}else{
 				$empleado = $this->db->query("SELECT UPPER(CONCAT_WS(' ', primer_nombre, segundo_nombre, tercer_nombre, primer_apellido, segundo_apellido, apellido_casada)) AS nombre_completo,  LOWER(CONCAT_WS(' ', primer_nombre, segundo_nombre, tercer_nombre)) AS nombre, LOWER(CONCAT_WS(' ', primer_apellido, segundo_apellido, apellido_casada)) AS apellido, LOWER(CONCAT_WS('.',primer_nombre, primer_apellido)) AS usuario, nr, id_genero FROM sir_empleado WHERE id_empleado = '".$this->input->post('id_empleado')."'");
@@ -82,7 +82,7 @@ class Usuarios extends CI_Controller {
 						'genero' => $fila->id_genero,
 						'usuario' => $fila->usuario,
 						'password' => $pass,
-						'estado' => $this->cambiar_checke($this->input->post('estado'))
+						'estado' => 1
 						);            
 		            }
 		        }				
@@ -94,8 +94,7 @@ class Usuarios extends CI_Controller {
 
 			$data = array(
 			'idusuario' => $this->input->post('idusuario'), 
-			'password' => md5($this->input->post('password')),
-			'estado' => $this->cambiar_checke($this->input->post('estado'))
+			'password' => md5($this->input->post('password'))
 			);
 			echo $this->usuarios_model->editar_usuario($data);
 
@@ -107,6 +106,14 @@ class Usuarios extends CI_Controller {
 			echo $this->usuarios_model->eliminar_usuario($data);
 
 		}
+	}
+
+	public function editar_estado(){
+		$data = array(
+		'idusuario' => $this->input->post('id_usuario'), 
+		'estado' => $this->input->post('estado')
+		);
+		echo $this->usuarios_model->editar_estado_usuario($data);
 	}
 }
 ?>

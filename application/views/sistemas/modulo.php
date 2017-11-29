@@ -1,5 +1,5 @@
 <script type="text/javascript">
-    function cambiar_editar(id,id_sistema,nombre,descripcion,dependencia,url,icono,opciones){
+    function cambiar_editar(id,id_sistema,nombre,descripcion,dependencia,url,icono,opciones,bandera){
         $("#idmodulo").val(id);
         $("#id_sistema").val(id_sistema);
         $("#nombre").val(nombre);
@@ -9,19 +9,19 @@
         $("#url").val(url);
         $("#icono").val(icono);
         $("#opciones").val(opciones);        
-        $("#band").val("edit");
 
-        $("#ttl_form").removeClass("bg-success");
-        $("#ttl_form").addClass("bg-info");
-
-        $("#btnadd").hide(0);
-        $("#btnedit").show(0);
-
-        vista_form_tabla();
-
-        $("#cnt_form").show(500);
-
-        $("#ttl_form").children("h4").html("<span class='fa fa-wrench'></span> Editar módulo");
+        if(bandera == "edit"){
+            $("#band").val("edit");
+            $("#ttl_form").removeClass("bg-success");
+            $("#ttl_form").addClass("bg-info");
+            $("#btnadd").hide(0);
+            $("#btnedit").show(0);
+            vista_form_tabla();
+            $("#cnt_form").show(500);
+            $("#ttl_form").children("h4").html("<span class='fa fa-wrench'></span> Editar módulo");
+        }else{
+            eliminar_modulo();
+        }
     }
 
     function cambiar_nuevo(dependencia){
@@ -52,13 +52,13 @@
         $("#cnt_form").hide(500);
     }
 
-    function editar_modulo(obj){
+    function editar_modulo(){
         $("#band").val("edit");
         $( "#dependencia" ).prop( "disabled", false );
         $("#submit").click();
     }
 
-    function eliminar_modulo(obj){
+    function eliminar_modulo(){
         $("#band").val("delete");
         swal({   
             title: "¿Está seguro?",   
@@ -67,7 +67,7 @@
             showCancelButton: true,   
             confirmButtonColor: "#fc4b6c",   
             confirmButtonText: "Sí, deseo eliminar!",   
-            closeOnConfirm: false 
+            closeOnConfirm: true 
         }, function(){  
             $( "#dependencia" ).prop( "disabled", false );
             $("#submit").click(); 
@@ -97,6 +97,7 @@
     function tablamodulos(){          
         var id_sistema = $("#sistema").val();
         $( "#cnt_tabla" ).load("<?php echo site_url(); ?>/modulos/tabla_modulo?id_sistema="+id_sistema, function() {
+            $('[data-toggle="tooltip"]').tooltip();
             tablamodulos2();
         });  
     }
@@ -200,7 +201,23 @@
         $("html").animate({scrollTop:0}, '2000', function() {
             $("#cnt_form").addClass("pulse animated");
         });
-    }    
+    }
+
+    function verificar_eliminacion(tipo){        
+        var parametros = {
+                "idmodulo" : $("#idmodulo").val(),
+                "nombre" : $("#nombre").val()
+        };
+        $.ajax({
+            data:  parametros, //datos que se envian a traves de ajax
+            url:   '<?php echo site_url(); ?>/sistemas/modulo/verificar_roles', //archivo que recibe la peticion
+            type:  'post', //método de envio
+            success:  function (response) { //una vez que el archivo recibe el request lo procesa y lo devuelve
+                $('#myModal').modal('show'); // abrir
+                $("#resultado").html("Para eliminar el modulo '"+parametros["nombre"]+"' debe eliminar su(s) "+tipo+": <br><br>"+response);
+            }
+        });
+    }   
 
 </script>
 <style type="text/css">
@@ -368,13 +385,12 @@
                         </div>
                         <button id="submit" type="submit" style="display: none;"></button>
                         <div align="right" id="btnadd">
-                            <button type="reset" class="btn waves-effect waves-light btn-success"><i class="mdi mdi-delete"></i> Limpiar</button>
+                            <button type="reset" class="btn waves-effect waves-light btn-success"><i class="mdi mdi-recycle"></i> Limpiar</button>
                             <button type="submit" class="btn waves-effect waves-light btn-success2"><i class="mdi mdi-plus"></i> Guardar</button>
                         </div>
                         <div align="right" id="btnedit" style="display: none;">
-                            <button type="reset" class="btn waves-effect waves-light btn-success"><i class="mdi mdi-delete-empty"></i> Limpiar</button>
-                            <button type="button" onclick="editar_modulo(this)" class="btn waves-effect waves-light btn-info"><i class="mdi mdi-pencil"></i> Editar</button>
-                            <button type="button" onclick="eliminar_modulo(this)" class="btn waves-effect waves-light btn-danger"><i class="mdi mdi-window-close"></i> Eliminar</button>
+                            <button type="reset" class="btn waves-effect waves-light btn-success"><i class="mdi mdi-recycle"></i> Limpiar</button>
+                            <button type="button" onclick="editar_modulo()" class="btn waves-effect waves-light btn-info"><i class="mdi mdi-pencil"></i> Editar</button>
                         </div>
                         <?php echo form_close(); ?>
                     </div>
@@ -393,6 +409,27 @@
 <!-- ============================================================== -->
 <!-- Fin de DIV de inicio (ENVOLTURA) -->
 <!-- ============================================================== -->
+
+<!-- sample modal content -->
+<div id="myModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="myModalLabel">¡El módulo posee datos relacionados!</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            </div>
+            <div class="modal-body">
+                <p id="resultado"></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-info waves-effect" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
 
 <script>
 
@@ -426,6 +463,8 @@ $(function(){
                     $( "#dependencia" ).prop( "disabled", true );
                 }
                 tablamodulos();
+            }else if(res == "roles" || res == "hijos"){
+                verificar_eliminacion(res);
             }else{
                 swal({ title: "¡Ups! Error", text: "Intentalo nuevamente.", type: "error", showConfirmButton: true });
             }

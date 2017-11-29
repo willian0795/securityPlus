@@ -31,6 +31,21 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 		return $cptabla;
 	}
 
+	function generar_boton($opciones,$funcion,$color,$icono,$title){
+		$var = ""; $boton = "";
+		foreach ($opciones as $otro) {
+			$var .= '"'.$otro.'",';
+		}
+		$var = substr($var, 0, -1);
+		$boton .= "<button type='button' class='btn waves-effect waves-light btn-rounded btn-sm ".$color."' onClick='".$funcion."(".$var.");' data-toggle='tooltip' title='".$title."'><span class='".$icono."'></span></button>&nbsp;";
+		return $boton;
+	}
+
+	function endKey($array){
+		end($array);
+		return key($array);
+	}
+
 	function boton_tabla1($fila,$nfuncion){
 		$cptabla = "<td>";
 		$var = "";

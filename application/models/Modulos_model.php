@@ -63,6 +63,18 @@ class Modulos_model extends CI_Model {
 		}
 	}
 
+	function verificar_roles($data){
+		$query = $this->db->query("SELECT DISTINCT r.* FROM org_rol AS r WHERE r.id_rol IN(SELECT id_rol FROM org_rol_modulo_permiso WHERE id_rol = r.id_rol AND id_modulo = '".$data['idmodulo']."') ORDER BY nombre_rol");
+		if($query->num_rows() > 0) return $query;
+		else return false;
+	}
+
+	function verificar_hijos($data){
+		$query = $this->db->query("SELECT * FROM org_modulo WHERE dependencia = '".$data['idmodulo']."' ORDER BY orden");
+		if($query->num_rows() > 0) return $query;
+		else return false;
+	}
+
 	function obtener_ultimo_id($tabla,$nombreid){
 		$this->db->order_by($nombreid, "asc");
 		$query = $this->db->get($tabla);

@@ -7,13 +7,6 @@
         $("#form_nusuario").hide(0);
         $("#form_eusuario").show(0);
 
-        if(estado == 1){
-            document.getElementById("estado").checked = 1;
-        }else{
-            document.getElementById("estado").checked = 0;
-        }
-        cambiar_check("estado");
-
         $("#l_nombre").val(nombre);
         $("#usuario").val(usuario);
         $("#l_usuario").val(usuario);
@@ -31,7 +24,7 @@
             $("#btnedit").show(0);
             tablaroles();
         }else{
-            eliminar_usuario();
+            cambiar_estado(id, usuario, estado);
         }
     }
 
@@ -41,8 +34,6 @@
         $("#usuario").val("");
         $("#password").val("");
         $("#password2").val("");
-        document.getElementById("estado").checked = 1;
-        cambiar_check("estado");
         $("#band").val("save");
         tablaroles();
 
@@ -70,9 +61,7 @@
         $("#submit").click();
     }
 
-    function eliminar_usuario(){
-        $("#password").val("ninguna");
-        $("#password2").val("ninguna");
+    function eliminar_usuario(estado){
         $("#band").val("delete");
         var nombre = $("#l_usuario").val();
         swal({   
@@ -86,6 +75,36 @@
         }, function(){   
             $("#submit").click(); 
         });
+    }
+
+    function cambiar_estado(id, usuario, estado){  
+        var cambiar;
+
+        if(estado == 0){
+            cambiar = 1;
+        }else{
+            cambiar = 0;
+        }
+
+        jugador = document.getElementById('jugador');
+        
+        ajax = objetoAjax();
+        ajax.open("POST", "<?php echo site_url(); ?>/usuarios/usuarios/editar_estado", true);
+        ajax.onreadystatechange = function() {
+            if (ajax.readyState == 4){
+                jugador.value = (ajax.responseText);
+                if(jugador.value == "exito" && cambiar == 1){
+                    swal({ title: "¡Cuenta activada!", text: "La cuenta del usuario: <<"+usuario+">> fué activada exitosamente", type: "success", showConfirmButton: true });
+                }else if(jugador.value == "exito" && cambiar == 0){
+                    swal({ title: "¡Cuenta desactivada!", text: "La cuenta del usuario: <<"+usuario+">> fué desactivada", type: "warning", showConfirmButton: true });
+                }else{
+                    swal({ title: "¡Ocurrio un error!", text: "No se logró completar las modificaciones", type: "warning", showConfirmButton: true });
+                }
+                tablausuarios();
+            }
+        } 
+        ajax.setRequestHeader("Content-Type","application/x-www-form-urlencoded"); 
+        ajax.send("&id_usuario="+id+"&estado="+cambiar)
     }
 
     function iniciar(){
@@ -169,6 +188,7 @@
 
     function mostrar(id_empleado, usuario, id_genero){
         $("#usuario").val(usuario);
+        alert("genero"+id_genero)
         document.getElementById("genero"+id_genero).checked = 1;
     }
 
@@ -352,15 +372,19 @@
                                 	<div class="form-group col-lg-6">
                                         <h5>Genero: <span class="text-danger">*</span></h5>
                                         <fieldset class="controls">
+                                            <input name="genero" type="radio" id="generoM" value="M">
+                                            <label class="m-l-20" for="generoM">Masculino</label>
+                                            <input name="genero" type="radio" id="generoF" value="F">
+                                            <label class="m-l-20" for="generoF">Femenino</label>
                                             <?php
-    	                                		$genero = $this->db->get("org_genero");
+    	                                		/*$genero = $this->db->get("org_genero");
 
     						                    if(!empty($genero)){
     						                        foreach ($genero->result() as $fila) {
     						                        	echo '<input name="genero" type="radio" id="genero'.strtolower($fila->id_genero).'" value="'.strtolower($fila->id_genero).'">';
     						                        	echo '<label class="m-l-20" for="genero'.strtolower($fila->id_genero).'">'.ucfirst(strtolower($fila->genero)).'</label>';
     						                        }
-    						                    }
+    						                    }*/
     	                                	?>
                                         </fieldset>
                                     </div> 
@@ -390,19 +414,7 @@
                                     </div>
                                     <div class="help-block"></div>
                                 </div>
-                            </div>      
-
-                            <div class="row" style="display: block;">
-                                <div class="form-group col-lg-6">
-                                </div>
-                                <div align="right" class="form-group col-lg-6">
-                                    <h5>Estado de la cuenta: <span class="text-danger">*</span></h5>
-                                    <div class="controls">
-                                        <label class="custom-control custom-checkbox">
-                                            <input type="checkbox" value="0" onchange="cambiar_check(this.id)" name="estado" id="estado" class="custom-control-input"> <span class="custom-control-indicator"></span> <span class="custom-control-description">Cuenta activa?</span> </label>
-                                    <div class="help-block"></div></div>
-                                </div>
-                            </div>                              
+                            </div>                                   
 
                             <div id="tabla_roles">
                                 
@@ -410,11 +422,12 @@
 
                             <button id="submit" type="submit" style="display: none;"></button>
                             <div align="right" id="btnadd">
+                                <button type="reset" class="btn waves-effect waves-light btn-success"><i class="mdi mdi-recycle"></i> Limpiar</button>
                                 <button type="input" class="btn waves-effect waves-light btn-success2"><i class="mdi mdi-plus"></i> Guardar</button>
                             </div>
                             <div align="right" id="btnedit" style="display: none;">
+                                <button type="reset" class="btn waves-effect waves-light btn-success"><i class="mdi mdi-recycle"></i> Limpiar</button>
                                 <button type="button" onclick="editar_usuario()" class="btn waves-effect waves-light btn-info"><i class="mdi mdi-pencil"></i> Editar</button>
-                                <button type="button" onclick="eliminar_usuario()" class="btn waves-effect waves-light btn-danger"><i class="mdi mdi-window-close"></i> Eliminar</button>
                             </div>
 
                         <?php echo form_close(); ?>
@@ -471,9 +484,6 @@ $(function(){
                 }else if($("#band").val() == "edit"){
                     swal({ title: "¡Modificación exitosa!", type: "success", showConfirmButton: true });
                     recorrer_roles();
-                }else{
-                    swal({ title: "¡Borrado exitoso!", type: "success", showConfirmButton: true });
-                    tablausuarios();
                 }
             }else if(res == "existe"){
                 swal({ title: "¡Ya existe!", text: "El usuario ya posee una cuenta", type: "warning", showConfirmButton: true });

@@ -1,9 +1,8 @@
 <script type="text/javascript">
     function cambiar_editar(id_rol,nombre_rol,descripcion_rol){
-         $("#id_rol").val(id_rol);
-         $("#nombre_rol").val(nombre_rol);
-         $("#descripcion_rol").val(descripcion_rol);
-         
+        $("#id_rol").val(id_rol);
+        $("#nombre_rol").val(nombre_rol);
+        $("#descripcion_rol").val(descripcion_rol);
 
         $("#ttl_form").removeClass("bg-success");
         $("#ttl_form").addClass("bg-info");
@@ -18,7 +17,7 @@
 
     function cambiar_nuevo(){
         $("#nombre_rol").val("");
-         $("#descripcion_rol").val("");
+        $("#descripcion_rol").val("");
          
         $("#band").val("save");
 
@@ -96,7 +95,7 @@
             }
         }
 
-        xmlhttpB.open("GET","<?php echo site_url(); ?>/roles/tablaroles",true);
+        xmlhttpB.open("GET","<?php echo site_url(); ?>/roles/roles/tablaroles",true);
         xmlhttpB.send();
     }
 
@@ -123,7 +122,7 @@
             }
         }
 
-        xmlhttpB.open("GET","<?php echo site_url(); ?>/roles/tabla_rol_modulo_permiso/index/"+id,true);
+        xmlhttpB.open("GET","<?php echo site_url(); ?>/roles/roles/tabla_rol_modulo_permiso/"+id,true);
         xmlhttpB.send();
     }
     function tabla_rol_modulo_permiso2(id){

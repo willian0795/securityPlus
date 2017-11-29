@@ -12,7 +12,6 @@
                     <tr>
                         <th>#</th>
                         <th>Nombre</th>
-                        <th>Base URL</th>
                         <th style="min-width: 85px;">(*)</th>
                     </tr>
                 </thead>
@@ -21,14 +20,19 @@
                     $sistemas = $this->db->get("org_sistema");
                     if(!empty($sistemas)){
                         foreach ($sistemas->result() as $fila) {
-                           echo "<tr>";
-                           echo "<td>".$fila->id_sistema."</td>";
-                           echo "<td>".$fila->nombre_sistema."</td>";
-                           echo "<td>".$fila->base_url."</td>";
-                           
-                           $array = array($fila->id_sistema, $fila->nombre_sistema, $fila->base_url);
-                           echo boton_tabla2($array,"cambiar_editar","cambiar_eliminar");
-                           echo "</tr>";
+                            echo "<tr>";
+                            echo "<td>".$fila->id_sistema."</td>";
+                            echo "<td>".$fila->nombre_sistema."</td>";
+                            echo "<td>";
+                            $array = array($fila->id_sistema, $fila->nombre_sistema);
+                            array_push($array, "edit");
+                            echo generar_boton($array,"cambiar_editar","btn-info","fa fa-wrench","Editar");
+                            unset($array[endKey($array)]); //eliminar el ultimo elemento de un array
+                            array_push($array, "delete");
+                            echo generar_boton($array,"cambiar_editar","btn-danger","fa fa-close","Eliminar");
+                            echo "</td>";
+
+                            echo "</tr>";
                         }
                     }
                 ?>

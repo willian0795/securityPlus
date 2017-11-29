@@ -66,6 +66,15 @@ class Usuarios_model extends CI_Model {
 		}
 	}
 
+	function editar_estado_usuario($data){
+		$this->db->where("id_usuario",$data["idusuario"]);
+		if($this->db->update('org_usuario', array('estado' => $data['estado']))){
+			return "exito";
+		}else{
+			return "fracaso";
+		}
+	}
+
 	function eliminar_usuario($data){
 		if($this->db->delete("org_usuario",array('id_usuario' => $data['idusuario']))){
 			return "exito";
