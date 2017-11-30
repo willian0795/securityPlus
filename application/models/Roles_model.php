@@ -40,7 +40,7 @@ class Roles_model extends CI_Model {
 		}
 	}
 
-	function obtener_ultimo_id($tabla,$nombreid){
+	public function obtener_ultimo_id($tabla,$nombreid){
 		$this->db->order_by($nombreid, "asc");
 		$query = $this->db->get($tabla);
 		$ultimoid = 0;
@@ -48,7 +48,7 @@ class Roles_model extends CI_Model {
 			foreach ($query->result() as $fila) {
 				$ultimoid = $fila->$nombreid; 
 			}
-			$ultimoid++;
+			 
 		}else{
 			$ultimoid = 1;
 		}
