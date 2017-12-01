@@ -252,6 +252,21 @@
             }
         }
     }
+    function borrarRol(id_rol){
+        swal({
+            title: "¿Está seguro?",
+            text: "¡Desea eliminar el registro!",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#fc4b6c",
+            confirmButtonText: "Sí, deseo eliminar!",
+            closeOnConfirm: false
+        }, function(){
+            mantto_rol(id_rol,"delete","dsf","sdf");
+            swal({ title: "¡Borrado exitoso!", type: "success", showConfirmButton: true });
+            cerrar_mantenimiento(); 
+        });
+    }
     function permisos_a_rol(id_rol_permiso,band,nombre_rol,id_modulo,id_permiso,estado){
             
       var formData = new FormData();
@@ -311,6 +326,8 @@
             }
         });
     }
+
+    
 
 </script>
 
