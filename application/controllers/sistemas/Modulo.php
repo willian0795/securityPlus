@@ -64,7 +64,19 @@ class modulo extends CI_Controller {
 			'dependencia' => $this->input->post('dependencia'),
 			'id_sistema' => $this->input->post('id_sistema')
 			);
-			echo $this->modulos_model->eliminar_modulo($data);
+
+			$validar_hijos = $this->modulos_model->verificar_hijos($data);
+
+			if($validar_hijos != false){
+				echo "hijos"; // No se eliminará por que el sistema tiene modulos
+			}else{
+				$valido_eliminar = $this->modulos_model->verificar_roles($data); //verifica si el sistema tiene modulos
+				if($valido_eliminar != false){
+					echo "roles"; // No se eliminará por que el sistema tiene modulos
+				}else{
+					echo $this->modulos_model->eliminar_modulo($data); // si no tiene modulos se elimina
+				}
+			}							
 
 		}
 	}
@@ -76,6 +88,29 @@ class modulo extends CI_Controller {
 			'dependencia' => $this->input->post('dependencia')
 			);
 		echo $this->modulos_model->ordenar_modulo($data);
+	}
+
+	function verificar_roles(){
+		$data = array(
+			'idmodulo' => $this->input->post('idmodulo')
+		);
+		$roles = '<ul>';
+		$validar_hijos = $this->modulos_model->verificar_hijos($data);
+		if($validar_hijos != false){
+			foreach ($validar_hijos->result() as $fila) {
+				$roles .= '<li>'.$fila->nombre_modulo.'</li>'; 
+			}
+		}else{
+			$valido_eliminar = $this->modulos_model->verificar_roles($data); //verifica si el sistema tiene modulos
+			if($valido_eliminar != false){
+				foreach ($valido_eliminar->result() as $fila) {
+					$roles .= '<li>'.$fila->nombre_rol.'</li>'; 
+				}
+			}
+		}	
+		$roles .= '</ul>';
+
+		echo $roles;
 	}
 }
 ?>

@@ -5,7 +5,6 @@ class Usuarios_model extends CI_Model {
 	
 	function __construct(){
 		parent::__construct();
-		$this->load->database();
 	}
 
 	function insertar_usuario($data){
@@ -60,6 +59,15 @@ class Usuarios_model extends CI_Model {
 	function editar_usuario($data){
 		$this->db->where("id_usuario",$data["idusuario"]);
 		if($this->db->update('org_usuario', array('estado' => $data['estado'],'password' => $data['password']))){
+			return "exito";
+		}else{
+			return "fracaso";
+		}
+	}
+
+	function editar_estado_usuario($data){
+		$this->db->where("id_usuario",$data["idusuario"]);
+		if($this->db->update('org_usuario', array('estado' => $data['estado']))){
 			return "exito";
 		}else{
 			return "fracaso";

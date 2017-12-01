@@ -13,7 +13,8 @@
                         <th>#</th>
                         <th>Nombre</th>
                         <th>Descripción</th>
-                        <th>Permisos</th>
+                         
+                        <th>(*)</th>
                         <th>(*)</th>
                     </tr>
                 </thead>
@@ -28,9 +29,12 @@
                            echo "<td>".$fila->descripcion_rol."</td>";
                            
                            $array = array($fila->id_rol, $fila->nombre_rol, $fila->descripcion_rol);
-                           $arrayPermiso = array($fila->id_rol);
-                           echo boton_tabla1($arrayPermiso,"mostrar_form_permisos");
+                           $array2 = array($fila->id_rol);
+                         
                            echo boton_tabla($array,"cambiar_editar");
+                           echo "<td>";
+                           echo "<button type='button' class='btn waves-effect waves-light btn-rounded btn-sm btn-danger' onClick='borrarRol(".$fila->id_rol.");'><span class='fa fa-times'></span></button>";
+                           echo "</td>";
                            echo "</tr>";
                         }
                     }

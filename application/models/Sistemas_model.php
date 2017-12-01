@@ -5,12 +5,11 @@ class Sistemas_model extends CI_Model {
 	
 	function __construct(){
 		parent::__construct();
-		$this->load->database();
 	}
 
 	function insertar_sistema($data){
 		$idsistema = $this->obtener_ultimo_id("org_sistema","id_sistema");
-		if($this->db->insert('org_sistema', array('id_sistema' => $idsistema, 'nombre_sistema' => $data['nombre'], 'base_url' => $data['base_url']))){
+		if($this->db->insert('org_sistema', array('id_sistema' => $idsistema, 'nombre_sistema' => $data['nombre']))){
 			return "exito";
 		}else{
 			return "fracaso";
@@ -25,7 +24,7 @@ class Sistemas_model extends CI_Model {
 
 	function editar_sistema($data){
 		$this->db->where("id_sistema",$data["idsistema"]);
-		if($this->db->update('org_sistema', array('nombre_sistema' => $data['nombre'], 'base_url' => $data['base_url']))){
+		if($this->db->update('org_sistema', array('nombre_sistema' => $data['nombre']))){
 			return "exito";
 		}else{
 			return "fracaso";
@@ -38,6 +37,12 @@ class Sistemas_model extends CI_Model {
 		}else{
 			return "fracaso";
 		}
+	}
+
+	function verificar_modulos($data){
+		$query = $this->db->query("SELECT * FROM org_modulo WHERE id_sistema = '".$data['idsistema']."' ORDER BY orden");
+		if($query->num_rows() > 0) return $query;
+		else return false;
 	}
 
 	function obtener_ultimo_id($tabla,$nombreid){

@@ -13,7 +13,7 @@
                         <th>Nombre</th>
                         <th>Usuario</th>
                         <th>Estado</th>
-                        <th>(*)</th>
+                        <th style="min-width: 85px;">(*)</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -26,16 +26,27 @@
                             echo "<tr>";
                             echo "<td>".$fila->nombre_completo."</td>";
                             echo "<td>".$fila->usuario."</td>";
-                            if($fila->estado == 1){ 
-                                echo '<td><span class="label label-success">Activo</span></div>'; 
-                            }else{ 
-                                echo '<td><span class="label label-danger">Inactivo</span></div>'; 
-                            }
-
+                                if($fila->estado == 1){ 
+                                    echo '<td><span class="label label-success">Activo</span></div>'; 
+                                }else{ 
+                                    echo '<td><span class="label label-danger">Inactivo</span></div>'; 
+                                }
                             echo"</td>";
-                           
-                            $array = array($fila->id_usuario, $fila->nombre_completo, $fila->sexo, $fila->usuario, $fila->estado);
-                            echo boton_tabla2($array,"cambiar_editar","cambiar_eliminar");
+
+                            echo"<td>";
+                                $array = array($fila->id_usuario, $fila->nombre_completo, $fila->sexo, $fila->usuario, $fila->estado);
+                                array_push($array, "edit");
+                                echo generar_boton($array,"cambiar_editar","btn-info","fa fa-wrench","Editar usuario");
+                                unset($array[endKey($array)]); //eliminar el ultimo elemento de un array
+                                if($fila->estado == 1){ 
+                                    array_push($array, "activo");
+                                    echo generar_boton($array,"cambiar_editar","btn-danger","fa fa-chevron-down","Desactivar cuenta");
+                                }else{ 
+                                    array_push($array, "Inactivo");
+                                    echo generar_boton($array,"cambiar_editar","btn-success","fa fa-chevron-up","Activar cuenta"); 
+                                }                        
+                            echo "</td>";
+
                             echo "</tr>";
                         }
                     }
