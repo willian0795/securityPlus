@@ -20,7 +20,7 @@
             $("#cnt_form").show(500);
             $("#ttl_form").children("h4").html("<span class='fa fa-wrench'></span> Editar módulo");
         }else{
-            eliminar_modulo();
+            verificar_eliminacion();
         }
     }
 
@@ -61,8 +61,8 @@
     function eliminar_modulo(){
         $("#band").val("delete");
         swal({   
-            title: "¿Está seguro?",   
-            text: "¡Desea eliminar el registro!",   
+            title: "¿Seguro que desea eliminarlo?",   
+            text: "¡El registro no podrá ser recuperado!",   
             type: "warning",   
             showCancelButton: true,   
             confirmButtonColor: "#fc4b6c",   
@@ -134,33 +134,44 @@
         var n1 = $("#nestable").children().children("li");
         var id = "", dep1 = 0,dep2 = 0,dep3 = 0, orden = 0;
 
+        var query = "UPDATE org_modulo SET\n";
+        var idqr = "", ordenquery = "orden = CASE id_modulo\n", dependenciaquery = "dependencia = CASE id_modulo\n";
+
         for(i=0; i<n1.length; i++){
             orden = i+1;
             dep1 = 0;
             id = $($(n1[i]).children("input")).val();
-            ordenando_modulo(id,dep1,orden);
+            ordenquery += "WHEN "+id+" THEN '"+orden+"'\n";
+            dependenciaquery += "WHEN "+id+" THEN '"+dep1+"'\n";
+            idqr += id+",";
             var n2 = $(n1[i]).children("ol").children("li");
             dep2 = id;
             for(j=0; j<n2.length; j++){
                 orden = j+1;                
                 id = $($(n2[j]).children("input")).val();
-                ordenando_modulo(id,dep2,orden);
+                ordenquery += "WHEN "+id+" THEN '"+orden+"'\n";
+                dependenciaquery += "WHEN "+id+" THEN '"+dep2+"'\n";
+                idqr += id+",";
                 var n3 = $(n2[j]).children("ol").children("li");
                 dep3 = id;
                 for(k=0; k<n3.length; k++){
                     orden = k+1;
                     id = $($(n3[k]).children("input")).val();
-                    ordenando_modulo(id,dep3,orden);
+                    ordenquery += "WHEN "+id+" THEN '"+orden+"'\n";
+                    dependenciaquery += "WHEN "+id+" THEN '"+dep3+"'\n";
+                    idqr += id+",";
                 }
 
             }
         }
-        swal({ title: "¡Ordenamiento finalizado!", type: "success", showConfirmButton: true });
-        tablamodulos2();
+        ordenquery += "END,\n";
+        dependenciaquery += "END";
+        idqr = idqr.substr(0,idqr.length-1);
+        ordenando_modulo(query+ordenquery+dependenciaquery+"\nWHERE id_modulo IN ("+idqr+")")
     }
 
-    function ordenando_modulo(id, dependencia, orden){       
-
+    function ordenando_modulo(query){       
+        var id_sistema = $("#id_sistema").val();
         jugador = document.getElementById('jugador');
         
         ajax = objetoAjax();
@@ -168,10 +179,16 @@
         ajax.onreadystatechange = function() {
             if (ajax.readyState == 4){
                 jugador.value = (ajax.responseText);
+                if(jugador.value == "exito"){
+                    swal({ title: "¡Ordenamiento finalizado!", type: "success", showConfirmButton: true });
+                }else{
+                    swal({ title: "¡Ups! Error", text: "Intentalo nuevamente.", type: "error", showConfirmButton: true });
+                }
+                tablamodulos2();
             }
         } 
         ajax.setRequestHeader("Content-Type","application/x-www-form-urlencoded"); 
-        ajax.send("&idmodulo="+id+"&dependencia="+dependencia+"&orden="+orden)
+        ajax.send("&query="+query+"&id_sistema="+id_sistema)
     }
 
     function vista_solo_form(){
@@ -203,7 +220,26 @@
         });
     }
 
-    function verificar_eliminacion(tipo){        
+    function verificar_eliminacion(){        
+        var parametros = {
+                "idmodulo" : $("#idmodulo").val(),
+                "nombre" : $("#nombre").val()
+        };
+        $.ajax({
+            data:  parametros, //datos que se envian a traves de ajax
+            url:   '<?php echo site_url(); ?>/sistemas/modulo/verificar_roles2', //archivo que recibe la peticion
+            type:  'post', //método de envio
+            success:  function (response) { //una vez que el archivo recibe el request lo procesa y lo devuelve
+                if(response == "eliminar"){
+                    eliminar_modulo();
+                }else{
+                    verificar_eliminacion2(response)
+                }
+            }
+        });
+    }  
+
+    function verificar_eliminacion2(tipo){        
         var parametros = {
                 "idmodulo" : $("#idmodulo").val(),
                 "nombre" : $("#nombre").val()
@@ -214,10 +250,10 @@
             type:  'post', //método de envio
             success:  function (response) { //una vez que el archivo recibe el request lo procesa y lo devuelve
                 $('#myModal').modal('show'); // abrir
-                $("#resultado").html("Para eliminar el modulo '"+parametros["nombre"]+"' debe eliminar su(s) "+tipo+": <br><br>"+response);
+                $("#resultado").html("Para eliminar el modulo '"+parametros["nombre"]+"' debe eliminar su(s) "+tipo+": <br><br>"+response);                
             }
         });
-    }   
+    }  
 
 </script>
 <style type="text/css">
@@ -450,9 +486,7 @@ $(function(){
             processData: false
         })
         .done(function(res){
-            if(res == "dependencia"){
-                swal({ title: "¡Espere un momento!", text: "Elimine las dependecias del módulo '"+$("#nombre").val()+"' para poder eliminarlo", type: "warning", showConfirmButton: true });
-            }else if(res == "exito"){
+            if(res == "exito"){
                 if($("#band").val() == "save"){
                     swal({ title: "¡Registro exitoso!", type: "success", showConfirmButton: true });
                 }else if($("#band").val() == "edit"){
@@ -463,8 +497,6 @@ $(function(){
                     $( "#dependencia" ).prop( "disabled", true );
                 }
                 tablamodulos();
-            }else if(res == "roles" || res == "hijos"){
-                verificar_eliminacion(res);
             }else{
                 swal({ title: "¡Ups! Error", text: "Intentalo nuevamente.", type: "error", showConfirmButton: true });
             }

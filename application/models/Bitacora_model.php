@@ -8,16 +8,21 @@ class Bitacora_model extends CI_Model {
 		date_default_timezone_set('America/El_Salvador');
 	}
 
-	function bitacora($data){
-
-        $user = $this->session->userdata('id_usuario');
+	function bitacora($desc, $accion){
+        $id_usuario = $this->session->userdata('id_usuario');
+        $usuario = $this->session->userdata('usuario');
         $fecha = date('Y-m-d h:i:s');
         $ip = $this->get_real_ip();
+        $descripcion = "";
         
-		
+        if($accion < 3){
+        	$descripcion = "El usuario ".$usuario." ".$desc;
+        }else{
+            $descripcion = $desc;
+        }
 		$id = $this->obtener_ultimo_id("sep_bitacora","id_bitacora");
 
-		if($this->db->insert('sep_bitacora', array('id_bitacora' => $id, 'id_sistema' => $data['id_sistema'], 'id_usuario' => $user, 'descripcion' => $data['descripcion'], 'fecha' => $fecha, 'ip' => $ip, 'id_accion' => $data['id_accion']))){
+		if($this->db->insert('sep_bitacora', array('id_bitacora' => $id, 'id_sistema' => '14', 'id_usuario' => $id_usuario, 'descripcion' => $descripcion, 'fecha' => $fecha, 'ip' => $ip, 'id_accion' => $accion))){
 			return "exito";
 		}else{
 			return "fracaso";

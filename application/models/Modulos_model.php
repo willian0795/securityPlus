@@ -13,6 +13,9 @@ class Modulos_model extends CI_Model {
 		$orden = $this->obtener_ultimo_id2("SELECT orden FROM org_modulo WHERE id_sistema = ".$data['id_sistema']." AND dependencia = ".$data['dependencia'],"orden");
 
 		if($this->db->insert('org_modulo', array('id_modulo' => $id, 'id_sistema' => $data['id_sistema'], 'nombre_modulo' => $data['nombre'], 'descripcion_modulo' => $data['descripcion'], 'orden' => $orden, 'dependencia' => $data["dependencia"], 'url_modulo' => $data['url'], 'img_modulo' => $data['icono'], 'opciones_modulo' => $data['opciones']))){
+			/************** Inicio de fragmento bitácora *********************/
+			$this->bitacora_model->bitacora("Se registró el modulo '".$data["nombre"]."' con id: ".$id." para el sistema con id: ".$data["id_sistema"],"3");
+            /************** Fin de fragmento bitácora *********************/
 			return "exito";
 		}else{
 			return "fracaso";
@@ -27,8 +30,12 @@ class Modulos_model extends CI_Model {
 	}
 
 	function ordenar_modulo($data){
-		$this->db->where("id_modulo",$data["idmodulo"]);
-		if($this->db->update('org_modulo', array('dependencia' => $data["dependencia"], 'orden' => $data["orden"]))){
+		$sistema = $this->obtener("SELECT nombre_sistema FROM org_sistema WHERE id_sistema = ".$data['id_sistema'],"nombre_sistema");
+
+		if($this->db->query($data["query"])){
+			/************** Inicio de fragmento bitácora *********************/
+			$this->bitacora_model->bitacora("Se modificó el orden de los modulos del sistema '".$sistema."' con id: ".$data["id_sistema"],"4");
+            /************** Fin de fragmento bitácora *********************/
 			return "exito";
 		}else{
 			return "fracaso";
@@ -38,6 +45,9 @@ class Modulos_model extends CI_Model {
 	function editar_modulo($data){
 		$this->db->where("id_modulo",$data["idmodulo"]);
 		if($this->db->update('org_modulo', array('nombre_modulo' => $data['nombre'], 'descripcion_modulo' => $data['descripcion'], 'dependencia' => $data["dependencia"], 'url_modulo' => $data['url'], 'img_modulo' => $data['icono'], 'opciones_modulo' => $data['opciones']))){
+			/************** Inicio de fragmento bitácora *********************/
+			$this->bitacora_model->bitacora("Se modificó el modulo '".$data["nombre"]."' con id: ".$data["idmodulo"]." para el sistema con id: ".$data["id_sistema"],"4");
+            /************** Fin de fragmento bitácora *********************/
 			return "exito";
 		}else{
 			return "fracaso";
@@ -46,19 +56,18 @@ class Modulos_model extends CI_Model {
 
 	function eliminar_modulo($data){
 		$orden = $this->obtener("SELECT orden FROM org_modulo WHERE id_modulo = ".$data['idmodulo'],"orden");
-		$query = $this->db->query("SELECT * FROM org_modulo WHERE id_sistema = ".$data['id_sistema']." AND dependencia = ".$data['idmodulo']);
-		if($query->num_rows() > 0){
-			echo "dependencia";
+		
+		$query = $this->db->query("SELECT * FROM org_modulo WHERE id_sistema = ".$data['id_sistema']." AND dependencia = ".$data['dependencia']);
+		if($query->num_rows() > 1){
+			$this->db->query("UPDATE org_modulo SET orden = orden-1 WHERE id_sistema = ".$data['id_sistema']." AND dependencia = ".$data['dependencia']." AND orden > ".$orden,"orden");
+		}
+		if($this->db->delete("org_modulo",array('id_modulo' => $data['idmodulo']))){
+			/************** Inicio de fragmento bitácora *********************/
+			$this->bitacora_model->bitacora("Se eliminó el modulo '".$data["nombre"]."' con id: ".$data['idmodulo']." para el sistema con id: ".$data["id_sistema"],"5");
+            /************** Fin de fragmento bitácora *********************/
+			return "exito";
 		}else{
-			$query = $this->db->query("SELECT * FROM org_modulo WHERE id_sistema = ".$data['id_sistema']." AND dependencia = ".$data['dependencia']);
-			if($query->num_rows() > 1){
-				$this->db->query("UPDATE org_modulo SET orden = orden-1 WHERE id_sistema = ".$data['id_sistema']." AND dependencia = ".$data['dependencia']." AND orden > ".$orden,"orden");
-			}
-			if($this->db->delete("org_modulo",array('id_modulo' => $data['idmodulo']))){
-				return "exito";
-			}else{
-				return "fracaso";
-			}
+			return "fracaso";
 		}
 	}
 
@@ -115,28 +124,4 @@ class Modulos_model extends CI_Model {
 		}
 		return $ultimoid;
 	}
-
-/*	function mostrar_personal(){
-		$query = $this->db->get("tpersonal");
-		if($query->num_rows() > 0) return $query;
-		else return false;
-	}
-
-	function mostrar_personal2(){
-        $query = $this->db->query("SELECT p.idpersonal, p.nombre, p.direccion, p.telefono, c.idcargo, c.nombre AS cnombre, z.idzona, z.nombre AS znombre FROM tpersonal p JOIN tcargos c ON p.idcargo = c.idcargo JOIN tzonas z ON z.idzona = p.idzona");
-		if($query->num_rows() > 0) return $query;
-		else return false;
-	}
-
-	function mostrar_cargos(){
-		$query = $this->db->get("tcargos");
-		if($query->num_rows() > 0) return $query;
-		else return false;
-	}
-
-	function mostrar_zonas(){
-		$query = $this->db->get("tzonas");
-		if($query->num_rows() > 0) return $query;
-		else return false;
-	}*/
 }

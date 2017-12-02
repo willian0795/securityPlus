@@ -164,70 +164,96 @@
         }
     }
 
-    function recorrer(){
-        var grupos_de_inputs = $("#nestable").find(".input-group"); // Recuperando agrupaciones de inputs cada agrupacion contiene 5 inputs
-        var test = "";
-        var idmodulo, seleccionar, insertar, modificar, eliminar;
-        var permisos= new Array();
+    function ultimo_rol(){               
+        ajax = objetoAjax();
+        ajax.open("POST", "<?php echo site_url(); ?>/roles/roles/ultimo_rol", true);
+        ajax.onreadystatechange = function() {
+            if (ajax.readyState == 4){
+                $("#id_rol").val(ajax.responseText);
+                recorrer2();
+            }
+        } 
+        ajax.setRequestHeader("Content-Type","application/x-www-form-urlencoded"); 
+        ajax.send()
+    }
+
+    function eliminar_roles(id){               
+        ajax = objetoAjax();
+        ajax.open("POST", "<?php echo site_url(); ?>/roles/roles/eliminar_roles", true);
+        ajax.onreadystatechange = function() {
+            if (ajax.readyState == 4){
+                if(ajax.responseText == "exito"){
+                    recorrer2();
+                }
+            }
+        } 
+        ajax.setRequestHeader("Content-Type","application/x-www-form-urlencoded"); 
+        ajax.send("&id_rol="+id)
+    }
+
+    function recorrer(){        
         var sentinela=0;
+        
         if($("#band").val()=="save"){
             if($("#nombre_rol").val()!=""){
                 mantto_rol("","save",$("#nombre_rol").val(),$("#descripcion_rol").val());
+                ultimo_rol();
                 sentinela=1;
             }
         }else if($("#band").val()=="edit"){
             if($("#nombre_rol").val()!=""){
                 mantto_rol($("#id_rol").val(),"edit",$("#nombre_rol").val(),$("#descripcion_rol").val());
+                eliminar_roles($("#id_rol").val());
                 sentinela=1;
             }
         }
+        
+        if(sentinela==1)cerrar_mantenimiento();
+    }
+
+    function recorrer2(){
+        var grupos_de_inputs = $("#nestable").find(".input-group"); // Recuperando agrupaciones de inputs cada agrupacion
+        var query = "";
+        var idmodulo, seleccionar, insertar, modificar, eliminar,id = 1;
         for(var i=0; i<grupos_de_inputs.length; i++){
             var inputs = $(grupos_de_inputs[i]).find("input"); // Sacando inputs de 5 en 5. (Cinco por cada agrupación)
-            
-  /*          idmodulo    = $(inputs[0]).val();
-            seleccionar = $(inputs[1]).val();
-            insertar    = $(inputs[2]).val();
-            modificar   = $(inputs[3]).val();
-            eliminar    = $(inputs[4]).val();
-
-
-            test += idmodulo+" - "+seleccionar+" - "+insertar+" - "+modificar+" - "+eliminar+"\n";
-*/
-            
-            if($(inputs[1]).val()=="1" && ($(inputs[1]).attr('id')=="")){
-                permisos_a_rol("","save",$("#nombre_rol").val(),$(inputs[0]).val(),$(inputs[1]).val(),"1");
-                
-            }else if($(inputs[1]).val()=="0" && ($(inputs[1]).attr('id'))){
-                permisos_a_rol($(inputs[1]).attr('id'),"delete",$("#nombre_rol").val(),$(inputs[0]).val(),"1","1");
+            for(j=1; j<=4; j++){
+                if($(inputs[j]).val() == 1){
+                    query += "\n('*id"+id+"*','"+$("#id_rol").val()+"','"+$(inputs[0]).val()+"','"+j+"','1'),";
+                }
+                id++;
             }
-
-            if($(inputs[2]).val()=="1"  && ($(inputs[2]).attr('id')=="")){
-                permisos_a_rol("","save",$("#nombre_rol").val(),$(inputs[0]).val(),"2","1");
-                
-            }else if($(inputs[2]).val()=="0"  && ($(inputs[2]).attr('id'))){
-                permisos_a_rol($(inputs[2]).attr('id'),"delete",$("#nombre_rol").val(),$(inputs[0]).val(),"2","1");
-            }
-
-            if($(inputs[3]).val()=="1"  && ($(inputs[3]).attr('id')=="")){
-                permisos_a_rol("","save",$("#nombre_rol").val(),$(inputs[0]).val(),"3","1");
-            }else if($(inputs[3]).val()=="0"  && ($(inputs[3]).attr('id'))){
-                permisos_a_rol($(inputs[3]).attr('id'),"delete",$("#nombre_rol").val(),$(inputs[0]).val(),"4","1");
-            }
-
-            if($(inputs[4]).val()=="1"  && ($(inputs[4]).attr('id')=="")){
-                permisos_a_rol("","save",$("#nombre_rol").val(),$(inputs[0]).val(),"4","1");
-            }else if($(inputs[4]).val()=="0"  && ($(inputs[4]).attr('id'))){
-                permisos_a_rol($(inputs[4]).attr('id'),"delete",$("#nombre_rol").val(),$(inputs[0]).val(),"3","1");
-            }
-            
-
-            for (var n = 0; n<5; n++) {
-                test+=$(inputs[n]).val();
-            }
-
-            test += "\n";
         }
-        if(sentinela==1)cerrar_mantenimiento();
+        if(query!=""){
+            query = "INSERT INTO org_rol_modulo_permiso (id_rol_permiso,id_rol,id_modulo,id_permiso,estado) VALUES"+query.substr(0,(query.length-1))+";";
+            guardar_rol_modulo_permiso(query)
+        }else{
+            if($("#band").val() == "save"){
+                swal({ title: "¡Registro exitoso!", type: "success", showConfirmButton: true });
+            }else if($("#band").val() == "edit"){
+                swal({ title: "¡Modificación exitosa!", type: "success", showConfirmButton: true });
+            }
+        }
+    }
+
+    function guardar_rol_modulo_permiso(query){               
+        ajax = objetoAjax();
+        ajax.open("POST", "<?php echo site_url(); ?>/roles/roles/guardar_rol_modulo_permiso", true);
+        ajax.onreadystatechange = function() {
+            if (ajax.readyState == 4){
+                if(ajax.responseText == "exito"){
+                    if($("#band").val() == "save"){
+                        swal({ title: "¡Registro exitoso!", type: "success", showConfirmButton: true });
+                    }else if($("#band").val() == "edit"){
+                        swal({ title: "¡Modificación exitosa!", type: "success", showConfirmButton: true });
+                    }
+                }else{
+                    swal({ title: "¡Ups! Error", text: "Intentalo nuevamente.", type: "error", showConfirmButton: true }); 
+                }  
+            }
+        } 
+        ajax.setRequestHeader("Content-Type","application/x-www-form-urlencoded"); 
+        ajax.send("&query="+query)
     }
 
     function cambiar_check(obj){

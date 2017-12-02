@@ -7,7 +7,6 @@ class Login extends CI_Controller {
 	function __construct(){
 		parent::__construct();
 		$this->load->model('login_model');
-		$this->load->model('bitacora_model');
 	}
 
 	public function index()
@@ -70,11 +69,9 @@ class Login extends CI_Controller {
 	               'sesion' => TRUE
 	            );
 				$this->session->set_userdata($usuario_data);
-				$this->bitacora_model->bitacora(array(
-	               'id_sistema' => "14",
-	               'descripcion' => "El usuario ".$this->input->post('usuario')." inició sesión",
-	               'id_accion' => "1"
-	            ));			
+				/************** Inicio de fragmento bitácora *********************/
+				$this->bitacora_model->bitacora("inició sesión","1");
+	            /************** Fin de fragmento bitácora *********************/		
 			}else{
 				$response = "sesion";
 				$this->session->sess_destroy();
@@ -114,6 +111,9 @@ class Login extends CI_Controller {
 	}
 
 	public function cerrar_sesion(){
+		/************** Inicio de fragmento bitácora *********************/
+		$this->bitacora_model->bitacora("cerró sesión","2");
+        /************** Fin de fragmento bitácora *********************/
 		$this->session->sess_destroy();
 		$this->index();
 	}

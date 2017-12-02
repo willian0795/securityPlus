@@ -73,6 +73,26 @@ class Roles extends CI_Controller {
 		$this->load->view('roles/combo_modulo',$data);
 	}
 
+	function ultimo_rol(){
+		echo $this->roles_model->obtener_ultimo_rol('org_rol','id_rol');
+	}
+
+	function eliminar_roles(){
+		$data = array(
+			'id_rol' => $this->input->post('id_rol')
+		);
+
+		echo $this->roles_model->eliminar_roles($data);
+	}
+
+	function guardar_rol_modulo_permiso(){
+		$data = array(
+			'query' => $this->input->post('query')
+		);
+
+		echo $this->roles_model->guardar_modulo_rol_permiso($data);
+	}
+
 	public function gestionar_rol_modulo_permiso(){
 		if($this->input->post('band') == "save"){
 			$miid = $this->roles_model->obtener_ultimo_id('org_rol','id_rol');
