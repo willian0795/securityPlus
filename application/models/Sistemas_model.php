@@ -10,6 +10,9 @@ class Sistemas_model extends CI_Model {
 	function insertar_sistema($data){
 		$idsistema = $this->obtener_ultimo_id("org_sistema","id_sistema");
 		if($this->db->insert('org_sistema', array('id_sistema' => $idsistema, 'nombre_sistema' => $data['nombre']))){
+			/************** Inicio de fragmento bitácora *********************/
+			$this->bitacora_model->bitacora("Se registró el sistema '".$data["nombre"]."' con id: ".$idsistema,"3");
+            /************** Fin de fragmento bitácora *********************/
 			return "exito";
 		}else{
 			return "fracaso";
@@ -25,6 +28,9 @@ class Sistemas_model extends CI_Model {
 	function editar_sistema($data){
 		$this->db->where("id_sistema",$data["idsistema"]);
 		if($this->db->update('org_sistema', array('nombre_sistema' => $data['nombre']))){
+			/************** Inicio de fragmento bitácora *********************/
+			$this->bitacora_model->bitacora("Se modificó el sistema '".$data["nombre"]."' con id: ".$data["idsistema"],"4");
+            /************** Fin de fragmento bitácora *********************/
 			return "exito";
 		}else{
 			return "fracaso";
@@ -33,6 +39,9 @@ class Sistemas_model extends CI_Model {
 
 	function eliminar_sistema($data){
 		if($this->db->delete("org_sistema",array('id_sistema' => $data['idsistema']))){
+			/************** Inicio de fragmento bitácora *********************/
+			$this->bitacora_model->bitacora("Se eliminó el sistema '".$data["nombre"]."' con id: ".$data["idsistema"],"4");
+            /************** Fin de fragmento bitácora *********************/
 			return "exito";
 		}else{
 			return "fracaso";

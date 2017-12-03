@@ -36,7 +36,8 @@ class Sistema extends CI_Controller {
 
 		}else if($this->input->post('band') == "delete"){
 			$data = array(
-			'idsistema' => $this->input->post('idb')
+			'idsistema' => $this->input->post('idb'),
+			'nombre' => strtoupper($this->input->post('nombre'))
 			);
 			echo $this->sistemas_model->eliminar_sistema($data); // si no tiene modulos se elimina
 		}
