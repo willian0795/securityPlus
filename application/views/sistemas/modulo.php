@@ -91,32 +91,73 @@
 
     function combosistemas(){    
         var id_sistema = $("#sistema").val();
-        $("#combosistemas").load("<?php echo site_url(); ?>/modulos/combo_modulo?id_sistema="+id_sistema);
+
+        if(window.XMLHttpRequest){// code for IE7+, Firefox, Chrome, Opera, Safari
+            xmlhttpB=new XMLHttpRequest();
+        }else{// code for IE6, IE5
+            xmlhttpB=new ActiveXObject("Microsoft.XMLHTTPB");
+        }
+
+        xmlhttpB.onreadystatechange=function(){
+            if (xmlhttpB.readyState==4 && xmlhttpB.status==200){
+                document.getElementById("combosistemas").innerHTML=xmlhttpB.responseText;
+            }
+        }
+
+        xmlhttpB.open("GET","<?php echo site_url(); ?>/modulos/combo_modulo?id_sistema="+id_sistema,true);
+        xmlhttpB.send(); 
     }
 
     function tablamodulos(){          
         var id_sistema = $("#sistema").val();
-        $( "#cnt_tabla" ).load("<?php echo site_url(); ?>/modulos/tabla_modulo?id_sistema="+id_sistema, function() {
-            $('[data-toggle="tooltip"]').tooltip();
-            tablamodulos2();
-        });  
+
+        if(window.XMLHttpRequest){// code for IE7+, Firefox, Chrome, Opera, Safari
+            xmlhttpB=new XMLHttpRequest();
+        }else{// code for IE6, IE5
+            xmlhttpB=new ActiveXObject("Microsoft.XMLHTTPB");
+        }
+
+        xmlhttpB.onreadystatechange=function(){
+            if (xmlhttpB.readyState==4 && xmlhttpB.status==200){
+                document.getElementById("cnt_tabla").innerHTML=xmlhttpB.responseText;
+                $('[data-toggle="tooltip"]').tooltip();
+                tablamodulos2();
+            }
+        }
+
+        xmlhttpB.open("GET","<?php echo site_url(); ?>/modulos/tabla_modulo?id_sistema="+id_sistema,true);
+        xmlhttpB.send(); 
     }
+
 
     function tablamodulos2(){  
         var id_sistema = $("#sistema").val();
-        $( "#cnt_tabla2" ).load("<?php echo site_url(); ?>/modulos/tabla_modulo2?id_sistema="+id_sistema, function() {
-            $("#cnt_form").hide(500);
-            vista_solo_form();
-            combosistemas();
-            var updateOutput = function(e) {
-                var list = e.length ? e : $(e.target),
+
+        if(window.XMLHttpRequest){// code for IE7+, Firefox, Chrome, Opera, Safari
+            xmlhttpB=new XMLHttpRequest();
+        }else{// code for IE6, IE5
+            xmlhttpB=new ActiveXObject("Microsoft.XMLHTTPB");
+        }
+
+        xmlhttpB.onreadystatechange=function(){
+            if (xmlhttpB.readyState==4 && xmlhttpB.status==200){
+                document.getElementById("cnt_tabla2").innerHTML=xmlhttpB.responseText;
+                $("#cnt_form").hide(500);
+                vista_solo_form();
+                combosistemas();
+                var updateOutput = function(e) {
+                    var list = e.length ? e : $(e.target),
                     output = list.data('output');
-            };
-            $('#nestable').nestable({
-                group: 1
-            }).on('change', updateOutput);
-            updateOutput($('#nestable').data('output', $('#nestable-output')));
-        });       
+                };
+                $('#nestable').nestable({
+                    group: 1
+                }).on('change', updateOutput);
+                updateOutput($('#nestable').data('output', $('#nestable-output')));
+            }
+        }
+
+        xmlhttpB.open("GET","<?php echo site_url(); ?>/modulos/tabla_modulo2?id_sistema="+id_sistema,true);
+        xmlhttpB.send();      
     }
 
     function mostrarFormMenu(){

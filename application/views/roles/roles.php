@@ -126,32 +126,44 @@
         xmlhttpB.send();
     }
     function tabla_rol_modulo_permiso2(id){
-        $("#cnt-tabla-rol").load("<?php echo site_url(); ?>/roles/roles/tabla_rol/"+id, function() {
-            var updateOutput = function(e) {
-            var list = e.length ? e : $(e.target),
-                output = list.data('output');
-            };
-            $('#nestable').nestable({
-                group: 1
-            }).on('change', updateOutput);
-            updateOutput($('#nestable').data('output', $('#nestable-output')));
-            //$('[data-toggle="tooltip"]').tooltip();
-        });
+        if(window.XMLHttpRequest){// code for IE7+, Firefox, Chrome, Opera, Safari
+            xmlhttpB=new XMLHttpRequest();
+        }else{// code for IE6, IE5
+            xmlhttpB=new ActiveXObject("Microsoft.XMLHTTPB");
+        }
+
+        xmlhttpB.onreadystatechange=function(){
+            if (xmlhttpB.readyState==4 && xmlhttpB.status==200){
+                  document.getElementById("cnt-tabla-rol").innerHTML=xmlhttpB.responseText;
+                  $('#nestable').nestable({
+                    group: 1
+                });
+            }
+        }
+
+        xmlhttpB.open("GET","<?php echo site_url(); ?>/roles/roles/tabla_rol/"+id,true);
+        xmlhttpB.send();
     }
     function tabla_rol_modulo_permiso3(id,id_rol){
         id+="x"+id_rol;
 
-        $("#cnt-tabla-rol").load("<?php echo site_url(); ?>/roles/roles/tabla_rol_chequed/"+id, function() {
-            var updateOutput = function(e) {
-            var list = e.length ? e : $(e.target),
-                output = list.data('output');
-            };
-            $('#nestable').nestable({
-                group: 1
-            }).on('change', updateOutput);
-            updateOutput($('#nestable').data('output', $('#nestable-output')));
-            //$('[data-toggle="tooltip"]').tooltip();
-        });
+        if(window.XMLHttpRequest){// code for IE7+, Firefox, Chrome, Opera, Safari
+            xmlhttpB=new XMLHttpRequest();
+        }else{// code for IE6, IE5
+            xmlhttpB=new ActiveXObject("Microsoft.XMLHTTPB");
+        }
+
+        xmlhttpB.onreadystatechange=function(){
+            if (xmlhttpB.readyState==4 && xmlhttpB.status==200){
+                  document.getElementById("cnt-tabla-rol").innerHTML=xmlhttpB.responseText;
+                  $('#nestable').nestable({
+                    group: 1
+                });
+            }
+        }
+
+        xmlhttpB.open("GET","<?php echo site_url(); ?>/roles/roles/tabla_rol_chequed/"+id,true);
+        xmlhttpB.send();
     }
 
     
