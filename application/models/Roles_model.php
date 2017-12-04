@@ -54,6 +54,22 @@ class Roles_model extends CI_Model {
 		}
 		return $ultimoid;
 	}
+
+	public function obtener_ultimo_rol($tabla,$nombreid){
+		$this->db->order_by($nombreid, "asc");
+		$query = $this->db->get($tabla);
+		$ultimoid = 0;
+		if($query->num_rows() > 0){
+			foreach ($query->result() as $fila) {
+				$ultimoid = $fila->$nombreid; 
+			}
+			 
+		}else{
+			$ultimoid = 1;
+		}
+		return $ultimoid;
+	}
+
 	 function mostrar_rol_por($data){
 		 $this->db->where("nombre_rol",$data);
         $query = $this->db->get('org_rol');
@@ -147,6 +163,40 @@ class Roles_model extends CI_Model {
 
 	function eliminar_rol_modulo_permiso($data){
 		if($this->db->delete("org_rol_modulo_permiso",array('id_rol_permiso' => $data['id_rol_permiso']))){
+			return "exito";
+		}else{
+			return "fracaso";
+		}
+	}
+
+	function eliminar_roles($data){
+		if($this->db->query("DELETE FROM org_rol_modulo_permiso WHERE id_rol = ".$data["id_rol"])){
+			return "exito";
+		}else{
+			return "fracaso";
+		}
+	}
+
+	function guardar_modulo_rol_permiso($data){
+		$band = false; $n = 1;
+		$ultimoid = $this->obtener_ultimo_rol("org_rol_modulo_permiso","id_rol_permiso");
+
+		$query = $data["query"];
+
+		while($band == false){
+			$ultimoid++;
+			$buscar = "*id".$n."*";
+			$posicion_coincidencia = strrpos($query, $buscar);
+			$posicion_coincidencia;
+			if ($posicion_coincidencia === false) {
+		    	$band = true;
+		    }else{
+		    	$query = str_replace($buscar, $ultimoid, $query);
+		    	$n++;
+		    }
+		}
+		
+		if($this->db->query($query)){
 			return "exito";
 		}else{
 			return "fracaso";

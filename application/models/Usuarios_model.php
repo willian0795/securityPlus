@@ -58,10 +58,14 @@ class Usuarios_model extends CI_Model {
 
 	function editar_usuario($data){
 		$this->db->where("id_usuario",$data["idusuario"]);
-		if($this->db->update('org_usuario', array('estado' => $data['estado'],'password' => $data['password']))){
-			return "exito";
+		if(!empty($data['password'])){
+			if($this->db->update('org_usuario', array('password' => $data['password']))){
+				return "exito";
+			}else{
+				return "fracaso";
+			}
 		}else{
-			return "fracaso";
+			return "exito";
 		}
 	}
 

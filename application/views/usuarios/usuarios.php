@@ -317,7 +317,7 @@
                                     <select id="id_empleado" name="id_empleado" class="select2" onchange="formusuario();" style="width: 100%">
                                         <option value="0">[Elija el empleado]</option>
                                         <?php 
-                                            $empleado = $this->db->query("SELECT id_empleado, UPPER(CONCAT_WS(' ', primer_nombre, segundo_nombre, tercer_nombre, primer_apellido, segundo_apellido, apellido_casada)) AS nombre_completo FROM sir_empleado");
+                                            $empleado = $this->db->query("SELECT e.id_empleado, UPPER(CONCAT_WS(' ', e.primer_nombre, e.segundo_nombre, e.tercer_nombre, e.primer_apellido, e.segundo_apellido, e.apellido_casada)) AS nombre_completo FROM sir_empleado AS e WHERE NOT EXISTS (SELECT u.nr FROM org_usuario AS u WHERE u.nr = e.nr) ORDER BY primer_nombre");
                                             if($empleado->num_rows() > 0){
                                                 foreach ($empleado->result() as $fila) {              
                                                    echo '<option class="m-l-50" value="'.$fila->id_empleado.'">'.$fila->nombre_completo.'</option>';
@@ -328,7 +328,7 @@
                                         
                                     </select>
                                 </div>
-                                <div class="form-group col-lg-6" style="display: block;" id="div_tipo_pass">
+                                <div class="form-group col-lg-6" style="display: none;" id="div_tipo_pass">
                                     <h5>¿Usuario sin contraseña?<span class="text-danger">*</span></h5>
                                     <div class="controls">
                                         <div class="switch">
@@ -476,6 +476,7 @@ $(function(){
             processData: false
         })
         .done(function(res){
+            alert(res)
             if(res == "exito"){
                 cerrar_mantenimiento();
                 if($("#band").val() == "save"){

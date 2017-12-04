@@ -61,32 +61,20 @@ class modulo extends CI_Controller {
 
 			$data = array(
 			'idmodulo' => $this->input->post('idmodulo'),
+			'nombre' => ucfirst(strtolower($this->input->post('nombre'))),
 			'dependencia' => $this->input->post('dependencia'),
 			'id_sistema' => $this->input->post('id_sistema')
 			);
-
-			$validar_hijos = $this->modulos_model->verificar_hijos($data);
-
-			if($validar_hijos != false){
-				echo "hijos"; // No se eliminará por que el sistema tiene modulos
-			}else{
-				$valido_eliminar = $this->modulos_model->verificar_roles($data); //verifica si el sistema tiene modulos
-				if($valido_eliminar != false){
-					echo "roles"; // No se eliminará por que el sistema tiene modulos
-				}else{
-					echo $this->modulos_model->eliminar_modulo($data); // si no tiene modulos se elimina
-				}
-			}							
+			echo $this->modulos_model->eliminar_modulo($data);				
 
 		}
 	}
 
 	public function ordenar_modulo(){
 		$data = array(
-			'idmodulo' => $this->input->post('idmodulo'), 
-			'orden' => $this->input->post('orden'),
-			'dependencia' => $this->input->post('dependencia')
-			);
+			'query' => $this->input->post('query'),
+			'id_sistema' => $this->input->post('id_sistema')
+		);
 		echo $this->modulos_model->ordenar_modulo($data);
 	}
 
@@ -101,7 +89,7 @@ class modulo extends CI_Controller {
 				$roles .= '<li>'.$fila->nombre_modulo.'</li>'; 
 			}
 		}else{
-			$valido_eliminar = $this->modulos_model->verificar_roles($data); //verifica si el sistema tiene modulos
+			$valido_eliminar = $this->modulos_model->verificar_roles($data); //verifica si el sistema tiene roles
 			if($valido_eliminar != false){
 				foreach ($valido_eliminar->result() as $fila) {
 					$roles .= '<li>'.$fila->nombre_rol.'</li>'; 
@@ -109,6 +97,25 @@ class modulo extends CI_Controller {
 			}
 		}	
 		$roles .= '</ul>';
+
+		echo $roles;
+	}
+
+	function verificar_roles2(){
+		$data = array(
+			'idmodulo' => $this->input->post('idmodulo')
+		);
+		$validar_hijos = $this->modulos_model->verificar_hijos($data);
+		if($validar_hijos != false){
+			$roles = "hijos";
+		}else{
+			$valido_eliminar = $this->modulos_model->verificar_roles($data); //verifica si el sistema tiene roles
+			if($valido_eliminar != false){
+				$roles = "roles";
+			}else{
+				$roles = "eliminar";
+			}
+		}	
 
 		echo $roles;
 	}

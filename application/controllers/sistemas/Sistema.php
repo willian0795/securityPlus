@@ -36,15 +36,10 @@ class Sistema extends CI_Controller {
 
 		}else if($this->input->post('band') == "delete"){
 			$data = array(
-			'idsistema' => $this->input->post('idb')
+			'idsistema' => $this->input->post('idb'),
+			'nombre' => strtoupper($this->input->post('nombre'))
 			);
-
-			$valido_eliminar = $this->sistemas_model->verificar_modulos($data); //verifica si el sistema tiene modulos
-			if($valido_eliminar != false){
-				echo "modulos"; // No se eliminará por que el sistema tiene modulos
-			}else{
-				echo $this->sistemas_model->eliminar_sistema($data); // si no tiene modulos se elimina
-			}
+			echo $this->sistemas_model->eliminar_sistema($data); // si no tiene modulos se elimina
 		}
 	}
 
@@ -52,14 +47,16 @@ class Sistema extends CI_Controller {
 		$data = array(
 			'idsistema' => $this->input->post('idb')
 		);
-		$modulos = '<ul>';
 		$valido_eliminar = $this->sistemas_model->verificar_modulos($data); //verifica si el sistema tiene modulos
-		if($valido_eliminar->num_rows() > 0){
+		if($valido_eliminar != false){
+			$modulos = '<ul>';
 			foreach ($valido_eliminar->result() as $fila) {
 				$modulos .= '<li>'.$fila->nombre_modulo.'</li>'; 
 			}
+			$modulos .= '</ul>';
+		}else{
+			$modulos = "eliminar";
 		}
-		$modulos .= '</ul>';
 
 		echo $modulos;
 	}

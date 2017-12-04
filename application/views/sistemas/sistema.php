@@ -12,7 +12,7 @@
             $("#cnt_form").show(0);
             $("#ttl_form").children("h4").html("<span class='fa fa-wrench'></span> Editar sistema");
         }else{
-            eliminar_sistema();
+            verificar_eliminacion();
         }
     }
 
@@ -45,8 +45,8 @@
     function eliminar_sistema(){
         $("#band").val("delete");
         swal({   
-            title: "¿Está seguro?",   
-            text: "¡Desea eliminar el registro!",   
+            title: "¿Seguro que desea eliminarlo?",   
+            text: "¡El registro no podrá ser recuperado!",   
             type: "warning",   
             showCancelButton: true,   
             confirmButtonColor: "#fc4b6c",   
@@ -75,8 +75,12 @@
             url:   '<?php echo site_url(); ?>/sistemas/sistema/verificar_modulos', //archivo que recibe la peticion
             type:  'post', //método de envio
             success:  function (response) { //una vez que el archivo recibe el request lo procesa y lo devuelve
-                $('#myModal').modal('show'); // abrir
-                $("#resultado").html("Para eliminar el sistema '"+parametros["nombre"]+"' debes eliminar sus módulos: <br><br>"+response);
+                if(response == "eliminar"){
+                    eliminar_sistema();
+                }else{
+                    $('#myModal').modal('show'); // abrir
+                    $("#resultado").html("Para eliminar el sistema '"+parametros["nombre"]+"' debes eliminar sus módulos: <br><br>"+response);
+                }
             }
         });
     }
@@ -219,8 +223,6 @@ $(function(){
                     swal({ title: "¡Borrado exitoso!", type: "success", showConfirmButton: true });
                 }
                 tablasistemas();
-            }else if(res == "modulos"){
-                verificar_eliminacion();
             }else{
                 swal({ title: "¡Ups! Error", text: "Intentalo nuevamente.", type: "error", showConfirmButton: true });
             }
