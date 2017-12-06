@@ -189,7 +189,8 @@
         ajax.send()
     }
 
-    function eliminar_roles(id){               
+    function eliminar_roles(id){
+        id_sistema = $("#id_sistema").val();
         ajax = objetoAjax();
         ajax.open("POST", "<?php echo site_url(); ?>/roles/roles/eliminar_roles", true);
         ajax.onreadystatechange = function() {
@@ -200,7 +201,7 @@
             }
         } 
         ajax.setRequestHeader("Content-Type","application/x-www-form-urlencoded"); 
-        ajax.send("&id_rol="+id)
+        ajax.send("&id_rol="+id+"&id_sistema="+id_sistema)
     }
 
     function recorrer(){        

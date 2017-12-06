@@ -170,7 +170,7 @@ class Roles_model extends CI_Model {
 	}
 
 	function eliminar_roles($data){
-		if($this->db->query("DELETE FROM org_rol_modulo_permiso WHERE id_rol = ".$data["id_rol"])){
+		if($this->db->query("DELETE FROM org_rol_modulo_permiso WHERE id_rol = '".$data["id_rol"]."' AND (id_modulo IN (SELECT m.id_modulo FROM org_modulo AS m WHERE m.id_sistema = '".$data["id_sistema"]."'))")){
 			return "exito";
 		}else{
 			return "fracaso";

@@ -8,8 +8,22 @@
         var usuario = $("#usuario").val();  
         var accion = $("#accion").val();  
         var sistema = $("#sistema").val(); 
-        
-        $("#cnt-tabla").load("<?php echo site_url(); ?>/bitacora/bitacora/tabla_bitacora?id_sistema="+sistema+"&id_accion="+accion+"&id_usuario="+usuario);
+
+        if(window.XMLHttpRequest){// code for IE7+, Firefox, Chrome, Opera, Safari
+            xmlhttpB=new XMLHttpRequest();
+        }else{// code for IE6, IE5
+            xmlhttpB=new ActiveXObject("Microsoft.XMLHTTPB");
+        }
+
+        xmlhttpB.onreadystatechange=function(){
+            if (xmlhttpB.readyState==4 && xmlhttpB.status==200){
+                  document.getElementById("cnt-tabla").innerHTML=xmlhttpB.responseText;
+                  $('#myTable').DataTable();
+            }
+        }
+
+        xmlhttpB.open("GET","<?php echo site_url(); ?>/bitacora/bitacora/tabla_bitacora?id_sistema="+sistema+"&id_accion="+accion+"&id_usuario="+usuario,true);
+        xmlhttpB.send();
     }
 </script>
 
@@ -43,14 +57,18 @@
 
             <!-- ============================================================== -->
             <!-- Inicio de la TABLA -->
-            <!-- ============================================================== -->
-        
-          
-         
-            <div class="col-lg-4" >
-<div class="card">
-                <div class="row">
-                        <div class="form-group col-lg-12">                            
+            <!-- ============================================================== -->       
+
+            <div class="col-lg-12">
+
+                <div class="card">
+                <div class="card-header">
+                    <h4 class="card-title m-b-0">Listado de sistemas</h4>
+                </div>
+                <div class="card-body b-t"  style="padding-top: 7px;">
+                    <div class="row">
+                        <div class="form-group col-lg-5">
+                            <h5>Sistema:</h5>                         
                             <select id="sistema" name="sistema" class="select2" onchange="tabla_bitacora()" style="width: 100%">
                                 <option value="0">[Elija el sistema]</option>
                                 <?php 
@@ -63,12 +81,9 @@
                                 ?>
                             </select>
                         </div>
-                    </div>
 
-<br>
-
-                    <div class="row">
-                        <div class="form-group col-lg-12">                            
+                        <div class="form-group col-lg-4">
+                            <h5>Usuario:</h5>                             
                             <select id="usuario" name="usuario" class="select2" onchange="tabla_bitacora()" style="width: 100%">
                                 <option value="0">[Elija el usuario]</option>
                                 <?php 
@@ -81,15 +96,13 @@
                                 ?>
                             </select>
                         </div>
-                    </div>
 
-<br>
-                    <div class="row">
-                        <div class="form-group col-lg-12">                            
+                        <div class="form-group col-lg-3">
+                            <h5>Acción:</h5>                          
                             <select id="accion" name="accion" class="select2" onchange="tabla_bitacora()" style="width: 100%">
                                 <option value="0">[Elija la acción]</option>
                                 <?php 
-                                    $accion = $this->db->get("sep_accion_bitacora");
+                                    $accion = $this->db->get("glb_accion_bitacora");
                                     if($accion->num_rows() > 0){
                                         foreach ($accion->result() as $fila3) {              
                                            echo '<option class="m-l-50" value="'.$fila3->id_accion.'">'.$fila3->accion.'</option>';
@@ -99,12 +112,11 @@
                             </select>
                         </div>
                     </div>
-
-           
-     </div>        
-</div>
-
-            <div class="col-lg-8" id="cnt-tabla">
+                   
+                    <div id="cnt-tabla"></div>
+                    
+                </div>
+            </div>
 
 
             </div>

@@ -20,9 +20,9 @@ class Bitacora_model extends CI_Model {
         }else{
             $descripcion = $desc;
         }
-		$id = $this->obtener_ultimo_id("sep_bitacora","id_bitacora");
+		$id = $this->obtener_ultimo_id("glb_bitacora","id_bitacora");
 
-		if($this->db->insert('sep_bitacora', array('id_bitacora' => $id, 'id_sistema' => '14', 'id_usuario' => $id_usuario, 'descripcion' => $descripcion, 'fecha' => $fecha, 'ip' => $ip, 'id_accion' => $accion))){
+		if($this->db->insert('glb_bitacora', array('id_bitacora' => $id, 'id_sistema' => '14', 'id_usuario' => $id_usuario, 'descripcion' => $descripcion, 'fecha_hora' => $fecha, 'IP' => $ip, 'id_accion' => $accion))){
 			return "exito";
 		}else{
 			return "fracaso";

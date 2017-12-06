@@ -79,7 +79,8 @@ class Roles extends CI_Controller {
 
 	function eliminar_roles(){
 		$data = array(
-			'id_rol' => $this->input->post('id_rol')
+			'id_rol' => $this->input->post('id_rol'),
+			'id_sistema' => $this->input->post('id_sistema')
 		);
 
 		echo $this->roles_model->eliminar_roles($data);

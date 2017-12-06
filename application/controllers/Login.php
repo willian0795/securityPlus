@@ -1,6 +1,10 @@
 <?php
-define("SERVER_MTPS","localhost");
 defined('BASEPATH') OR exit('No direct script access allowed');
+if("192.168.1.200" == $_SERVER['SERVER_NAME']){
+	define("SERVER_MTPS","192.168.1.200");
+}else{
+	define("SERVER_MTPS","localhost");
+}
 
 class Login extends CI_Controller {
 
@@ -25,7 +29,7 @@ class Login extends CI_Controller {
 	public function verificar_usuario(){
 		$data = array(
 		'usuario' => $this->input->post('usuario'),
-		'password' => md5($this->input->post('password'))
+		'password' => $this->input->post('password')
 		);
 
 		$response = "";
@@ -54,7 +58,7 @@ class Login extends CI_Controller {
 				$response = "estado";
 			}
 		}else{
-			$response = "usuario";
+			$response = "usuario".$usuario;
 		}
 		
 		if($response == "exito"){

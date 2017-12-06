@@ -262,7 +262,7 @@
 <body class="fix-header fix-sidebar card-no-border logo-center" onload="iniciar();">
 <?php 
     $id_sistema = 12;
-    $sistemas = $this->db->query("SELECT * FROM org_sistema WHERE base_url='".base_url()."'");
+    $sistemas = $this->db->query("SELECT * FROM org_sistema WHERE id_sistema=14");
     if($sistemas->num_rows() > 0){
         foreach ($sistemas->result() as $otro) {
            $id_sistema = $otro->id_sistema;
