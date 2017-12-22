@@ -427,29 +427,31 @@
                     <ul id="sidebarnav">
                         <li class="nav-small-cap text-center">MENÚ</li>
                         <li class="nav-devider" style="margin:5px;"></li>
-                        <?php
-                            $modulos = $this->db->query("SELECT * FROM org_modulo WHERE id_sistema = ".$id_sistema." AND (dependencia = '' OR dependencia = 0 OR dependencia IS NULL) ORDER BY orden");
-                            if($modulos->num_rows() > 0){
-                                foreach ($modulos->result() as $fila) {
-                        ?>
-                            <li> <a class="has-arrow waves-effect waves-dark" href="<?php echo $fila->url_modulo; ?>" aria-expanded="false"><i class="<?php echo $fila->img_modulo; ?>"></i><span class="hide-menu"> <?php echo $fila->nombre_modulo; ?></span></a>
-                                <?php 
-                                    $modulos2 = $this->db->query("SELECT * FROM org_modulo WHERE id_sistema = $id_sistema AND dependencia = ".$fila->id_modulo." ORDER BY orden");
-                                    if($modulos2->num_rows() > 0){
-                                        echo '<ul aria-expanded="false" class="collapse">';
-                                        foreach ($modulos2->result() as $fila2) {
-                                ?>
-                                    <li><a href="<?php echo site_url()."/"; ?><?php echo $fila2->url_modulo; ?>"><span class="<?php echo $fila2->img_modulo; ?>"></span> <?php echo $fila2->nombre_modulo; ?></a></li>
-                                <?php
-                                        }
-                                        echo "</ul>";
-                                    }
-                                ?>
-                            </li>
-                        <?php
-                                }
-                            }
-                        ?>
+
+                        <li> <a class="has-arrow waves-effect waves-dark" href="#!" aria-expanded="false"><i class="mdi mdi-settings"></i><span class="hide-menu">Sistemas MTPS</span></a>
+                            <ul aria-expanded="false" class="collapse" style="padding-left: 20px;">
+                                <li><a href="<?php echo site_url(); ?>/sistemas"><span class="mdi mdi-label"></span> Sistemas</a></li>
+                                <li><a href="<?php echo site_url(); ?>/modulos"><span class="mdi mdi-label"></span> Módulos</a></li>
+                            </ul>
+                        </li>
+
+                        <li> <a class="has-arrow waves-effect waves-dark" href="#!" aria-expanded="false"><i class="mdi mdi-account-multiple"></i><span class="hide-menu">Usuarios</span></a>
+                            <ul aria-expanded="false" class="collapse" style="padding-left: 20px;">
+                                <li><a href="<?php echo site_url(); ?>/usuarios"><span class="mdi mdi-label"></span> Usuarios</a></li>
+                            </ul>
+                        </li>
+
+                        <li> <a class="has-arrow waves-effect waves-dark" href="#!" aria-expanded="false"><i class="mdi mdi-treasure-chest"></i><span class="hide-menu">Roles</span></a>
+                            <ul aria-expanded="false" class="collapse" style="padding-left: 20px;">
+                                <li><a href="<?php echo site_url(); ?>/roles/roles"><span class="mdi mdi-label"></span> Roles</a></li>
+                            </ul>
+                        </li>
+
+                        <li> <a class="has-arrow waves-effect waves-dark" href="#!" aria-expanded="false"><i class="mdi mdi-history"></i><span class="hide-menu">Bitácora</span></a>
+                            <ul aria-expanded="false" class="collapse" style="padding-left: 20px;">
+                                <li><a href="<?php echo site_url(); ?>/bitacora/bitacora"><span class="mdi mdi-label"></span> Bitácora</a></li>
+                            </ul>
+                        </li>
                             
                     </ul>
                 </nav>
