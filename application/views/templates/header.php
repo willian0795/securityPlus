@@ -76,7 +76,7 @@
 
     function hora(){
         var c = new Date();
-        var a = new Date(c.getFullYear()+"-"+c.getMonth()+"-"+c.getDate()+" "+c.getHours()+":"+c.getMinutes()+":"+c.getSeconds());
+        var a = new Date(c.getFullYear(),c.getMonth(),c.getDate(),c.getHours(),c.getMinutes(),c.getSeconds());
         var b = new Date(localStorage["expira"]);
         //La diferencia se da en milisegundos así que debes dividir entre 1000
         var result = ((a-b)/1000);
@@ -118,7 +118,7 @@
             } else {
                 moviendo=false;
                 var c = new Date();
-                localStorage["expira"] = new Date(c.getFullYear()+"-"+c.getMonth()+"-"+c.getDate()+" "+c.getHours()+":"+c.getMinutes()+":"+c.getSeconds());
+                localStorage["expira"] = new Date(c.getFullYear(),c.getMonth(),c.getDate(),c.getHours(),c.getMinutes(),c.getSeconds());
                 hora();
                 $("#initial_user").hide(0);
             }
@@ -170,7 +170,7 @@
         $("#congelar").fadeOut(1000);
         $("#main-wrapper").fadeIn(1000);
         var c = new Date();
-        localStorage["expira"] = new Date(c.getFullYear()+"-"+c.getMonth()+"-"+c.getDate()+" "+c.getHours()+":"+c.getMinutes()+":"+c.getSeconds());
+        localStorage["expira"] = new Date(c.getFullYear(),c.getMonth(),c.getDate(),c.getHours(),c.getMinutes(),c.getSeconds());
     }
 
     function esEnter(e) {

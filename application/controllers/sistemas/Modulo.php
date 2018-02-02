@@ -31,7 +31,7 @@ class modulo extends CI_Controller {
 	public function gestionar_modulos(){
 		if($this->input->post('band') == "save"){
 			$data = array(
-			'nombre' => ucfirst(strtolower($this->input->post('nombre'))), 
+			'nombre' => ucfirst(mb_strtolower($this->input->post('nombre'))), 
 			'icono' => $this->input->post('icono'),
 			'descripcion' => $this->input->post('descripcion'),
 			'url' => $this->input->post('url'),
@@ -46,7 +46,7 @@ class modulo extends CI_Controller {
 
 			$data = array(
 			'idmodulo' => $this->input->post('idmodulo'), 
-			'nombre' => ucfirst(strtolower($this->input->post('nombre'))), 
+			'nombre' => ucfirst(mb_strtolower($this->input->post('nombre'))), 
 			'icono' => $this->input->post('icono'),
 			'descripcion' => $this->input->post('descripcion'),
 			'url' => $this->input->post('url'),
@@ -61,7 +61,7 @@ class modulo extends CI_Controller {
 
 			$data = array(
 			'idmodulo' => $this->input->post('idmodulo'),
-			'nombre' => ucfirst(strtolower($this->input->post('nombre'))),
+			'nombre' => ucfirst(mb_strtolower($this->input->post('nombre'))),
 			'dependencia' => $this->input->post('dependencia'),
 			'id_sistema' => $this->input->post('id_sistema')
 			);

@@ -108,7 +108,7 @@
     }
 
     function iniciar(){
-        tablausuarios();        
+        tablausuarios(); 
     }
 
     function objetoAjax(){
@@ -314,7 +314,7 @@
                             <div class="row">
                                 <div class="form-group col-lg-6"> 
                                     <h5>Empleado: <span class="text-danger">*</span></h5>                           
-                                    <select id="id_empleado" name="id_empleado" class="select2" onchange="formusuario();" style="width: 100%">
+                                    <select id="id_empleado" name="id_empleado" class="select2" style="width: 100%">
                                         <option value="0">[Elija el empleado]</option>
                                         <?php 
                                             $empleado = $this->db->query("SELECT e.id_empleado, UPPER(CONCAT_WS(' ', e.primer_nombre, e.segundo_nombre, e.tercer_nombre, e.primer_apellido, e.segundo_apellido, e.apellido_casada)) AS nombre_completo FROM sir_empleado AS e WHERE NOT EXISTS (SELECT u.nr FROM org_usuario AS u WHERE u.nr = e.nr) ORDER BY primer_nombre");
