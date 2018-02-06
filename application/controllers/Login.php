@@ -115,9 +115,16 @@ class Login extends CI_Controller {
 
 	public function cerrar_sesion(){
 		/************** Inicio de fragmento bitácora *********************/
-		$this->bitacora_model->bitacora("cerró sesión","2");
+		if(isset($_SESSION['id_usuario'])){
+			$this->bitacora_model->bitacora("cerró sesión","2");
+		}
         /************** Fin de fragmento bitácora *********************/
-		$this->session->sess_destroy();
+		unset(
+		    $_SESSION['id_usuario'],
+		    $_SESSION['usuario'],
+		    $_SESSION['nombre_usuario'],
+		    $_SESSION['sesion']
+		);
 		$this->index();
 	}
 
