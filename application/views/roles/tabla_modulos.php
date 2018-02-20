@@ -22,35 +22,35 @@ if($id_sistema != 0){
                     <div class="input-group" style="z-index: 1; font-size: 16px;">
                         <input type="hidden" value="<?php echo $fila->id_modulo; ?>" style="width: 30px; margin-right: 10px;">
                         <label class="custom-control custom-checkbox" data-toggle="tooltip" title="Consultar" style="margin-right: 5px;">
-                            <input type="checkbox" id="" class="custom-control-input" value="0" onchange="cambiar_check(this)">
+                            <input type="checkbox" class="custom-control-input" value="0" onchange="cambiar_check(this)">
                             <span class="custom-control-indicator" style="width: 20px; height: 20px;"></span>
                             <span style="position: absolute; left: -5px; top:-5px; display: inline-flex;">
                                 <i class="fa fa-hand-pointer-o"></i>
                             </span>
                         </label>
                         <label class="custom-control custom-checkbox" data-toggle="tooltip" title="Insertar" style="margin-right: 5px;">
-                            <input type="checkbox" id="" class="custom-control-input" value="0" onchange="cambiar_check(this)">
+                            <input type="checkbox" class="custom-control-input" value="0" onchange="cambiar_check(this)">
                             <span class="custom-control-indicator" style="width: 20px; height: 20px;"></span>
                             <span style="position: absolute; left: -5px; top:-5px; display: inline-flex;">
                                 <i class="fa fa-plus"></i>
                             </span>
                         </label>
                         <label class="custom-control custom-checkbox" data-toggle="tooltip" title="Modificar" style="margin-right: 5px;">
-                            <input type="checkbox" id="" class="custom-control-input" value="0" onchange="cambiar_check(this)">
+                            <input type="checkbox" class="custom-control-input" value="0" onchange="cambiar_check(this)">
                             <span class="custom-control-indicator" style="width: 20px; height: 20px;"></span>
                             <span style="position: absolute; left: -5px; top:-5px; display: inline-flex;">
                                 <i class="ti-marker-alt"></i>
                             </span>
                         </label>
                         <label class="custom-control custom-checkbox" data-toggle="tooltip" title="Eliminar" style="margin-right: 5px;">
-                            <input type="checkbox" id="" class="custom-control-input" value="0" onchange="cambiar_check(this)">
+                            <input type="checkbox" class="custom-control-input" value="0" onchange="cambiar_check(this)">
                             <span class="custom-control-indicator" style="width: 20px; height: 20px;"></span>
                             <span style="position: absolute; left: -5px; top:-5px; display: inline-flex;">
                                 <i class="fa fa-close"></i>
                             </span>
                         </label>
                         <label class="custom-control custom-checkbox m-0" data-toggle="tooltip" title="Seleccionar todos">
-                            <input type="checkbox" id="" class="custom-control-input" value="0" onchange="marcar_check(this)">
+                            <input type="checkbox" class="custom-control-input" value="0" onchange="marcar_check(this)">
                             <span class="custom-control-indicator" style="width: 20px; height: 20px;"></span>
                             <span style="position: absolute; left: 12px; top:-5px; display: inline-flex;">
                                 <i class="fa fa-check-circle-o"></i>
@@ -79,35 +79,35 @@ if($id_sistema != 0){
                     <div class="input-group" style="z-index: 1; font-size: 16px;">
                         <input type="hidden" value="<?php echo $fila2->id_modulo; ?>" style="width: 30px; margin-right: 10px;">
                         <label class="custom-control custom-checkbox" data-toggle="tooltip" title="Consultar" style="margin-right: 5px;">
-                            <input type="checkbox" id=""  class="custom-control-input" value="0" onchange="cambiar_check(this)">
+                            <input type="checkbox" class="custom-control-input" value="0" onchange="cambiar_check(this)">
                             <span class="custom-control-indicator" style="width: 20px; height: 20px;"></span>
                             <span style="position: absolute; left: -5px; top:-5px; display: inline-flex;">
                                 <i class="fa fa-hand-pointer-o"></i>
                             </span>
                         </label>
                         <label class="custom-control custom-checkbox" data-toggle="tooltip" title="Insertar" style="margin-right: 5px;">
-                            <input type="checkbox" id="" class="custom-control-input" value="0" onchange="cambiar_check(this)">
+                            <input type="checkbox" class="custom-control-input" value="0" onchange="cambiar_check(this)">
                             <span class="custom-control-indicator" style="width: 20px; height: 20px;"></span>
                             <span style="position: absolute; left: -5px; top:-5px; display: inline-flex;">
                                 <i class="fa fa-plus"></i>
                             </span>
                         </label>
                         <label class="custom-control custom-checkbox" data-toggle="tooltip" title="Modificar" style="margin-right: 5px;">
-                            <input type="checkbox" id="" class="custom-control-input" value="0" onchange="cambiar_check(this)">
+                            <input type="checkbox" class="custom-control-input" value="0" onchange="cambiar_check(this)">
                             <span class="custom-control-indicator" style="width: 20px; height: 20px;"></span>
                             <span style="position: absolute; left: -5px; top:-5px; display: inline-flex;">
                                 <i class="ti-marker-alt"></i>
                             </span>
                         </label>
                         <label class="custom-control custom-checkbox m-0" data-toggle="tooltip" title="Eliminar">
-                            <input type="checkbox" id="" class="custom-control-input" value="0" onchange="cambiar_check(this)">
+                            <input type="checkbox" class="custom-control-input" value="0" onchange="cambiar_check(this)">
                             <span class="custom-control-indicator" style="width: 20px; height: 20px;"></span>
                             <span style="position: absolute; left: -5px; top:-5px; display: inline-flex;">
                                 <i class="fa fa-close"></i>
                             </span>
                         </label>
                         <label class="custom-control custom-checkbox m-0" data-toggle="tooltip" title="Seleccionar todos">
-                            <input type="checkbox" id="" class="custom-control-input" value="0" onchange="marcar_check(this)">
+                            <input type="checkbox" class="custom-control-input" value="0" onchange="marcar_check(this)">
                             <span class="custom-control-indicator" style="width: 20px; height: 20px;"></span>
                             <span style="position: absolute; left: 12px; top:-5px; display: inline-flex;">
                                 <i class="fa fa-check-circle-o"></i>
@@ -132,35 +132,35 @@ if($id_sistema != 0){
                     <div class="input-group" style="z-index: 1; font-size: 16px;">
                         <input type="hidden" value="<?php echo $fila3->id_modulo; ?>" style="width: 30px; margin-right: 10px;">
                         <label class="custom-control custom-checkbox" data-toggle="tooltip" title="Consultar" style="margin-right: 5px;">
-                            <input type="checkbox" id="" class="custom-control-input" value="0" onchange="cambiar_check(this)">
+                            <input type="checkbox" class="custom-control-input" value="0" onchange="cambiar_check(this)">
                             <span class="custom-control-indicator" style="width: 20px; height: 20px;"></span>
                             <span style="position: absolute; left: -5px; top:-5px; display: inline-flex;">
                                 <i class="fa fa-hand-pointer-o"></i>
                             </span>
                         </label>
                         <label class="custom-control custom-checkbox" data-toggle="tooltip" title="Insertar" style="margin-right: 5px;">
-                            <input type="checkbox" id="" class="custom-control-input" value="0" onchange="cambiar_check(this)">
+                            <input type="checkbox" class="custom-control-input" value="0" onchange="cambiar_check(this)">
                             <span class="custom-control-indicator" style="width: 20px; height: 20px;"></span>
                             <span style="position: absolute; left: -5px; top:-5px; display: inline-flex;">
                                 <i class="fa fa-plus"></i>
                             </span>
                         </label>
                         <label class="custom-control custom-checkbox" data-toggle="tooltip" title="Modificar" style="margin-right: 5px;">
-                            <input type="checkbox" id="" class="custom-control-input" value="0" onchange="cambiar_check(this)">
+                            <input type="checkbox" class="custom-control-input" value="0" onchange="cambiar_check(this)">
                             <span class="custom-control-indicator" style="width: 20px; height: 20px;"></span>
                             <span style="position: absolute; left: -5px; top:-5px; display: inline-flex;">
                                 <i class="ti-marker-alt"></i>
                             </span>
                         </label>
                         <label class="custom-control custom-checkbox m-0" data-toggle="tooltip" title="Eliminar">
-                            <input type="checkbox" id="" class="custom-control-input" value="0" onchange="cambiar_check(this)">
+                            <input type="checkbox" class="custom-control-input" value="0" onchange="cambiar_check(this)">
                             <span class="custom-control-indicator" style="width: 20px; height: 20px;"></span>
                             <span style="position: absolute; left: -5px; top:-5px; display: inline-flex;">
                                 <i class="fa fa-close"></i>
                             </span>
                         </label>
                         <label class="custom-control custom-checkbox m-0" data-toggle="tooltip" title="Seleccionar todos">
-                            <input type="checkbox" id="" class="custom-control-input" value="0" onchange="marcar_check(this)">
+                            <input type="checkbox" class="custom-control-input" value="0" onchange="marcar_check(this)">
                             <span class="custom-control-indicator" style="width: 20px; height: 20px;"></span>
                             <span style="position: absolute; left: 12px; top:-5px; display: inline-flex;">
                                 <i class="fa fa-check-circle-o"></i>
@@ -211,7 +211,7 @@ if($id_sistema != 0){
 <div class="sl-item">
     <div class="sl-right">
             <blockquote class="m-t-10">
-                Selecciona un sistema para poder iniciar las configuraciones de sus módulos.
+                Selecciona un sistema para poder configurar los roles de sus módulos
             </blockquote>
         </div>
     </div>

@@ -3,6 +3,7 @@
         $("#id_rol").val(id_rol);
         $("#nombre_rol").val(nombre_rol);
         $("#descripcion_rol").val(descripcion_rol);
+        $("#id_sistema").val("0").trigger("change.select2");
 
         $("#ttl_form").removeClass("bg-success");
         $("#ttl_form").addClass("bg-info");
@@ -18,6 +19,7 @@
     function cambiar_nuevo(){
         $("#nombre_rol").val("");
         $("#descripcion_rol").val("");
+        $("#id_sistema").val("0").trigger("change.select2");
          
         $("#band").val("save");
 
