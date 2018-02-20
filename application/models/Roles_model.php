@@ -33,7 +33,7 @@ class Roles_model extends CI_Model {
 	}
 
 	function eliminar_rol($data){
-		if($this->db->delete("org_rol",array('id_rol' => $data['id_rol']))){
+		if($this->db->delete("org_rol",array('id_rol' => $data['id_rol'])) && $this->db->delete("org_rol_modulo_permiso",array('id_rol' => $data['id_rol']))){
 			return "exito";
 		}else{
 			return "fracaso";
@@ -167,7 +167,7 @@ class Roles_model extends CI_Model {
 	}
 
 	function eliminar_rol_modulo_permiso($data){
-		if($this->db->delete("org_rol_modulo_permiso",array('id_rol_permiso' => $data['id_rol_permiso']))){
+		if( $this->db->delete("org_rol_modulo_permiso",array('id_rol_permiso' => $data['id_rol_permiso'])) ){
 			return "exito";
 		}else{
 			return "fracaso";
