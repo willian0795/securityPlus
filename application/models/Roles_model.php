@@ -83,6 +83,11 @@ class Roles_model extends CI_Model {
 	}
 	/***************** Fin Roles_model *********************************/
 
+	function verificar_usuarios($data){
+		$query = $this->db->query("SELECT u.* FROM org_usuario AS u WHERE u.id_usuario IN (SELECT p.id_usuario FROM org_usuario_rol AS p WHERE p.id_rol = '".$data["id_rol"]."')");
+		if($query->num_rows() > 0) return $query;
+		else return false;
+	}
 
 	/***************** Inicio Combox_rol_modulo_permiso_model *********************************/
 	function getRol() {

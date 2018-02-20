@@ -25,6 +25,25 @@ class Roles extends CI_Controller {
 		$this->load->view('roles/tabla_modulos_chequed',$nuevo);
 	}
 
+	function verificar_usuarios(){
+		$data = array(
+			'id_rol' => $this->input->post('idb')
+		);
+
+		$valido_eliminar = $this->roles_model->verificar_usuarios($data); //verifica si el rol ya fue asignado a usuarios
+		if($valido_eliminar != false){
+			$roles = '<ul>';
+			foreach ($valido_eliminar->result() as $fila) {
+				$roles .= '<li>'.$fila->nombre_completo.'</li>'; 
+			}
+			$roles .= '</ul>';
+		}else{
+			$roles = "eliminar";
+		}
+
+		echo $roles;
+	}
+
 	public function tablaroles(){
 		$objeto =  new stdClass();
 		$objeto->roles = $roles = $this->roles_model->mostrar_rol();

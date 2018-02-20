@@ -293,6 +293,27 @@
             }
         }
     }
+
+    function verificar_eliminacion(id_rol, nombre){        
+        var parametros = {
+            "idb" : id_rol,
+            "nombre" : nombre
+        };
+        $.ajax({
+            data:  parametros, //datos que se envian a traves de ajax
+            url:   '<?php echo site_url(); ?>/roles/roles/verificar_usuarios', //archivo que recibe la peticion
+            type:  'post', //método de envio
+            success:  function (response) { //una vez que el archivo recibe el request lo procesa y lo devuelve
+                if(response == "eliminar"){
+                    borrarRol(id_rol);
+                }else{
+                    $('#myModal').modal('show'); // abrir
+                    $("#resultado").html("Para eliminar el rol '"+parametros["nombre"]+"' debes quitarle este rol a los usuarios: <br><br>"+response);
+                }
+            }
+        });
+    }
+
     function borrarRol(id_rol){
         swal({
             title: "¿Está seguro?",
@@ -308,6 +329,7 @@
             cerrar_mantenimiento(); 
         });
     }
+
     function permisos_a_rol(id_rol_permiso,band,nombre_rol,id_modulo,id_permiso,estado){
             
       var formData = new FormData();
@@ -473,6 +495,29 @@
 
     </div>
 </div>
+
+
+<!-- sample modal content -->
+<div id="myModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="myModalLabel">¡El rol ya está asignado!</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            </div>
+            <div class="modal-body">
+                <p id="resultado"></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-info waves-effect" data-dismiss="modal">Aceptar</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+
 
 <script>
 

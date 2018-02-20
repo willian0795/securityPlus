@@ -33,7 +33,7 @@
                          
                            echo boton_tabla($array,"cambiar_editar");
                            echo "<td>";
-                           echo "<button type='button' class='btn waves-effect waves-light btn-rounded btn-sm btn-danger' onClick='borrarRol(".$fila->id_rol.");'><span class='fa fa-times'></span></button>";
+                           echo generar_boton(array($fila->id_rol, $fila->nombre_rol),"verificar_eliminacion","btn-danger","fa fa-times","Eliminar");                           
                            echo "</td>";
                            echo "</tr>";
                         }
