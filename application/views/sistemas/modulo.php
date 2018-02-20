@@ -171,7 +171,7 @@
         }
     }
 
-    function recorrerNestable(){
+    function recorrerNestable(nullocero){
         var n1 = $("#nestable").children().children("li");
         var id = "", dep1 = 0,dep2 = 0,dep3 = 0, orden = 0;
 
@@ -180,10 +180,14 @@
 
         for(i=0; i<n1.length; i++){
             orden = i+1;
-            dep1 = 0;
+            if(nullocero == "NULL"){
+                dep1 = "NULL";
+            }else{
+                dep1 = "'0'";
+            }
             id = $($(n1[i]).children("input")).val();
             ordenquery += "WHEN "+id+" THEN '"+orden+"'\n";
-            dependenciaquery += "WHEN "+id+" THEN '"+dep1+"'\n";
+            dependenciaquery += "WHEN "+id+" THEN "+dep1+"\n";
             idqr += id+",";
             var n2 = $(n1[i]).children("ol").children("li");
             dep2 = id;
@@ -492,14 +496,14 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title" id="myModalLabel">¡El módulo posee datos relacionados!</h4>
+                <h4 class="modal-title" id="myModalLabel">¡El módulo posee roles asociados!</h4>
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
             </div>
             <div class="modal-body">
                 <p id="resultado"></p>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-info waves-effect" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-info waves-effect" data-dismiss="modal">Aceptar</button>
             </div>
         </div>
         <!-- /.modal-content -->

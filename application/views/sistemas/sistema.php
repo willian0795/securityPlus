@@ -77,6 +77,8 @@
             success:  function (response) { //una vez que el archivo recibe el request lo procesa y lo devuelve
                 if(response == "eliminar"){
                     eliminar_sistema();
+                }else if(response == "estable"){
+                    swal({ title: "Sistema estable", text: "No puedes eliminar un sistema estable.", type: "error", showConfirmButton: true });
                 }else{
                     $('#myModal').modal('show'); // abrir
                     $("#resultado").html("Para eliminar el sistema '"+parametros["nombre"]+"' debes eliminar sus módulos: <br><br>"+response);
@@ -184,7 +186,7 @@
                 <p id="resultado"></p>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-info waves-effect" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-info waves-effect" data-dismiss="modal">Aceptar</button>
             </div>
         </div>
         <!-- /.modal-content -->

@@ -1,15 +1,9 @@
 <script type="text/javascript">
-    function cambiar_editar(id,nombre,sexo,usuario,estado,bandera){
-
-        $("#id_empleado").parent().parent().hide(0);
-        $("#idusuario").val(id);        
-
-        $("#form_nusuario").hide(0);
-        $("#form_eusuario").show(0);
-
-        $("#l_nombre").val(nombre);
-        $("#usuario").val(usuario);
-        $("#l_usuario").val(usuario);
+    function cambiar_editar(id,nombre,sexo,usuario,estado,nr,bandera){
+        $("#idusuario").val(id);
+        $("#id_empleado").parent().hide(0);
+        $("#id_empleado2").parent().show(0);
+        $("#id_empleado2").val(id).trigger('change.select2');
 
         $("#password").val("");
         $("#password2").val("");
@@ -22,25 +16,25 @@
             $("#ttl_form").addClass("bg-info");
             $("#btnadd").hide(0);
             $("#btnedit").show(0);
-            tablaroles();
+            $("#div_tipo_pass").show(0);
+            formdatos(id, "edit");
         }else{
             cambiar_estado(id, usuario, estado);
         }
     }
 
     function cambiar_nuevo(){
-        $("#id_empleado").parent().parent().show(0);
+        $("#id_empleado").parent().show(0);
+        $("#id_empleado2").parent().hide(0);
         $("#idusuario").val("");
         $("#usuario").val("");
         $("#password").val("");
         $("#password2").val("");
         $("#band").val("save");
-        tablaroles();
+        formdatos("0", "save");
 
         $("#ttl_form").addClass("bg-success");
-        $("#ttl_form").removeClass("bg-info");
-
-        $("#form_eusuario").hide(0);
+        $("#ttl_form").removeClass("bg-info");        
 
         $("#btnadd").show(0);
         $("#btnedit").hide(0);
@@ -122,18 +116,67 @@
         return xmlhttp;
     }
 
-    function tablausuarios(){        
-        $("#cnt-tabla").load("<?php echo site_url(); ?>/usuarios/tabla_usuario", function() {
-            $('[data-toggle="tooltip"]').tooltip();
-            tablaroles();
-        });
+    function tablausuarios(){
+        var newName = 'Tabla usuarios',
+        xhr = new XMLHttpRequest();
+        var user = $("#idusuario").val(); 
+
+        xhr.open('GET', "<?php echo site_url(); ?>/usuarios/tabla_usuario");
+        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        xhr.onload = function() {
+            if (xhr.status === 200 && xhr.responseText !== newName) {
+                document.getElementById("cnt-tabla").innerHTML = xhr.responseText;
+                $('[data-toggle="tooltip"]').tooltip();
+                $('#myTable').DataTable();
+                tablaroles();
+            }else if (xhr.status !== 200) {
+                swal({ title: "Ups! ocurrió un Error", text: "Al parecer no todos los objetos se cargaron correctamente por favor recarga la página e intentalo nuevamente", type: "error", showConfirmButton: true });
+            }
+        };
+        xhr.send(encodeURI('name=' + newName));
     }
 
     function tablaroles(){
+        var newName = 'Tabla roles',
+        xhr = new XMLHttpRequest();
         var user = $("#idusuario").val(); 
-        $( "#tabla_roles" ).load("<?php echo site_url(); ?>/usuarios/tabla_roles?id_usuario="+user, function() {
-            multi_select();
-        });  
+
+        xhr.open('GET', "<?php echo site_url(); ?>/usuarios/tabla_roles?id_usuario="+user);
+        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        xhr.onload = function() {
+            if (xhr.status === 200 && xhr.responseText !== newName) {
+                document.getElementById("tabla_roles").innerHTML = xhr.responseText;
+                multi_select();
+            }else if (xhr.status !== 200) {
+                swal({ title: "Ups! ocurrió un Error", text: "Al parecer no todos los objetos se cargaron correctamente por favor recarga la página e intentalo nuevamente", type: "error", showConfirmButton: true });
+            }
+        };
+        xhr.send(encodeURI('name=' + newName));
+    }
+
+    function password_change(valor){
+        if(valor == "0"){
+            $("#form_nusuario").show(0);
+        }else{
+            $("#form_nusuario").hide(0);
+        }
+    }
+
+    function formdatos(valor, tipo){
+        var newName = 'Form datos',
+        xhr = new XMLHttpRequest();
+
+        xhr.open('GET', "<?php echo site_url(); ?>/usuarios/form_datos?id_empleado="+valor+"&tipo="+tipo);
+        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        xhr.onload = function() {
+            if (xhr.status === 200 && xhr.responseText !== newName) {
+                document.getElementById("form_datos").innerHTML = xhr.responseText;
+                tablaroles();
+            }else if (xhr.status !== 200) {
+                swal({ title: "Ups! ocurrió un Error", text: "Al parecer no todos los objetos se cargaron correctamente por favor recarga la página e intentalo nuevamente", type: "error", showConfirmButton: true });
+            }
+        };
+        xhr.send(encodeURI('name=' + newName));
     }
 
     function multi_select(){
@@ -204,6 +247,8 @@
         if( $("#"+obj).prop('checked') ) {
             $("#"+obj).val('1');
             $("#div_pass").hide(0);
+            $("#password").val("");
+            $("#password2").val("");
         }else{
             $("#"+obj).val('0');
             $("#div_pass").show(0);
@@ -307,20 +352,20 @@
                     </div>
                     <div class="card-body b-t">
                         <div id="form_user"></div>
-                        <?php echo form_open('', array('id' => 'formajax', 'style' => 'margin-top: 0px;', 'class' => 'm-t-40', 'novalidate' => '')); ?>
+                        <?php echo form_open('', array('id' => 'formajax', 'style' => 'margin-top: 0px;', 'class' => 'm-t-40')); ?>
                             <input type="hidden" id="band" name="band" value="save">
                             <input type="hidden" id="idusuario" name="idusuario" value="">
 
                             <div class="row">
                                 <div class="form-group col-lg-6"> 
                                     <h5>Empleado: <span class="text-danger">*</span></h5>                           
-                                    <select id="id_empleado" name="id_empleado" class="select2" style="width: 100%">
+                                    <select id="id_empleado" name="id_empleado" class="select2" style="width: 100%" onchange="formdatos(this.value,'save');">
                                         <option value="0">[Elija el empleado]</option>
                                         <?php 
-                                            $empleado = $this->db->query("SELECT e.id_empleado, UPPER(CONCAT_WS(' ', e.primer_nombre, e.segundo_nombre, e.tercer_nombre, e.primer_apellido, e.segundo_apellido, e.apellido_casada)) AS nombre_completo FROM sir_empleado AS e WHERE NOT EXISTS (SELECT u.nr FROM org_usuario AS u WHERE u.nr = e.nr) ORDER BY primer_nombre");
+                                            $empleado = $this->db->query("SELECT e.nr, UPPER(CONCAT_WS(' ', e.primer_nombre, e.segundo_nombre, e.tercer_nombre, e.primer_apellido, e.segundo_apellido, e.apellido_casada)) AS nombre_completo FROM sir_empleado AS e WHERE NOT EXISTS (SELECT u.nr FROM org_usuario AS u WHERE u.nr = e.nr) ORDER BY primer_nombre");
                                             if($empleado->num_rows() > 0){
                                                 foreach ($empleado->result() as $fila) {              
-                                                   echo '<option class="m-l-50" value="'.$fila->id_empleado.'">'.$fila->nombre_completo.'</option>';
+                                                   echo '<option class="m-l-50" value="'.$fila->nr.'">'.$fila->nombre_completo.'</option>';
                                                 }
                                             }
                                         ?>
@@ -328,7 +373,23 @@
                                         
                                     </select>
                                 </div>
-                                <div class="form-group col-lg-6" style="display: none;" id="div_tipo_pass">
+                                <div class="form-group col-lg-6"> 
+                                    <h5>Empleado: <span class="text-danger">*</span></h5>                           
+                                    <select id="id_empleado2" name="id_empleado2" class="select2" style="width: 100%">
+                                        <option value="0">[Elija el empleado]</option>
+                                        <?php 
+                                            $empleado = $this->db->query("SELECT id_usuario, nombre_completo FROM org_usuario");
+                                            if($empleado->num_rows() > 0){
+                                                foreach ($empleado->result() as $fila) {              
+                                                   echo '<option class="m-l-50" value="'.$fila->id_usuario.'">'.$fila->nombre_completo.'</option>';
+                                                }
+                                            }
+                                        ?>
+
+                                        
+                                    </select>
+                                </div>
+                                <div class="form-group col-lg-6" id="div_tipo_pass">
                                     <h5>¿Usuario sin contraseña?<span class="text-danger">*</span></h5>
                                     <div class="controls">
                                         <div class="switch">
@@ -337,65 +398,8 @@
                                     </div>
                                 </div>
                             </div>
-                            <div id="form_eusuario">
-                                <div class="row">
-                                    <div class="form-group col-lg-6">
-                                        <h5>Nombre: <span class="text-danger">*</span></h5>
-                                        <div class="controls">
-                                            <input type="text" id="l_nombre" name="l_nombre" class="form-control" readonly="">
-                                        </div>
-                                    </div>
-                                    <div class="form-group col-lg-6">
-                                        <h5>Usuario: <span class="text-danger">*</span></h5>
-                                        <div class="controls">
-                                            <input type="text" id="l_usuario" name="l_usuario" class="form-control" readonly="">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div id="form_nusuario">
-                                <div class="row">
-                                    <div class="form-group col-lg-6">
-                                        <h5>Nombre: <span class="text-danger">*</span></h5>
-                                        <div class="controls">
-                                            <input type="text" onkeyup="formar_usuario();" id="nombre" name="nombre" class="form-control" placeholder="Ingrese el nombre">
-                                        </div>
-                                    </div>
-                                    <div class="form-group col-lg-6">
-                                        <h5>Apellido: <span class="text-danger">*</span></h5>
-                                        <div class="controls">
-                                            <input type="text" onkeyup="formar_usuario();" id="apellido" name="apellido" class="form-control" placeholder="Ingrese el apellido">
-                                        </div>
-                                    </div>
-                                </div>                                                
-                                <div class="row">
-                                	<div class="form-group col-lg-6">
-                                        <h5>Genero: <span class="text-danger">*</span></h5>
-                                        <fieldset class="controls">
-                                            <input name="genero" type="radio" id="generoM" value="M">
-                                            <label class="m-l-20" for="generoM">Masculino</label>
-                                            <input name="genero" type="radio" id="generoF" value="F">
-                                            <label class="m-l-20" for="generoF">Femenino</label>
-                                            <?php
-    	                                		/*$genero = $this->db->get("org_genero");
 
-    						                    if(!empty($genero)){
-    						                        foreach ($genero->result() as $fila) {
-    						                        	echo '<input name="genero" type="radio" id="genero'.strtolower($fila->id_genero).'" value="'.strtolower($fila->id_genero).'">';
-    						                        	echo '<label class="m-l-20" for="genero'.strtolower($fila->id_genero).'">'.ucfirst(strtolower($fila->genero)).'</label>';
-    						                        }
-    						                    }*/
-    	                                	?>
-                                        </fieldset>
-                                    </div> 
-                                    <div class="form-group col-lg-6">
-                                        <h5>Usuario: <span class="text-danger">*</span></h5>
-                                        <div class="controls">
-                                            <input type="text" id="usuario" name="usuario" class="form-control" placeholder="Nombre de usuario" minlength="3" readonly>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                            <div id="form_datos"></div>                           
 
                             <div class="row" id="div_pass">
                             	<div class="form-group col-lg-6">
@@ -466,32 +470,55 @@ $(function(){
         var formData = new FormData(document.getElementById("formajax"));
         formData.append("dato", "valor");
 
-        $.ajax({
-            url: "<?php echo site_url(); ?>/usuarios/gestionar_usuarios",
-            type: "post",
-            dataType: "html",
-            data: formData,
-            cache: false,
-            contentType: false,
-            processData: false
-        })
-        .done(function(res){
-            alert(res)
-            if(res == "exito"){
-                cerrar_mantenimiento();
-                if($("#band").val() == "save"){
-                    swal({ title: "¡Registro exitoso!", type: "success", showConfirmButton: true });
-                    obtener_usuario();
-                }else if($("#band").val() == "edit"){
-                    swal({ title: "¡Modificación exitosa!", type: "success", showConfirmButton: true });
-                    recorrer_roles();
+        var band = true;
+
+        if($("#band").val()=="save"){
+            if(document.getElementById("tipo_pass").checked == 0){
+                if($("#password").val() != $("#password2").val()){
+                    band = false;
                 }
-            }else if(res == "existe"){
-                swal({ title: "¡Ya existe!", text: "El usuario ya posee una cuenta", type: "warning", showConfirmButton: true });
-            }else{
-                swal({ title: "¡Ups! Error", text: "Intentalo nuevamente.", type: "error", showConfirmButton: true });
+
+                if($("#password").val().trim() == "" || $("#password2").val().trim() == ""){
+                    band = false;
+                }
             }
-        });
+        }else{
+            if(document.getElementById("tipo_pass").checked == 0){
+                if($("#password").val() != $("#password2").val()){
+                    band = false;
+                }
+            }
+        }
+
+        if(band){
+            $.ajax({
+                url: "<?php echo site_url(); ?>/usuarios/gestionar_usuarios",
+                type: "post",
+                dataType: "html",
+                data: formData,
+                cache: false,
+                contentType: false,
+                processData: false
+            })
+            .done(function(res){
+                if(res == "exito"){
+                    cerrar_mantenimiento();
+                    if($("#band").val() == "save"){
+                        swal({ title: "¡Registro exitoso!", type: "success", showConfirmButton: true });
+                        obtener_usuario();
+                    }else if($("#band").val() == "edit"){
+                        swal({ title: "¡Modificación exitosa!", type: "success", showConfirmButton: true });
+                        recorrer_roles();
+                    }
+                }else if(res == "existe"){
+                    swal({ title: "¡Ya existe!", text: "El usuario ya posee una cuenta", type: "warning", showConfirmButton: true });
+                }else{
+                    swal({ title: "¡Ups! Error", text: "Intentalo nuevamente.", type: "error", showConfirmButton: true });
+                }
+            });
+        }else{
+            $.toast({ heading: 'Contraseña no válida', text: 'La contraseña debe empatar y no puede estar vacía', position: 'top-right', loaderBg:'#3c763d', icon: 'warning', hideAfter: 4000, stack: 6 });
+        }
             
     });
 

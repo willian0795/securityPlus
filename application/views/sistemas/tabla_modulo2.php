@@ -12,7 +12,13 @@ if($id_sistema != 0){
         if($modelo->num_rows() > 0){
             echo '<ol class="dd-list">';
             $contador++;
-            foreach ($modelo->result() as $fila) {           
+            $nullocero;
+            foreach ($modelo->result() as $fila) {
+            if(is_null($fila->dependencia)){
+                $nullocero = "NULL";
+            }else{
+                $nullocero = 0;
+            }
     ?>
 
     <li class="dd-item" data-id="<?php $contador; ?>">
@@ -63,7 +69,7 @@ if($id_sistema != 0){
             echo "</li>";
     ?>
     <div align="right">
-        <button type="button" onclick="recorrerNestable();" class="btn waves-effect waves-light btn-success">Finalizar </button>
+        <button type="button" onclick="recorrerNestable('<?php echo $nullocero; ?>');" class="btn waves-effect waves-light btn-success">Finalizar </button>
     </div>
     <?php }else{ ?>
         <div class="sl-item">

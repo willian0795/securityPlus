@@ -13,7 +13,9 @@ class Usuarios_model extends CI_Model {
 		if($query->num_rows() > 0){
 			return "existe";
 		}else{
-			$id_seccion = $this->obtener("SELECT id_seccion FROM sir_empleado_informacion_laboral WHERE id_empleado = ".$data['id_empleado'],"id_seccion");
+			$id_empleado = $this->obtener("SELECT id_empleado FROM sir_empleado WHERE nr = '".$data['id_empleado']."'", "id_empleado");
+
+			$id_seccion = $this->obtener("SELECT id_seccion FROM sir_empleado_informacion_laboral WHERE id_empleado = '".$id_empleado."' ORDER BY id_empleado_informacion_laboral", "id_seccion");
 
 			$id = $this->obtener_ultimo_id("org_usuario","id_usuario");
 
@@ -57,17 +59,23 @@ class Usuarios_model extends CI_Model {
 	}
 
 	function editar_usuario($data){
-		$this->db->where("id_usuario",$data["idusuario"]);
-		if(!empty($data['password'])){
-			if($this->db->update('org_usuario', array('password' => $data['password']))){
-				return "exito";
-			}else{
-				return "fracaso";
-			}
-		}else{
+		$this->db->where("id_usuario",$data["idusuario"]);		
+		if($this->db->update('org_usuario', array('sexo' => $data['genero'], 'usuario' => $data['usuario'], 'password' => $data['password']))){
 			return "exito";
+		}else{
+			return "fracaso";
 		}
 	}
+
+	function editar_usuario2($data){
+		$this->db->where("id_usuario",$data["idusuario"]);		
+		if($this->db->update('org_usuario', array('sexo' => $data['genero'], 'usuario' => $data['usuario']))){
+			return "exito";
+		}else{
+			return "fracaso";
+		}
+	}
+
 
 	function editar_estado_usuario($data){
 		$this->db->where("id_usuario",$data["idusuario"]);
@@ -87,14 +95,14 @@ class Usuarios_model extends CI_Model {
 	}
 
 	function obtener($consulta,$nombreid){
-		$query = $this->db->query($consulta." ORDER BY ".$nombreid);
+		$query = $this->db->query($consulta);
 		$ultimoid = "";
 		if($query->num_rows() > 0){
 			foreach ($query->result() as $fila) {
 				$ultimoid = $fila->$nombreid; 
 			}
 		}else{
-			$ultimoid = "0";
+			$ultimoid = NULL;
 		}
 		return $ultimoid;
 	}

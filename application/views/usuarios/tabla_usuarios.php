@@ -34,7 +34,7 @@
                             echo"</td>";
 
                             echo"<td>";
-                                $array = array($fila->id_usuario, $fila->nombre_completo, $fila->sexo, $fila->usuario, $fila->estado);
+                                $array = array($fila->id_usuario, $fila->nombre_completo, $fila->sexo, $fila->usuario, $fila->estado, $fila->nr);
                                 array_push($array, "edit");
                                 echo generar_boton($array,"cambiar_editar","btn-info","fa fa-wrench","Editar usuario");
                                 unset($array[endKey($array)]); //eliminar el ultimo elemento de un array

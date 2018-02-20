@@ -47,18 +47,23 @@ class Sistema extends CI_Controller {
 		$data = array(
 			'idsistema' => $this->input->post('idb')
 		);
-		$valido_eliminar = $this->sistemas_model->verificar_modulos($data); //verifica si el sistema tiene modulos
-		if($valido_eliminar != false){
-			$modulos = '<ul>';
-			foreach ($valido_eliminar->result() as $fila) {
-				$modulos .= '<li>'.$fila->nombre_modulo.'</li>'; 
-			}
-			$modulos .= '</ul>';
-		}else{
-			$modulos = "eliminar";
-		}
 
-		echo $modulos;
+		if(floatval($this->input->post('idb')) <= 14){
+			echo "estable";
+		}else{
+			$valido_eliminar = $this->sistemas_model->verificar_modulos($data); //verifica si el sistema tiene modulos
+			if($valido_eliminar != false){
+				$modulos = '<ul>';
+				foreach ($valido_eliminar->result() as $fila) {
+					$modulos .= '<li>'.$fila->nombre_modulo.'</li>'; 
+				}
+				$modulos .= '</ul>';
+			}else{
+				$modulos = "eliminar";
+			}
+
+			echo $modulos;
+		}
 	}
 }
 ?>

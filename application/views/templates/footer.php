@@ -29,6 +29,7 @@
     }(window, document, jQuery);*/
     </script>
     <script src="<?php echo base_url(); ?>assets/plugins/moment/min/moment.min.js"></script>
+    <script src="<?php echo base_url(); ?>assets/plugins/toast-master/js/jquery.toast.js"></script>
     <!-- ============================================================== -->
     <!-- This page plugins -->
     <!-- ============================================================== -->

@@ -83,6 +83,7 @@ $route['usuarios/obtener_usuario'] = '/usuarios/usuarios/obtener_usuario';
 $route['usuarios/gestionar_roles'] = '/usuarios/usuarios/gestionar_roles';
 $route['usuarios/tabla_usuario'] = '/usuarios/usuarios/tabla_usuario';
 $route['usuarios/tabla_roles'] = '/usuarios/usuarios/tabla_roles';
+$route['usuarios/form_datos'] = '/usuarios/usuarios/form_datos';
 
 /**********************************************************************************************
 		MODULO DE ROLES
