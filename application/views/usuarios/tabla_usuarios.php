@@ -18,10 +18,10 @@
                 </thead>
                 <tbody>
                 <?php
-                    $this->db->order_by("nombre_completo", "asc");
-                    $usuarios = $this->db->get("org_usuario");
+                    //$this->db->order_by("nombre_completo", "asc");
+                    $usuarios = $this->db->query("SELECT id_usuario, nombre_completo, sexo, usuario, estado, nr, password FROM org_usuario ORDER BY nombre_completo");
 
-                    if(!empty($usuarios)){
+                    if($usuarios->num_rows() > 0){
                         foreach ($usuarios->result() as $fila) {
                             echo "<tr>";
                             echo "<td>".$fila->nombre_completo."</td>";
@@ -34,7 +34,7 @@
                             echo"</td>";
 
                             echo"<td>";
-                                $array = array($fila->id_usuario, $fila->nombre_completo, $fila->sexo, $fila->usuario, $fila->estado, $fila->nr);
+                                $array = array($fila->id_usuario, $fila->nombre_completo, $fila->sexo, $fila->usuario, $fila->estado, $fila->nr, $fila->password);
                                 array_push($array, "edit");
                                 echo generar_boton($array,"cambiar_editar","btn-info","fa fa-wrench","Editar usuario");
                                 unset($array[endKey($array)]); //eliminar el ultimo elemento de un array

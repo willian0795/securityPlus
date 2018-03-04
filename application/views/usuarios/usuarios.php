@@ -1,9 +1,17 @@
 <script type="text/javascript">
-    function cambiar_editar(id,nombre,sexo,usuario,estado,nr,bandera){
+    function cambiar_editar(id,nombre,sexo,usuario,estado,nr,pass,bandera){
         $("#idusuario").val(id);
         $("#id_empleado").parent().hide(0);
         $("#id_empleado2").parent().show(0);
         $("#id_empleado2").val(id).trigger('change.select2');
+
+        if(pass == ""){
+            document.getElementById("tipo_pass").checked = 1;
+            cambiar_check2("tipo_pass");
+        }else{
+            document.getElementById("tipo_pass").checked = 0;
+            cambiar_check2("tipo_pass");
+        }
 
         $("#password").val("");
         $("#password2").val("");

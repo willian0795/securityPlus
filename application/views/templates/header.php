@@ -237,6 +237,11 @@
   }
 }
 
+.modal-body {
+  max-height:450px;
+  overflow-y:scroll;
+}
+
     </style>
 
 <body class="fix-header fix-sidebar card-no-border logo-center" onload="iniciar();">
