@@ -40,7 +40,7 @@ class Sistemas_model extends CI_Model {
 	function eliminar_sistema($data){
 		if($this->db->delete("org_sistema",array('id_sistema' => $data['idsistema']))){
 			/************** Inicio de fragmento bitácora *********************/
-			$this->bitacora_model->bitacora("Se eliminó el sistema '".$data["nombre"]."' con id: ".$data["idsistema"],"4");
+			$this->bitacora_model->bitacora("Se eliminó el sistema '".$data["nombre"]."' con id: ".$data["idsistema"],"5");
             /************** Fin de fragmento bitácora *********************/
 			return "exito";
 		}else{

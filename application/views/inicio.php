@@ -1,5 +1,12 @@
 <script type="text/javascript">
-	function iniciar(){
+
+<?php
+    $query = $this->db->query("SELECT * FROM org_usuario WHERE estado = 1");
+?>
+
+    var total_usuarios = <?php echo $query->num_rows(); ?>
+
+    function iniciar(){
         cargar_estado();
 	}
 
@@ -14,7 +21,7 @@
         myVar = "";
     }
 
-    var myVar = setInterval(function(){ cargar_estado() }, 3000);
+    var myVar = setInterval(function(){ cargar_estado() }, 2000);
 
     function cargar_estado(){
         var newName = 'John Smith',
@@ -33,20 +40,65 @@
 
                 chart.data.datasets[0].data[0] = memoria_enuso.toFixed(2);  //memoria usada
                 chart.data.datasets[0].data[1] = memoria_libre.toFixed(2);  //memoria libre
+
+                if(parseFloat(porceje_usado)<30){
+                    chart.data.datasets[0].backgroundColor[0] = "rgb(38, 198, 218)";
+                }else if(parseFloat(porceje_usado)>=30 && parseFloat(porceje_usado)<50){
+                    chart.data.datasets[0].backgroundColor[0] = "rgb(255, 178, 43)";
+                }else{
+                    chart.data.datasets[0].backgroundColor[0] = "rgb(255, 99, 132)";
+                }
                 
                 chart.update();
 
                 $("#porcentajem").text(porceje_usado+"%");
 
 
-                var porcentajecpu = datos[3];
+                var porcentajecpu = parseInt(datos[3]);
 
                 chart2.data.datasets[0].data[0] = porcentajecpu;  //memoria libre
                 chart2.data.datasets[0].data[1] = 100-porcentajecpu;  //memoria usada
+
+
+                if(parseFloat(porcentajecpu)<30){
+                    chart2.data.datasets[0].backgroundColor[0] = "rgb(38, 198, 218)";
+                }else if(parseFloat(porcentajecpu)>=30 && parseFloat(porcentajecpu)<50){
+                    chart2.data.datasets[0].backgroundColor[0] = "rgb(255, 178, 43)";
+                }else{
+                    chart2.data.datasets[0].backgroundColor[0] = "rgb(255, 99, 132)";
+                }
+
+
                 chart2.update();
 
                 $("#porcentajecpu").text(porcentajecpu+"%");
 
+                usuario_log();
+            }else if (xhr.status !== 200) {
+                swal({ title: "Ups! ocurrió un Error", text: "Al parecer la tabla de empresas visitadas no se cargó correctamente por favor recarga la página e intentalo nuevamente", type: "error", showConfirmButton: true });
+            }
+        };
+        xhr.send(encodeURI('name=' + newName));
+    }
+
+    function usuario_log(){
+        var newName = 'AjaxCall',
+        xhr = new XMLHttpRequest();
+        xhr.open('GET', "<?php echo site_url(); ?>/inicio/usuario_log");
+        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        xhr.onload = function() {
+            if (xhr.status === 200 && xhr.responseText !== newName) {
+                var datos2 = xhr.responseText;
+                var usuarioslog = parseInt(datos2);   //usuarios logeados
+                var usuariostotal = parseInt(total_usuarios); //total de ususarios
+                var porcentajelog = parseFloat((usuarioslog/usuariostotal)*100).toFixed(2);
+
+                chart3.data.datasets[0].data[0] = usuarioslog;  //memoria libre
+                chart3.data.datasets[0].data[1] = usuariostotal-usuarioslog;  //memoria usada
+                chart3.update();
+
+                $("#porcentajeus").text(porcentajelog+"%");
+                $("#texto_usuarios").text(usuarioslog+"/"+usuariostotal);
 
             }else if (xhr.status !== 200) {
                 swal({ title: "Ups! ocurrió un Error", text: "Al parecer la tabla de empresas visitadas no se cargó correctamente por favor recarga la página e intentalo nuevamente", type: "error", showConfirmButton: true });
@@ -71,7 +123,7 @@
 
                 <div class="row">
 
-                <div class="col-lg-6">
+                <div class="col-lg-3">
                     <div class="row">
 
 
@@ -84,29 +136,22 @@
     					?>
 
                         <!-- Column -->
-                        <div class="col-lg-6">
-                            <div class="card card-inverse card-info">
+                        <div class="col-lg-12">
+                            <div class="card card-inverse card-success">
                                 <div class="card-body">
                                     <div class="d-flex">
                                         <div class="m-r-20 align-self-center">
                                             <h1 class="text-white"><i class="mdi mdi-laptop-chromebook"></i></h1></div>
                                         <div>
-                                            <h3 align="center" class="card-title">Sistemas</h3>
-                                            <h2 align="center" class="card-subtitle"><?php echo $sistemas; ?></h2> </div>
+                                            <h3 align="center" class="card-title">Sistemas: <?php echo $sistemas; ?></h3>
+                                        </div>
                                     </div>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- Column -->
-                        <div class="col-lg-6">
-                            <div class="card card-inverse card-success">
-                                <div class="card-body">
                                     <div class="d-flex">
                                         <div class="m-r-20 align-self-center">
                                             <h1 class="text-white"><i class="mdi mdi-library-books"></i></h1></div>
                                         <div>
-                                            <h3 align="center" class="card-title">Módulos</h3>
-                                            <h2 align="center" class="card-subtitle"><?php echo $modulos; ?></h2> </div>
+                                            <h3 align="center" class="card-title">Módulos: <?php echo $modulos; ?></h3>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -129,7 +174,7 @@
 
 
                         <!-- Column -->
-                        <div class="col-lg-6">
+                        <div class="col-lg-12">
                             <div class="card">
                                 <div class="card-body">
                                     <div class="d-flex flex-row">
@@ -145,44 +190,38 @@
                         </div>
 
 
-                        <?php 							            
-    						$query = $this->db->query("SELECT * FROM org_usuario WHERE estado = 1");
-    						$usuarios = $query->num_rows();
+                        
+                    </div>
+                </div>
 
-    						$query = $this->db->query("SELECT * FROM glb_bitacora WHERE id_accion = '1' AND cast(fecha_hora as date) = '".date ('Y-m-d')."' GROUP BY id_usuario");
-    						$sesiones = $query->num_rows();
 
-    						$porcentaje = (($sesiones/$usuarios)*100)
+                <div class="col-lg-9">
+                    <div class="row">
 
-    					?>
 
                         <!-- Column -->
-                        <div class="col-lg-6">
+                        <div class="col-lg-4">
                             <div class="card card-body">
                                 <!-- Row -->
                                 <div class="row">
                                     <!-- Column -->
                                     <div align="center" class="col p-r-0 align-self-center" style="padding: 0px; padding-left: 10px;">
-                                        <h2 class="font-light m-b-0"><?php echo $sesiones."/".$usuarios; ?></h2>
+                                        <h2 class="font-light m-b-0" id="texto_usuarios">0/0</h2>
                                         <h6 class="font-light" style="margin: 0px;">Usuarios iniciaron sesión hoy</h6></div>
                                     <!-- Column -->
-                                    <div class="col text-right align-self-center" style="padding: 0px;">
-                                    	<div id="visitor" style="height:87px; width:90%; position: absolute;"></div>
-                                        
+                                    <div class="col text-right align-self-center" style="padding: 0px; position: relative;">
+                                        <h3 align="center" id="porcentajeus" style="left:50%; top: 57%; position: absolute; transform: translate(-50%, -50%); -webkit-transform: translate(-50%, -50%);">Cargando...</h3>
+                                        <div style="margin-left: 10px; margin-right: 10px;">
+                                            <canvas id="myChart3"></canvas>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </div>
-
-
-                <div class="col-lg-6">
-                    <div class="row">
 
 
                     <!-- Column -->
-                    <div class="col-md-6 col-lg-6">
+                    <div class="col-md-6 col-lg-4">
                         <div class="card card-body">
                             <!-- Row -->
                             <div class="row">
@@ -204,7 +243,7 @@
 
 
                     <!-- Column -->
-                    <div class="col-md-6 col-lg-6">
+                    <div class="col-md-6 col-lg-4">
                         <div class="card card-body">
                             <!-- Row -->
                             <div class="row">
@@ -241,8 +280,6 @@
                     <!-- column -->
                 </div>
 
-                <button class="small" onclick="example();">Load</button>
-
 
                 <!-- ============================================================== -->
                 <!-- End PAge Content -->
@@ -262,9 +299,7 @@
         <!-- ============================================================== -->
 
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
-t>
-
+<script src="<?php echo base_url(); ?>assets/js/Chart.min.js"></script>
 <script src="<?php echo base_url(); ?>assets/plugins/echarts/echarts-all.js"></script>
 <script type="text/javascript">
 
@@ -405,6 +440,35 @@ if (option && typeof option === "object") {
         });
 }
 
+
+var ctx3;
+var chart3;
+
+$( document ).ready(function() {
+
+ctx3 = document.getElementById('myChart3').getContext('2d');
+chart3 = new Chart(ctx3, {
+    // The type of chart we want to create
+    type: 'doughnut',
+
+    // The data for our dataset
+    data: {
+        labels: ["Logeados", "Sin logear"],
+        datasets: [{
+            backgroundColor: ['rgb(30, 136, 229)', 'rgba(33, 37, 41, 0.21)'],
+            data: [0, 100],
+        }]
+    },
+
+    // Configuration options go here
+    options: { cutoutPercentage: 75  }
+
+});
+
+});
+
+
+
 var ctx;
 var chart;
 
@@ -451,11 +515,14 @@ chart2 = new Chart(ctx2, {
     },
 
     // Configuration options go here
-    options: { cutoutPercentage: 75 }
+    options: { cutoutPercentage: 75  }
 
 });
 
 });
+
+
+
 
 
 

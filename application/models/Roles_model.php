@@ -11,7 +11,10 @@ class Roles_model extends CI_Model {
 	function insertar_rol($data){
 		//$id = $this->obtener_ultimo_id("vyp_oficinas","id_oficina");
 		if($this->db->insert('org_rol', array('nombre_rol' => $data['nombre_rol'], 'descripcion_rol' => $data['descripcion_rol']))){
-			return "exito";
+			/************** Inicio de fragmento bitácora *********************/
+			$this->bitacora_model->bitacora("Se registró el rol '".$data["nombre_rol"]."'","3");
+            /************** Fin de fragmento bitácora *********************/
+            return "exito";
 		}else{
 			return "fracaso";
 		}
@@ -26,7 +29,10 @@ class Roles_model extends CI_Model {
 	function editar_rol($data){
 		$this->db->where("id_rol",$data["id_rol"]);
 		if($this->db->update('org_rol', array('nombre_rol' => $data['nombre_rol'], 'descripcion_rol' => $data['descripcion_rol']))){
-			return "exito";
+			/************** Inicio de fragmento bitácora *********************/
+			$this->bitacora_model->bitacora("Se modificó el rol '".$data["nombre_rol"]."' con id: ".$data["id_rol"],"4");
+            /************** Fin de fragmento bitácora *********************/
+            return "exito";
 		}else{
 			return "fracaso";
 		}
@@ -34,7 +40,10 @@ class Roles_model extends CI_Model {
 
 	function eliminar_rol($data){
 		if($this->db->delete("org_rol",array('id_rol' => $data['id_rol'])) && $this->db->delete("org_rol_modulo_permiso",array('id_rol' => $data['id_rol']))){
-			return "exito";
+			/************** Inicio de fragmento bitácora *********************/
+			$this->bitacora_model->bitacora("Se eliminó el rol con id: ".$data["id_rol"],"5");
+            /************** Fin de fragmento bitácora *********************/
+            return "exito";
 		}else{
 			return "fracaso";
 		}

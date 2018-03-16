@@ -21,6 +21,9 @@ class Usuarios_model extends CI_Model {
 			$id = $this->obtener_ultimo_id("org_usuario","id_usuario");
 
 			if($this->db->insert('org_usuario', array('id_usuario' => $id, 'nombre_completo' => $data['nombre'], 'nr' => $data['nr'], 'sexo' => $data['genero'], 'usuario' => $data['usuario'], 'password' => $data['password'], 'id_seccion' => $id_seccion, 'estado' => $data['estado']))){
+				/************** Inicio de fragmento bitácora *********************/
+				$this->bitacora_model->bitacora("Se registró el usuario '".$data["nombre"]."' con id: ".$id,"3");
+	            /************** Fin de fragmento bitácora *********************/
 				return "exito";
 			}else{
 				return "fracaso";
@@ -39,7 +42,7 @@ class Usuarios_model extends CI_Model {
 
 			if($this->db->insert('org_usuario_rol', array('id_usuario_rol' => $id, 'id_usuario' => $id_usuario, 'id_rol' => $data['id_rol']))){
 				return "exito";
-			}else{
+							}else{
 				return "fracaso";
 			}
 		}
@@ -62,7 +65,10 @@ class Usuarios_model extends CI_Model {
 	function editar_usuario($data){
 		$this->db->where("id_usuario",$data["idusuario"]);		
 		if($this->db->update('org_usuario', array('sexo' => $data['genero'], 'usuario' => $data['usuario'], 'password' => $data['password']))){
-			return "exito";
+			/************** Inicio de fragmento bitácora *********************/
+			$this->bitacora_model->bitacora("Se modificó el usuario '".$data["usuario"]."' con id: ".$data["idusuario"],"4");
+            /************** Fin de fragmento bitácora *********************/
+            return "exito";
 		}else{
 			return "fracaso";
 		}
@@ -71,7 +77,10 @@ class Usuarios_model extends CI_Model {
 	function editar_usuario2($data){
 		$this->db->where("id_usuario",$data["idusuario"]);		
 		if($this->db->update('org_usuario', array('sexo' => $data['genero'], 'usuario' => $data['usuario']))){
-			return "exito";
+			/************** Inicio de fragmento bitácora *********************/
+			$this->bitacora_model->bitacora("Se modificó el usuario '".$data["usuario"]."' con id: ".$data["idusuario"],"4");
+            /************** Fin de fragmento bitácora *********************/
+            return "exito";
 		}else{
 			return "fracaso";
 		}
@@ -81,7 +90,10 @@ class Usuarios_model extends CI_Model {
 	function editar_estado_usuario($data){
 		$this->db->where("id_usuario",$data["idusuario"]);
 		if($this->db->update('org_usuario', array('estado' => $data['estado']))){
-			return "exito";
+			/************** Inicio de fragmento bitácora *********************/
+			$this->bitacora_model->bitacora("Se cambió el estado del usuario con id: ".$data["idusuario"],"4");
+            /************** Fin de fragmento bitácora *********************/
+            return "exito";
 		}else{
 			return "fracaso";
 		}
@@ -89,6 +101,9 @@ class Usuarios_model extends CI_Model {
 
 	function eliminar_usuario($data){
 		if($this->db->delete("org_usuario",array('id_usuario' => $data['idusuario']))){
+			/************** Inicio de fragmento bitácora *********************/
+			$this->bitacora_model->bitacora("Se eliminó el usuario con id: ".$data["idusuario"],"5");
+            /************** Fin de fragmento bitácora *********************/
 			return "exito";
 		}else{
 			return "fracaso";

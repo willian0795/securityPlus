@@ -514,7 +514,7 @@ $(function(){
                     cerrar_mantenimiento();
                     if($("#band").val() == "save"){
                         swal({ title: "¡Registro exitoso!", type: "success", showConfirmButton: true });
-                        obtener_usuario();
+                        window.location.reload
                     }else if($("#band").val() == "edit"){
                         swal({ title: "¡Modificación exitosa!", type: "success", showConfirmButton: true });
                         recorrer_roles();

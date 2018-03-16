@@ -22,6 +22,13 @@ class Inicio extends CI_Controller {
 	    echo $musage.",".$memUsage["free"].",".$memUsage["total"].",".$cpuLoad;	
 	}
 
+	public function usuario_log(){
+		$query = $this->db->query("SELECT * FROM glb_bitacora WHERE id_accion = '1' AND cast(fecha_hora as date) = '".date ('Y-m-d')."' GROUP BY id_usuario");
+		$sesiones = $query->num_rows();
+
+	    echo $sesiones;	
+	}
+
 	public function getServerMemoryUsage($getPercentage=true){
         $memoryTotal = null;
         $memoryFree = null;
