@@ -1,28 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <!-- Favicon icon -->
+    <link rel="icon" type="image/png" sizes="16x16" href="<?php echo base_url(); ?>assets/images/logo_min.png">
+    <title>SecurityPlus</title>
+    <script src="<?php echo base_url(); ?>assets/js/jquery-3.2.1.min.js"></script>
+    <!-- Bootstrap Core CSS -->
+    <link href="<?php echo base_url(); ?>assets/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="<?php echo base_url(); ?>assets/plugins/css-chart/css-chart.css" rel="stylesheet">
+    <link href="<?php echo base_url(); ?>assets/plugins/c3-master/c3.min.css" rel="stylesheet">
+</head>
+
+<body>
+
+
+
+
+
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Inicio extends CI_Controller {
-
-	function __construct(){
-		parent::__construct();
-	}
-
-	public function index()
-	{
-		$this->load->view('templates/header');
-		$this->load->view('inicio');
-		$this->load->view('templates/footer');
-	}
-
-	public function memory_usage(){
-	    $memUsage = $this->getServerMemoryUsage(false);
-	    $musage = $memUsage["total"]-$memUsage["free"];
-	    $cpuLoad = $this->getServerLoad();
-
-	    echo $musage.",".$memUsage["free"].",".$memUsage["total"].",".$cpuLoad;	
-	}
-
-	public function getServerMemoryUsage($getPercentage=true){
+    // Returns used memory (either in percent (without percent sign) or free and overall in bytes)
+    function getServerMemoryUsage($getPercentage=true){
         $memoryTotal = null;
         $memoryFree = null;
 
@@ -107,8 +111,39 @@ class Inicio extends CI_Controller {
         }
     }
 
+    function getNiceFileSize($bytes, $binaryPrefix=true) {
+        if ($binaryPrefix) {
+            $unit=array('B','KiB','MiB','GiB','TiB','PiB');
+            if ($bytes==0) return '0 ';
+            return @round($bytes/pow(1024,($i=floor(log($bytes,1024)))),2);
+        } else {
+            $unit=array('B','KB','MB','GB','TB','PB');
+            if ($bytes==0) return '0 ';
+            return @round($bytes/pow(1000,($i=floor(log($bytes,1000)))),2);
+        }
+    }
 
-    public function _getServerLoadLinuxData()
+    // Memory usage: 4.55 GiB / 23.91 GiB (19.013557664178%)
+    $memUsage = getServerMemoryUsage(false);
+    sprintf("%s / %s (%s%%)",
+        getNiceFileSize($memUsage["total"] - $memUsage["free"]),
+        getNiceFileSize($memUsage["total"]),
+        getServerMemoryUsage(true)
+    );
+
+    $musage = sprintf("%.2f", getNiceFileSize($memUsage["total"] - $memUsage["free"]) );
+    $mtotal = sprintf("%.2f", getNiceFileSize($memUsage["total"]) );
+    $porcentaje = sprintf("%.2f", getServerMemoryUsage(true) );
+
+    
+
+
+
+?>
+
+<?php
+
+    function _getServerLoadLinuxData()
     {
         if (is_readable("/proc/stat"))
         {
@@ -150,7 +185,7 @@ class Inicio extends CI_Controller {
     }
 
     // Returns server load in percent (just number, without percent sign)
-    public function getServerLoad()
+    function getServerLoad()
     {
         $load = null;
 
@@ -177,9 +212,9 @@ class Inicio extends CI_Controller {
             {
                 // Collect 2 samples - each with 1 second period
                 // See: https://de.wikipedia.org/wiki/Load#Der_Load_Average_auf_Unix-Systemen
-                $statData1 = $this->_getServerLoadLinuxData();
+                $statData1 = _getServerLoadLinuxData();
                 sleep(1);
-                $statData2 = $this->_getServerLoadLinuxData();
+                $statData2 = _getServerLoadLinuxData();
 
                 if
                 (
@@ -208,5 +243,61 @@ class Inicio extends CI_Controller {
 
     //----------------------------
 
-}
+    $cpuLoad = getServerLoad();
 ?>
+
+
+<div id="visitor" style="height:87px; width:90%; position: absolute;"></div>
+
+    <script src="<?php echo base_url(); ?>assets/plugins/d3/d3.min.js"></script>
+    <script src="<?php echo base_url(); ?>assets/plugins/c3-master/c3.min.js"></script>
+
+<script src="<?php echo base_url(); ?>assets/plugins/echarts/echarts-all.js"></script>
+<script type="text/javascript">
+
+// ============================================================== 
+// Line chart
+// ============================================================== 
+
+
+$(function () {
+
+
+var chart = c3.generate({
+        bindto: '#visitor',
+        data: {
+            columns: [
+                ['Usado', <?php echo $musage; ?>],
+                ['Restante', <?php echo $mtotal - $musage; ?>]
+            ],
+            
+            type : 'donut',
+            onclick: function (d, i) { console.log("onclick", d, i); },
+            onmouseover: function (d, i) { console.log("onmouseover", d, i); },
+            onmouseout: function (d, i) { console.log("onmouseout", d, i); }
+        },
+        donut: {
+            label: {
+                show: false
+              },
+            title: "<?php echo $porcentaje; ?>%",
+            width:15,
+            
+        },
+        
+        legend: {
+          hide: true
+          //or hide: 'data1'
+          //or hide: ['data1', 'data2']
+        },
+        color: {
+              pattern: ['#eceff1', '#745af2']
+        }
+    });
+
+
+});
+
+
+
+</script>

@@ -33,6 +33,10 @@
     <link href="<?php echo base_url(); ?>assets/plugins/switchery/dist/switchery.min.css" rel="stylesheet" />
     <link href="<?php echo base_url(); ?>assets/plugins/bootstrap-select/bootstrap-select.min.css" rel="stylesheet" />
     <link href="<?php echo base_url(); ?>assets/plugins/multiselect/css/multi-select.css" rel="stylesheet" type="text/css" />
+    <link href="<?php echo base_url(); ?>assets/plugins/chartist-js/dist/chartist.min.css" rel="stylesheet">
+    <link href="<?php echo base_url(); ?>assets/plugins/chartist-js/dist/chartist-init.css" rel="stylesheet">
+    <link href="<?php echo base_url(); ?>assets/plugins/chartist-plugin-tooltip-master/dist/chartist-plugin-tooltip.css" rel="stylesheet">
+    <link href="<?php echo base_url(); ?>assets/plugins/css-chart/css-chart.css" rel="stylesheet">
     <!-- Custom CSS -->
     <link href="<?php echo base_url(); ?>assets/css/style.css" rel="stylesheet">
     <!-- You can change the theme colors from here -->
@@ -51,6 +55,7 @@
 
     $(document).ready(function() {
         $("#password_val").val("");
+        localStorage["ventanasvyp"]++;
         if(hora() >= 60*minutos || localStorage["expira"] == "expirada"){
             cerrar_sesion(0);
         }
@@ -73,6 +78,11 @@
 
     window.onbeforeunload = function() {
         //localStorage["expira"] = 0;
+        localStorage["ventanasvyp"] -= 1;
+
+        if(localStorage["ventanasvyp"] == 0){
+            
+        }
     }
 
     function hora(){
@@ -303,7 +313,7 @@
                 <!-- Logo -->
                 <!-- ============================================================== -->
                 <div class="navbar-header">
-                    <a class="navbar-brand" href="index.html">
+                    <a class="navbar-brand" href="<?php echo site_url(); ?>">
                         <!-- Logo icono --><b>
                             <!--You can put here icon as well // <i class="wi wi-sunset"></i> //-->
                             <!-- Dark Logo icon -->
@@ -314,9 +324,9 @@
                         <!--Fin Logo icon -->
                         <!-- Logo text --><span>
                          <!-- dark Logo text -->
-                         <img src="<?php echo base_url(); ?>assets/images/logo_text.png" height='30px;' alt="homepage" class="dark-logo" />
+                         <img onclick="detener();" src="<?php echo base_url(); ?>assets/images/logo_text.png" height='30px;' alt="homepage" class="dark-logo" />
                          <!-- Light Logo text -->    
-                         <img src="<?php echo base_url(); ?>assets/images/logo_text.png" style="margin-left: 10px; margin-top: 10px;"  height='30px;' class="light-logo" alt="homepage" /></span> </a>
+                         <img onclick="detener();" src="<?php echo base_url(); ?>assets/images/logo_text.png" style="margin-left: 10px; margin-top: 10px;"  height='30px;' class="light-logo" alt="homepage" /></span> </a>
                 </div>
                 <!-- ============================================================== -->
                 <!-- Fin Logo -->

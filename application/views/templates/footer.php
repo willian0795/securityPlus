@@ -1,6 +1,6 @@
 </div>
    
-    <script src="<?php echo base_url(); ?>assets/plugins/jquery/jquery.min.js"></script>
+    <script src="<?php echo base_url(); ?>assets/js/jquery-3.2.1.min.js"></script>
     
     <!-- Bootstrap tether Core JavaScript -->
     <script src="<?php echo base_url(); ?>assets/plugins/bootstrap/js/popper.min.js"></script>
@@ -14,11 +14,13 @@
     <!--stickey kit -->
     <script src="<?php echo base_url(); ?>assets/plugins/sticky-kit-master/dist/sticky-kit.min.js"></script>
     <script src="<?php echo base_url(); ?>assets/plugins/sparkline/jquery.sparkline.min.js"></script>
+
     <!--Custom JavaScript -->
     <script src="<?php echo base_url(); ?>assets/js/custom.min.js"></script>
     <script src="<?php echo base_url(); ?>assets/js/validation.js"></script>
     <script src="<?php echo base_url(); ?>assets/js/mask.js"></script>
     <script src="<?php echo base_url(); ?>assets/plugins/nestable/jquery.nestable.js"></script>
+
     <script>
     /*! function(window, document, $) {
         "use strict";
@@ -37,6 +39,7 @@
     <script src="<?php echo base_url(); ?>assets/plugins/select2/dist/js/select2.full.min.js" type="text/javascript"></script>
     <script src="<?php echo base_url(); ?>assets/plugins/bootstrap-select/bootstrap-select.min.js" type="text/javascript"></script>
     <script type="text/javascript" src="<?php echo base_url(); ?>assets/plugins/multiselect/js/jquery.multi-select.js"></script>
+
     <!-- ============================================================== -->
     <!-- Style switcher -->
     <!-- ============================================================== -->

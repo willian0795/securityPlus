@@ -286,6 +286,7 @@
         ajax.onreadystatechange = function() {
             if (ajax.readyState == 4){
                 jugador.value = (ajax.responseText);
+                tablausuarios();
             }
         } 
         ajax.setRequestHeader("Content-Type","application/x-www-form-urlencoded"); 
@@ -373,7 +374,7 @@
                                             $empleado = $this->db->query("SELECT e.nr, UPPER(CONCAT_WS(' ', e.primer_nombre, e.segundo_nombre, e.tercer_nombre, e.primer_apellido, e.segundo_apellido, e.apellido_casada)) AS nombre_completo FROM sir_empleado AS e WHERE NOT EXISTS (SELECT u.nr FROM org_usuario AS u WHERE u.nr = e.nr) ORDER BY primer_nombre");
                                             if($empleado->num_rows() > 0){
                                                 foreach ($empleado->result() as $fila) {              
-                                                   echo '<option class="m-l-50" value="'.$fila->nr.'">'.$fila->nombre_completo.'</option>';
+                                                   echo '<option class="m-l-50" value="'.$fila->nr.'">'.preg_replace ('/[ ]+/', ' ', $fila->nombre_completo.' - '.$fila->nr).'</option>';
                                                 }
                                             }
                                         ?>
@@ -389,7 +390,7 @@
                                             $empleado = $this->db->query("SELECT id_usuario, nombre_completo FROM org_usuario");
                                             if($empleado->num_rows() > 0){
                                                 foreach ($empleado->result() as $fila) {              
-                                                   echo '<option class="m-l-50" value="'.$fila->id_usuario.'">'.$fila->nombre_completo.'</option>';
+                                                   echo '<option class="m-l-50" value="'.$fila->id_usuario.'">'.preg_replace ('/[ ]+/', ' ', $fila->nombre_completo.' - '.$fila->nr).'</option>';
                                                 }
                                             }
                                         ?>
