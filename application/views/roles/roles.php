@@ -198,6 +198,7 @@
         ajax.onreadystatechange = function() {
             if (ajax.readyState == 4){
                 if(ajax.responseText == "exito"){
+                    console.log(ajax.responseText)
                     recorrer2();
                 }
             }
@@ -239,6 +240,9 @@
                 id++;
             }
         }
+
+        console.log(grupos_de_inputs.length);
+
         if(query!=""){
             query = "INSERT INTO org_rol_modulo_permiso (id_rol_permiso,id_rol,id_modulo,id_permiso,estado) VALUES"+query.substr(0,(query.length-1))+";";
             guardar_rol_modulo_permiso(query)
@@ -251,7 +255,30 @@
         }
     }
 
-    function guardar_rol_modulo_permiso(query){               
+    function guardar_rol_modulo_permiso(query){
+        var newName = 'AjaxCall',
+        xhr = new XMLHttpRequest();
+        xhr.open('POST', "<?php echo site_url(); ?>/roles/roles/guardar_rol_modulo_permiso");
+        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        xhr.onload = function() {
+            if (xhr.status === 200 && xhr.responseText !== newName) {
+                if(xhr.responseText == "exito"){
+                    if($("#band").val() == "save"){
+                        swal({ title: "¡Registro exitoso!", type: "success", showConfirmButton: true });
+                    }else if($("#band").val() == "edit"){
+                        swal({ title: "¡Modificación exitosa!", type: "success", showConfirmButton: true });
+                    }
+                }else{
+                    swal({ title: "¡Ups! Error", text: "Intentalo nuevamente.", type: "error", showConfirmButton: true }); 
+                }  
+            }else if (xhr.status !== 200) {
+                swal({ title: "Ups! ocurrió un Error", text: "Al parecer la tabla de empresas visitadas no se cargó correctamente por favor recarga la página e intentalo nuevamente", type: "error", showConfirmButton: true });
+            }
+        };
+        xhr.send('name='+newName+"&query="+query);
+    }
+
+    /*function guardar_rol_modulo_permiso(query){               
         ajax = objetoAjax();
         ajax.open("POST", "<?php echo site_url(); ?>/roles/roles/guardar_rol_modulo_permiso", true);
         ajax.onreadystatechange = function() {
@@ -269,7 +296,7 @@
         } 
         ajax.setRequestHeader("Content-Type","application/x-www-form-urlencoded"); 
         ajax.send("&query="+query)
-    }
+    }*/
 
     function cambiar_check(obj){
         if( $(obj).prop('checked') ) {

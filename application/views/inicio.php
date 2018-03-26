@@ -75,7 +75,7 @@
 
                 usuario_log();
             }else if (xhr.status !== 200) {
-                swal({ title: "Ups! ocurrió un Error", text: "Al parecer la tabla de empresas visitadas no se cargó correctamente por favor recarga la página e intentalo nuevamente", type: "error", showConfirmButton: true });
+                //swal({ title: "Ups! ocurrió un Error", text: "Al parecer la tabla de empresas visitadas no se cargó correctamente por favor recarga la página e intentalo nuevamente", type: "error", showConfirmButton: true });
             }
         };
         xhr.send(encodeURI('name=' + newName));
@@ -101,7 +101,7 @@
                 $("#texto_usuarios").text(usuarioslog+"/"+usuariostotal);
 
             }else if (xhr.status !== 200) {
-                swal({ title: "Ups! ocurrió un Error", text: "Al parecer la tabla de empresas visitadas no se cargó correctamente por favor recarga la página e intentalo nuevamente", type: "error", showConfirmButton: true });
+                //swal({ title: "Ups! ocurrió un Error", text: "Al parecer la tabla de empresas visitadas no se cargó correctamente por favor recarga la página e intentalo nuevamente", type: "error", showConfirmButton: true });
             }
         };
         xhr.send(encodeURI('name=' + newName));
@@ -336,7 +336,7 @@ option = {
             data : [
             <?php 
             $fecha = date('Y-m-j');
-			$fecha = strtotime ( '-7 day' , strtotime ( $fecha ) ) ;
+			$fecha = strtotime ( '-14 day' , strtotime ( $fecha ) ) ;
 
 			for($i=0; $i<=14; $i++){
 				if($i==14){
@@ -346,11 +346,6 @@ option = {
 				}
 				$fecha = date ( 'Y-m-j' , $fecha );
 				$fecha = strtotime ( '+1 day' , strtotime ( $fecha ) ) ;
-				/*if(date ( 'w' , $fecha ) == "0"){
-					$fecha = strtotime ( '+1 day' , $fecha ) ;
-				}else if(date ( 'w' , $fecha ) == "6"){
-					$fecha = strtotime ( '+2 day' , $fecha ) ;
-				}*/
 			}
 			 
 			?>
@@ -373,11 +368,11 @@ option = {
             data:[
             <?php 
             $fecha = date('Y-m-j');
-			$fecha = strtotime ( '-7 day' , strtotime ( $fecha ) ) ;
+			$fecha = strtotime ( '-14 day' , strtotime ( $fecha ) ) ;
 
 			$max = 0;
 			$x = 0;
-			$min = 0;
+			$min = 10000;
 			$x2 = 0;
 
 			for($j=0; $j<=14; $j++){
@@ -387,6 +382,7 @@ option = {
 					$max = intval($query->num_rows());
 					$x = $j;
 				}
+
 
 				if(intval($query->num_rows()) < $min){
 					$min = intval($query->num_rows());
@@ -400,11 +396,6 @@ option = {
 				}
 				$fecha = date ( 'Y-m-j' , $fecha );
 				$fecha = strtotime ( '+1 day' , strtotime ( $fecha ) ) ;
-				/*if(date ( 'w' , $fecha ) == "0"){
-					$fecha = strtotime ( '+1 day' , $fecha ) ;
-				}else if(date ( 'w' , $fecha ) == "6"){
-					$fecha = strtotime ( '+2 day' , $fecha ) ;
-				}*/
 			}
 			 
 			?>
