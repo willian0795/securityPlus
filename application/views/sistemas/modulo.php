@@ -437,7 +437,7 @@
                                 </div>
                             </div>
                             <div class="form-group col-lg-6">
-                                <h5>Opciones modulo: </h5>
+                                <h5>Opciones del módulo: </h5>
                                 <div class="controls">
                                     <input type="text" id="opciones" name="opciones" value="" class="form-control">
                                     <div class="help-block"></div>

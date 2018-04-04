@@ -141,14 +141,14 @@
                                 <div class="card-body">
                                     <div class="d-flex">
                                         <div class="m-r-20 align-self-center">
-                                            <h1 class="text-white"><i class="mdi mdi-laptop-chromebook"></i></h1></div>
+                                            <h2 class="text-white"><i class="mdi mdi-laptop-chromebook"></i></h1></div>
                                         <div>
                                             <h3 align="center" class="card-title">Sistemas: <?php echo $sistemas; ?></h3>
                                         </div>
                                     </div>
                                     <div class="d-flex">
                                         <div class="m-r-20 align-self-center">
-                                            <h1 class="text-white"><i class="mdi mdi-library-books"></i></h1></div>
+                                            <h2 class="text-white"><i class="mdi mdi-library-books"></i></h1></div>
                                         <div>
                                             <h3 align="center" class="card-title">Módulos: <?php echo $modulos; ?></h3>
                                         </div>
@@ -177,12 +177,13 @@
                         <div class="col-lg-12">
                             <div class="card">
                                 <div class="card-body">
-                                    <div class="d-flex flex-row">
-                                        <div class="p-0 b-r" align="center">
-                                            <h6 class="font-light">Usuarios Hombres</h6><h6><?php echo $hombres; ?></h6><h6><?php echo $porcentajeh; ?>%</h6>
+                                    <h4 align="center">Personas usuarias</h4>
+                                    <div class="d-flex flex-row" align="center">
+                                        <div class="p-0 b-r" align="center" style="width: 50%;">
+                                            <h6 class="font-light">Hombres</h6><h6><?php echo $hombres; ?></h6><h6><?php echo $porcentajeh; ?>%</h6>
                                         </div>
-                                        <div class="p-0" align="center">
-                                            <h6 class="font-light">Usuarios Mujeres</h6><h6><?php echo $mujeres; ?></h6><h6><?php echo $porcentajem; ?>%</h6>
+                                        <div class="p-0" align="center" style="width: 50%;">
+                                            <h6 class="font-light">Mujeres</h6><h6><?php echo $mujeres; ?></h6><h6><?php echo $porcentajem; ?>%</h6>
                                         </div>
                                     </div>
                                 </div>

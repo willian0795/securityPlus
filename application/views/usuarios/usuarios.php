@@ -337,7 +337,7 @@
         <!-- ============================================================== -->
         <div class="row page-titles">
             <div class="align-self-center" align="center">
-                <h3 class="text-themecolor m-b-0 m-t-0">Administración de usuarios</h3>
+                <h3 class="text-themecolor m-b-0 m-t-0">Administración de personas usuarias</h3>
             </div>
         </div>
         <!-- ============================================================== -->
@@ -357,7 +357,7 @@
                         <div class="card-actions text-white">
                             <a style="font-size: 16px;" onclick="cerrar_mantenimiento();"><i class="mdi mdi-window-close"></i></a>
                         </div>
-                        <h4 class="card-title m-b-0 text-white">Listado de usuarios</h4>
+                        <h4 class="card-title m-b-0 text-white">Listado de personas usuarias</h4>
                     </div>
                     <div class="card-body b-t">
                         <div id="form_user"></div>
@@ -367,7 +367,7 @@
 
                             <div class="row">
                                 <div class="form-group col-lg-6"> 
-                                    <h5>Empleado: <span class="text-danger">*</span></h5>                           
+                                    <h5>Persona empleada: <span class="text-danger">*</span></h5>                           
                                     <select id="id_empleado" name="id_empleado" class="select2" style="width: 100%" onchange="formdatos(this.value,'save');">
                                         <option value="0">[Elija el empleado]</option>
                                         <?php 
@@ -383,11 +383,11 @@
                                     </select>
                                 </div>
                                 <div class="form-group col-lg-6"> 
-                                    <h5>Empleado: <span class="text-danger">*</span></h5>                           
+                                    <h5>Persona empleada: <span class="text-danger">*</span></h5>                           
                                     <select id="id_empleado2" name="id_empleado2" class="select2" style="width: 100%">
                                         <option value="0">[Elija el empleado]</option>
                                         <?php 
-                                            $empleado = $this->db->query("SELECT id_usuario, nombre_completo FROM org_usuario");
+                                            $empleado = $this->db->query("SELECT id_usuario, nombre_completo, nr FROM org_usuario");
                                             if($empleado->num_rows() > 0){
                                                 foreach ($empleado->result() as $fila) {              
                                                    echo '<option class="m-l-50" value="'.$fila->id_usuario.'">'.preg_replace ('/[ ]+/', ' ', $fila->nombre_completo.' - '.$fila->nr).'</option>';
