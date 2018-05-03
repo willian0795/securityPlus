@@ -25,9 +25,22 @@ class Inicio extends CI_Controller {
 	public function usuario_log(){
 		$query = $this->db->query("SELECT * FROM glb_bitacora WHERE id_accion = '1' AND cast(fecha_hora as date) = '".date ('Y-m-d')."' GROUP BY id_usuario");
 		$sesiones = $query->num_rows();
-
 	    echo $sesiones;	
-	}
+	}    
+
+    public function liberar_memoria(){
+        if (stristr(PHP_OS, "win")) {
+            echo "sistemaoperativo"; 
+        }else{
+            if (is_readable("Sync")){
+                @file_get_contents("Sync");
+                $stats = @file_get_contents("echo 3 > /proc/sys/vm/drop_caches");
+                echo $stats;
+            }else{
+                echo "fracaso";
+            }
+        }
+    }
 
 	public function getServerMemoryUsage($getPercentage=true){
         $memoryTotal = null;

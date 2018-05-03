@@ -107,6 +107,30 @@
         xhr.send(encodeURI('name=' + newName));
     }
 
+    function liberar_memoria(){
+        var newName = 'AjaxCall',
+        xhr = new XMLHttpRequest();
+        xhr.open('GET', "<?php echo site_url(); ?>/inicio/liberar_memoria");
+        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        xhr.onload = function() {
+            if (xhr.status === 200 && xhr.responseText !== newName) {
+                var datos = xhr.responseText;
+                alert(datos)
+                if(datos == "sistemaoperativo"){
+                    $.toast({ heading: 'Lo sentimos', text: 'Esta función no está disponible para su sistema operativo', position: 'top-right', loaderBg:'#000', icon: 'warning', hideAfter: 4000, stack: 6 });
+                }else if(datos == "fracaso"){
+                    $.toast({ heading: 'Ocurrió un error', text: 'No se logró ejecutar la acción solicitada', position: 'top-right', loaderBg:'#000', icon: 'error', hideAfter: 4000, stack: 6 });
+                }else{
+                    $.toast({ heading: 'Memoria liberada', text: 'El caché de la memoria RAM fué liberado exitosamente', position: 'top-right', loaderBg:'#000', icon: 'success', hideAfter: 4000, stack: 6 });
+                }
+                
+            }else if (xhr.status !== 200) {
+                swal({ title: "Ups! ocurrió un Error", text: "Al parecer no se logró ejecutar el comando requerido", type: "error", showConfirmButton: true });
+            }
+        };
+        xhr.send(encodeURI('name=' + newName));
+    }
+
 </script>
 <!-- ============================================================== -->
         <!-- Page wrapper  -->
@@ -250,8 +274,9 @@
                             <div class="row">
                                 <!-- Column -->
                                 <div align="center" class="col p-r-0 align-self-center" style="padding: 0px; padding-left: 10px;">
-                                    <h2 class="font-light m-b-0">Memoria RAM</h2>
-                                    <h6 class="font-light" style="margin: 0px;">Servidor</h6></div>
+                                    <h2 class="font-light m-b-0">Memoria RAM <span class="mdi mdi-autorenew text-info" style="cursor: pointer;" onclick="liberar_memoria();"></span></h2>
+                                    <h6 class="font-light" style="margin: 0px;">Servidor</h6>
+                                </div>
                                 <!-- Column -->
                                 <div class="col text-right align-self-center" style="padding: 0px; position: relative;">
                                     <h3 align="center" id="porcentajem" style="left:50%; top: 57%; position: absolute; transform: translate(-50%, -50%); -webkit-transform: translate(-50%, -50%);">Cargando...</h3>

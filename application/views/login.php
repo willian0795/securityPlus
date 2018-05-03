@@ -16,7 +16,6 @@
     <link href="<?php echo base_url(); ?>assets/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <link href="<?php echo base_url(); ?>assets/plugins/sweetalert/sweetalert.css" rel="stylesheet" type="text/css">
     <!--This page css - Morris CSS -->
-    <link href="<?php echo base_url(); ?>assets/plugins/c3-master/c3.min.css" rel="stylesheet">
     <!-- Custom CSS -->
     <link href="<?php echo base_url(); ?>assets/css/style.css" rel="stylesheet">
     <!-- You can change the theme colors from here -->
@@ -44,7 +43,7 @@
     <!-- ============================================================== -->
     <!-- Barra Superior -->
     <!-- ============================================================== -->
-    <header class="topbar">
+    <header class="topbar" style="background-color: #393939;">
         <nav class="navbar top-navbar navbar-light">
             <!-- ============================================================== -->
             <!-- Content -->
@@ -181,10 +180,6 @@ $(function(){
     <script src="<?php echo base_url(); ?>assets/plugins/sparkline/jquery.sparkline.min.js"></script>
     <!--Custom JavaScript -->
     <script src="<?php echo base_url(); ?>assets/js/custom.min.js"></script>
-    <script src="<?php echo base_url(); ?>assets/plugins/moment/min/moment.min.js"></script>
-    <!--c3 JavaScript -->
-    <script src="<?php echo base_url(); ?>assets/plugins/d3/d3.min.js"></script>
-    <script src="<?php echo base_url(); ?>assets/plugins/c3-master/c3.min.js"></script>
     <!-- Sweet-Alert  -->
     <script src="<?php echo base_url(); ?>assets/plugins/sweetalert/sweetalert.min.js"></script>
 </body>
