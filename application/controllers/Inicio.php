@@ -32,13 +32,13 @@ class Inicio extends CI_Controller {
         if (stristr(PHP_OS, "win")) {
             echo "sistemaoperativo"; 
         }else{
-            if (is_readable("Sync")){
-                @file_get_contents("Sync");
-                $stats = @file_get_contents("echo 3 > /proc/sys/vm/drop_caches");
+            //if (is_readable("Sync")){
+                exec("Sync");
+                $stats = exec("echo 3 > /proc/sys/vm/drop_caches");
                 echo $stats;
-            }else{
-                echo "fracaso";
-            }
+            //}else{
+                //echo "fracaso";
+            //}
         }
     }
 
