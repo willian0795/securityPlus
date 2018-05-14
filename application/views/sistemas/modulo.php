@@ -298,7 +298,14 @@
                 $("#resultado").html("Para eliminar el modulo '"+parametros["nombre"]+"' debe eliminar su(s) "+tipo+": <br><br>"+response);                
             }
         });
-    }  
+    }
+
+    function stopRKey(evt) {
+    var evt = (evt) ? evt : ((event) ? event : null);
+    var node = (evt.target) ? evt.target : ((evt.srcElement) ? evt.srcElement : null);
+    if ((evt.keyCode == 13) && (node.type=="text")) {return false;}
+    }
+    document.onkeypress = stopRKey; 
 
 </script>
 <style type="text/css">
@@ -398,7 +405,7 @@
                         <h4 class="card-title m-b-0 text-white"><span class='mdi mdi-plus'></span> Nuevo módulo</h4>
                     </div>
                     <div class="card-body b-t">
-                        <?php echo form_open('', array('id' => 'formajax', 'style' => 'margin-top: 0px;', 'class' => 'm-t-40', 'novalidate' => '')); ?>
+                        <?php echo form_open('', array('id' => 'formajax', 'style' => 'margin-top: 0px;', 'class' => 'm-t-40')); ?>
                         <input type="hidden" id="band" name="band" value="save">
                         <input type="hidden" id="idmodulo" name="idmodulo" value="">
                         <div class="row">
@@ -473,7 +480,7 @@
                             <button type="reset" class="btn waves-effect waves-light btn-success"><i class="mdi mdi-recycle"></i> Limpiar</button>
                             <button type="button" onclick="editar_modulo()" class="btn waves-effect waves-light btn-info"><i class="mdi mdi-pencil"></i> Editar</button>
                         </div>
-                        <?php echo form_close(); ?>
+                        </form>
                     </div>
                 </div>
             </div>

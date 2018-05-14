@@ -10,7 +10,11 @@ class Modulos_model extends CI_Model {
 	function insertar_modulo($data){
 		$id = $this->obtener_ultimo_id("org_modulo","id_modulo");
 
-		$orden = $this->obtener_ultimo_id2("SELECT orden FROM org_modulo WHERE id_sistema = ".$data['id_sistema']." AND dependencia = ".$data['dependencia'],"orden");
+		if($data['dependencia'] == "0"){
+			$data['dependencia'] = $data['dependencia']." OR dependencia = '' OR dependencia IS NULL";
+		}
+
+		$orden = $this->obtener_ultimo_id2("SELECT orden FROM org_modulo WHERE id_sistema = ".$data['id_sistema']." AND (dependencia = ".$data['dependencia'].")","orden");
 
 		if($this->db->insert('org_modulo', array('id_modulo' => $id, 'id_sistema' => $data['id_sistema'], 'nombre_modulo' => $data['nombre'], 'descripcion_modulo' => $data['descripcion'], 'orden' => $orden, 'dependencia' => $data["dependencia"], 'url_modulo' => $data['url'], 'img_modulo' => $data['icono'], 'opciones_modulo' => $data['opciones']))){
 			/************** Inicio de fragmento bitácora *********************/
