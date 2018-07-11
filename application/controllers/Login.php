@@ -57,7 +57,7 @@ class Login extends CI_Controller {
 				$response = "estado";
 			}
 		}else{
-			$response = "usuario".$usuario;
+			$response = "usuario";
 		}
 		
 		if($response == "exito"){
@@ -128,24 +128,26 @@ class Login extends CI_Controller {
 		$this->index();
 	}
 
-	function ldap_login($user,$pass){			
-		$ldaprdn = $user.'@trabajo.local';
-		$ldappass = $pass;
-		$ds = 'trabajo.local';
-		$dn = 'dc=trabajo,dc=local';
-		$puertoldap = 389; 
-		$ldapconn = ldap_connect($ds,$puertoldap)
-		or die("ERROR: No se pudo conectar con el Servidor LDAP."); 
-		
+	function ldap_login($user,$pass){
+		error_reporting(0); $ldaprdn = $user.'@trabajo.local'; $ldappass = $pass; $ds = 'trabajo.local'; $dn = 'dc=trabajo,dc=local'; $puertoldap = 389; $ldapconn = @ldap_connect($ds,$puertoldap);
 		if ($ldapconn){ 
-			ldap_set_option($ldapconn, LDAP_OPT_PROTOCOL_VERSION,3); 
-			ldap_set_option($ldapconn, LDAP_OPT_REFERRALS,0); 
-			$ldapbind = ldap_bind($ldapconn, $ldaprdn, $ldappass);
-			if ($ldapbind){ 
-				return "login";
-			}else{ 
-				return "error";
-			} 
+			ldap_set_option($ldapconn, LDAP_OPT_PROTOCOL_VERSION,3); ldap_set_option($ldapconn, LDAP_OPT_REFERRALS,0); 
+			$ldapbind = @ldap_bind($ldapconn, $ldaprdn, $ldappass);
+			if ($ldapbind){  return "login";
+			}else{ return $this->ldap2_login($user,$pass); } 
+		}else{ 
+			return $this->ldap2_login($user,$pass);
+		}
+		ldap_close($ldapconn);
+	}
+
+	function ldap2_login($user,$pass){
+		error_reporting(0); $ldaprdn = $user.'@mtps.local'; $ldappass = $pass; $ds = 'mtps.local'; $dn = 'dc=mtps,dc=local'; $puertoldap = 389;  $ldapconn = @ldap_connect($ds,$puertoldap); 
+		if ($ldapconn){ 
+			ldap_set_option($ldapconn, LDAP_OPT_PROTOCOL_VERSION,3);  ldap_set_option($ldapconn, LDAP_OPT_REFERRALS,0); 
+			$ldapbind = @ldap_bind($ldapconn, $ldaprdn, $ldappass);
+			if ($ldapbind){  return "login";
+			}else{  return "error"; } 
 		}else{ 
 			return "error";
 		}

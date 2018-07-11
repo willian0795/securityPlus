@@ -50,6 +50,7 @@
                             echo "</tr>";
                         }
                     }
+                    $usuarios->free_result();
                 ?>
                 </tbody>
             </table>

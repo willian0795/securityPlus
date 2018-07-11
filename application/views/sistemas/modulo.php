@@ -172,6 +172,7 @@
     }
 
     function recorrerNestable(nullocero){
+        $("#Loading2").show(0);
         var n1 = $("#nestable").children().children("li");
         var id = "", dep1 = 0,dep2 = 0,dep3 = 0, orden = 0;
 
@@ -224,6 +225,7 @@
         ajax.onreadystatechange = function() {
             if (ajax.readyState == 4){
                 jugador.value = (ajax.responseText);
+                $("#Loading2").hide(0);
                 if(jugador.value == "exito"){
                     swal({ title: "¡Ordenamiento finalizado!", type: "success", showConfirmButton: true });
                 }else{
@@ -472,6 +474,9 @@
                         </div>
                         </div>
                         <button id="submit" type="submit" style="display: none;"></button>
+                        <div class="pull-left" id="Loading1" style="display: none;">
+                            <h4 class="text-primary"><b><span class="fa fa-spinner fa-pulse"></span> <small>Aplicando los cambios...</small></b></h4>
+                        </div>
                         <div align="right" id="btnadd">
                             <button type="reset" class="btn waves-effect waves-light btn-success"><i class="mdi mdi-recycle"></i> Limpiar</button>
                             <button type="submit" class="btn waves-effect waves-light btn-success2"><i class="mdi mdi-plus"></i> Guardar</button>
@@ -524,10 +529,10 @@
 $(function(){     
     $("#formajax").on("submit", function(e){
         e.preventDefault();
+        $("#Loading1").show(0);
         var f = $(this);
         var formData = new FormData(document.getElementById("formajax"));
         formData.append("dato", "valor");
-        
         $.ajax({
             url: "<?php echo site_url(); ?>/modulos/gestionar_modulos",
             type: "post",
@@ -538,6 +543,7 @@ $(function(){
             processData: false
         })
         .done(function(res){
+            $("#Loading1").hide(0);
             if(res == "exito"){
                 if($("#band").val() == "save"){
                     swal({ title: "¡Registro exitoso!", type: "success", showConfirmButton: true });

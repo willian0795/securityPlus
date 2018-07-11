@@ -68,6 +68,9 @@ if($id_sistema != 0){
             echo "</ol>";
             echo "</li>";
     ?>
+    <div class="pull-left" id="Loading2" style="display: none;">
+        <h4 class="text-primary"><b><span class="fa fa-spinner fa-pulse"></span> <small>Ordenando menú...</small></b></h4>
+    </div>
     <div align="right">
         <button type="button" onclick="recorrerNestable('<?php echo $nullocero; ?>');" class="btn waves-effect waves-light btn-success">Finalizar </button>
     </div>

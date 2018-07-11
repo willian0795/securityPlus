@@ -18,7 +18,7 @@
                 <tbody>
                 <?php 
                     $sistemas = $this->db->get("org_sistema");
-                    if(!empty($sistemas)){
+                    if($sistemas->num_rows() > 0){
                         foreach ($sistemas->result() as $fila) {
                             echo "<tr>";
                             echo "<td>".$fila->id_sistema."</td>";

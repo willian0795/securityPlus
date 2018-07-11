@@ -154,9 +154,12 @@
                     	<?php
                         	$querys = $this->db->query("SELECT * FROM org_sistema");
     						$sistemas = $querys->num_rows();
+                            $querys->free_result();
 
     						$querymod = $this->db->query("SELECT * FROM org_modulo");
     						$modulos = $querymod->num_rows();
+                            $querymod->free_result();
+
     					?>
 
                         <!-- Column -->
@@ -184,12 +187,15 @@
                         <?php
                         	$query = $this->db->query("SELECT * FROM org_usuario WHERE estado = 1");
     						$usuarios = $query->num_rows();
+                            $query->free_result();
 
     						$queryh = $this->db->query("SELECT * FROM org_usuario WHERE estado = 1 AND sexo = 'M'");
     						$hombres = $queryh->num_rows();
+                            $queryh->free_result();
 
     						$querym = $this->db->query("SELECT * FROM org_usuario WHERE estado = 1 AND sexo = 'F'");
     						$mujeres = $querym->num_rows();
+                            $querym->free_result();
 
     						$porcentajeh = number_format((($hombres/$usuarios)*100),2);
     						$porcentajem = number_format((($mujeres/$usuarios)*100),2);
@@ -252,7 +258,7 @@
                             <div class="row">
                                 <!-- Column -->
                                 <div align="center" class="col p-r-0 align-self-center" style="padding: 0px; padding-left: 10px;">
-                                    <h2 class="font-light m-b-0">Procesador (CPU)</h2>
+                                    <h2 class="font-light m-b-0">Procesador</h2>
                                     <h6 class="font-light" style="margin: 0px;">Servidor</h6></div>
                                 <!-- Column -->
                                 <div class="col text-right align-self-center" style="padding: 0px; position: relative;">
@@ -274,7 +280,7 @@
                             <div class="row">
                                 <!-- Column -->
                                 <div align="center" class="col p-r-0 align-self-center" style="padding: 0px; padding-left: 10px;">
-                                    <h2 class="font-light m-b-0">Memoria RAM <span class="mdi mdi-autorenew text-info" style="cursor: pointer;" onclick="liberar_memoria();"></span></h2>
+                                    <h2 class="font-light m-b-0">Memoria RAM <!--<span class="mdi mdi-autorenew text-info" style="cursor: pointer;" onclick="liberar_memoria();"></span>--></h2>
                                     <h6 class="font-light" style="margin: 0px;">Servidor</h6>
                                 </div>
                                 <!-- Column -->
@@ -402,7 +408,7 @@ option = {
 			$x2 = 0;
 
 			for($j=0; $j<=14; $j++){
-				$query = $this->db->query("SELECT * FROM glb_bitacora WHERE id_accion = '1' AND cast(fecha_hora as date) = '".date ( 'Y-m-d' , $fecha )."'");
+				$query = $this->db->query("SELECT * FROM glb_bitacora WHERE id_accion = '1' AND DATE(fecha_hora) = '".date ( 'Y-m-d' , $fecha )."'");
 
 				if(intval($query->num_rows()) > $max){
 					$max = intval($query->num_rows());
@@ -420,6 +426,7 @@ option = {
 				}else{
 					echo "'".intval($query->num_rows())."', ";
 				}
+                $query->free_result();
 				$fecha = date ( 'Y-m-j' , $fecha );
 				$fecha = strtotime ( '+1 day' , strtotime ( $fecha ) ) ;
 			}

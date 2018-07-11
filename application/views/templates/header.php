@@ -45,13 +45,13 @@
 <![endif]-->
 </head>
 <script>
-    var minutos = 10;
-    var warning = 9.90;
+    var minutos = 15;
+    var warning = 10;
     var danger = 3;
 
     $(document).ready(function() {
         $("#password_val").val("");
-        localStorage["ventanasvyp"]++;
+        localStorage["ventanas"]++;
         if(hora() >= 60*minutos || localStorage["expira"] == "expirada"){
             cerrar_sesion(0);
         }
@@ -74,9 +74,9 @@
 
     window.onbeforeunload = function() {
         //localStorage["expira"] = 0;
-        localStorage["ventanasvyp"] -= 1;
+        localStorage["ventanas"] -= 1;
 
-        if(localStorage["ventanasvyp"] == 0){
+        if(localStorage["ventanas"] == 0){
             
         }
     }
@@ -156,7 +156,7 @@
         jugador = document.getElementById('jugador');
         
         ajax = objetoAjax();
-        ajax.open("POST", "<?php echo site_url(); ?>/login/verificar_usuario2", true);
+        ajax.open("POST", "<?php echo site_url(); ?>/login/verificar_usuario", true);
         ajax.onreadystatechange = function() {
             if (ajax.readyState == 4){
                 jugador.value = (ajax.responseText);
@@ -346,7 +346,7 @@
                     <!-- User profile and search -->
                     <!-- ============================================================== -->
                     <ul class="navbar-nav my-lg-0">
-                        
+                        <li class="nav-item"> <a id="initial_user" style="display: none;" class="nav-link waves-effect waves-dark" href="javascript:void(0)"><span id="contador"></span></a> </li>
                         <!-- ============================================================== -->
                         <!-- Profile -->
                         <!-- ============================================================== -->
@@ -426,7 +426,7 @@
             <div class="sidebar-footer">
                 <!-- item--><a href="<?php echo site_url(); ?>" class="link" data-toggle="tooltip" title="Ir a Inicio"><i class="mdi mdi-home"></i></a>
                 <!-- item--><a href="http://www.mtps.gob.sv/" target="blank" class="link" data-toggle="tooltip" title="Web MTPS"><i class="mdi mdi-web"></i></a>
-                <!-- item--><a href="" class="link" data-toggle="tooltip" title="Salir"><i class="mdi mdi-power"></i></a> </div>
+                <!-- item--><a href="<?php echo site_url(); ?>/cerrar_sesion" class="link" data-toggle="tooltip" title="Salir"><i class="mdi mdi-power"></i></a> </div>
             <!-- End Bottom points-->
         </aside>
         <!-- ============================================================== -->
