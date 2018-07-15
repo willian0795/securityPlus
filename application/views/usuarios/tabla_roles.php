@@ -1,23 +1,34 @@
-<hr>
-<div class="row">
-	<div class="col-lg-12" align="center">
-	    <h5 class="box-title">Asignación de roles</h5>
-	    <select id='pre-selected-options' multiple='multiple'>
-	        <?php 
-	        	$usuario = $_GET["id_usuario"];
-	            $roles = $this->db->query("SELECT * FROM org_rol ORDER BY nombre_rol");
-	            if($roles->num_rows() > 0){
-	                foreach ($roles->result() as $fila) {
-	                	$existe = $this->db->query("SELECT * FROM org_usuario_rol WHERE id_usuario = '".$usuario."' AND id_rol = '".$fila->id_rol."'");
-	                	if($existe->num_rows() > 0){          
-	                  		echo '<option align="left" value="'.$fila->id_rol.'" selected>'.$fila->nombre_rol.'</option>';
-	               		}else{
-	               			echo '<option align="left" value="'.$fila->id_rol.'">'.$fila->nombre_rol.'</option>';
-	               		}
-	                }
-	            }
-	        ?>
-	    </select>
-	</div>
+<div class="table-responsive">
+    <table id="myTable2" class="table table-hover product-overview">
+        <thead class="bg-info text-white">
+            <tr>
+                <th>#</th>   
+                <th>Nombre del rol</th>
+                <th style="min-width: 85px;">(*)</th>
+            </tr>
+        </thead>
+        <tbody>
+        <?php
+        	$usuario = $_GET["id_usuario"];
+            
+            $roles = $this->db->query("SELECT * FROM org_rol WHERE id_rol IN (SELECT r.id_rol FROM org_usuario_rol AS r WHERE r.id_usuario = '".$usuario."') ORDER BY nombre_rol");
+            $contador = 0;
+            if($roles->num_rows() > 0){
+                foreach ($roles->result() as $fila) {
+                    $contador++;
+                    echo "<tr>";
+                    echo "<td>".$contador."</td>";
+                    echo "<td>".$fila->nombre_rol."</td>";
+                    echo"<td>";
+                        $array = array($fila->id_rol, $usuario);
+                        array_push($array, "eliminar");
+                        echo generar_boton($array,"gestionar_roles","btn-danger","fa fa-close","Eliminar");
+                    echo "</td>";
+                    echo "</tr>";
+                }
+            }
+            $roles->free_result();
+        ?>
+        </tbody>
+    </table>
 </div>
-<hr>

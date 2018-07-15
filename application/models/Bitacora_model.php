@@ -11,7 +11,7 @@ class Bitacora_model extends CI_Model {
 	function bitacora($desc, $accion){
         $id_usuario = $this->session->userdata('id_usuario');
         $usuario = $this->session->userdata('usuario');
-        $fecha = date('Y-m-d h:i:s');
+        $fecha = date('Y-m-d H:i:s');
         $ip = $this->get_real_ip();
         $descripcion = "";
         

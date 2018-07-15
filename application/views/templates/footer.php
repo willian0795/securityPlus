@@ -17,32 +17,12 @@
 
     <!--Custom JavaScript -->
     <script src="<?php echo base_url(); ?>assets/js/custom.min.js"></script>
-    <script src="<?php echo base_url(); ?>assets/js/validation.js"></script>
-    <script src="<?php echo base_url(); ?>assets/js/mask.js"></script>
     <script src="<?php echo base_url(); ?>assets/plugins/nestable/jquery.nestable.js"></script>
-
-    <script>
-    /*! function(window, document, $) {
-        "use strict";
-        $("input,select,textarea").not("[type=submit]").jqBootstrapValidation(), $(".skin-square input").iCheck({
-            checkboxClass: "icheckbox_square-green",
-            radioClass: "iradio_square-green"
-        }), $(".touchspin").TouchSpin(), $(".switchBootstrap").bootstrapSwitch();
-    }(window, document, jQuery);*/
-    </script>
     <script src="<?php echo base_url(); ?>assets/plugins/toast-master/js/jquery.toast.js"></script>
     <!-- ============================================================== -->
     <!-- This page plugins -->
     <!-- ============================================================== -->
-    <script src="<?php echo base_url(); ?>assets/plugins/switchery/dist/switchery.min.js"></script>
     <script src="<?php echo base_url(); ?>assets/plugins/select2/dist/js/select2.full.min.js" type="text/javascript"></script>
-    <script src="<?php echo base_url(); ?>assets/plugins/bootstrap-select/bootstrap-select.min.js" type="text/javascript"></script>
-    <script type="text/javascript" src="<?php echo base_url(); ?>assets/plugins/multiselect/js/jquery.multi-select.js"></script>
-
-    <!-- ============================================================== -->
-    <!-- Style switcher -->
-    <!-- ============================================================== -->
-    <script src="<?php echo base_url(); ?>assets/plugins/styleswitcher/jQuery.style.switcher.js"></script>
     <!-- Sweet-Alert  -->
     <script src="<?php echo base_url(); ?>assets/plugins/sweetalert/sweetalert.min.js"></script>
     <!-- This is data table -->
@@ -51,7 +31,6 @@
     jQuery(document).ready(function() {
         // For select 2
         $(".select2").select2();
-        $('.selectpicker').selectpicker();
     });
     </script>
 </body>

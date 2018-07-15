@@ -121,7 +121,6 @@
             if (xmlhttpB.readyState==4 && xmlhttpB.status==200){
                 document.getElementById("cnt_tabla").innerHTML=xmlhttpB.responseText;
                 $('[data-toggle="tooltip"]').tooltip();
-                tablamodulos2();
             }
         }
 

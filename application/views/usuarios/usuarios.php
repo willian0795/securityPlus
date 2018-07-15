@@ -15,6 +15,7 @@
 
         $("#password").val("");
         $("#password2").val("");
+        $("#band").val(bandera);
 
         if(bandera == "edit"){
             $("#cnt-tabla").hide(0);
@@ -25,6 +26,7 @@
             $("#btnadd").hide(0);
             $("#btnedit").show(0);
             $("#div_tipo_pass").show(0);
+            open_form(1);
             formdatos(id, "edit");
         }else{
             cambiar_estado(id, usuario, estado);
@@ -40,22 +42,19 @@
         $("#password2").val("");
         $("#band").val("save");
         formdatos("0", "save");
-
         $("#ttl_form").addClass("bg-success");
         $("#ttl_form").removeClass("bg-info");        
-
         $("#btnadd").show(0);
         $("#btnedit").hide(0);
-
         $("#cnt-tabla").hide(0);
         $("#cnt_form").show(0);
-
         $("#ttl_form").children("h4").html("<span class='mdi mdi-plus'></span> Nuevo usuario");
     }
 
     function cerrar_mantenimiento(){
         $("#cnt-tabla").show(0);
         $("#cnt_form").hide(0);
+        tablausuarios();
     }
 
     function editar_usuario(){
@@ -80,16 +79,8 @@
     }
 
     function cambiar_estado(id, usuario, estado){  
-        var cambiar;
-
-        if(estado == 0){
-            cambiar = 1;
-        }else{
-            cambiar = 0;
-        }
-
+        var cambiar; if(estado == 0){ cambiar = 1;   }else{  cambiar = 0; }
         jugador = document.getElementById('jugador');
-        
         ajax = objetoAjax();
         ajax.open("POST", "<?php echo site_url(); ?>/usuarios/usuarios/editar_estado", true);
         ajax.onreadystatechange = function() {
@@ -127,16 +118,15 @@
     function tablausuarios(){
         var newName = 'Tabla usuarios',
         xhr = new XMLHttpRequest();
-        var user = $("#idusuario").val(); 
+        var user = $("#idusuario").val();  var oficina = $("#oficina").val();
 
-        xhr.open('GET', "<?php echo site_url(); ?>/usuarios/tabla_usuario");
+        xhr.open('GET', "<?php echo site_url(); ?>/usuarios/tabla_usuario?oficina="+oficina);
         xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
         xhr.onload = function() {
             if (xhr.status === 200 && xhr.responseText !== newName) {
-                document.getElementById("cnt-tabla").innerHTML = xhr.responseText;
-                $('[data-toggle="tooltip"]').tooltip();
+                document.getElementById("cnt_tabla_user").innerHTML = xhr.responseText;
+                //$('[data-toggle="tooltip"]').tooltip();
                 $('#myTable').DataTable();
-                tablaroles();
             }else if (xhr.status !== 200) {
                 swal({ title: "Ups! ocurrió un Error", text: "Al parecer no todos los objetos se cargaron correctamente por favor recarga la página e intentalo nuevamente", type: "error", showConfirmButton: true });
             }
@@ -154,7 +144,7 @@
         xhr.onload = function() {
             if (xhr.status === 200 && xhr.responseText !== newName) {
                 document.getElementById("tabla_roles").innerHTML = xhr.responseText;
-                multi_select();
+                $('#myTable2').DataTable();
             }else if (xhr.status !== 200) {
                 swal({ title: "Ups! ocurrió un Error", text: "Al parecer no todos los objetos se cargaron correctamente por favor recarga la página e intentalo nuevamente", type: "error", showConfirmButton: true });
             }
@@ -179,19 +169,11 @@
         xhr.onload = function() {
             if (xhr.status === 200 && xhr.responseText !== newName) {
                 document.getElementById("form_datos").innerHTML = xhr.responseText;
-                tablaroles();
             }else if (xhr.status !== 200) {
                 swal({ title: "Ups! ocurrió un Error", text: "Al parecer no todos los objetos se cargaron correctamente por favor recarga la página e intentalo nuevamente", type: "error", showConfirmButton: true });
             }
         };
         xhr.send(encodeURI('name=' + newName));
-    }
-
-    function multi_select(){
-        $('#pre-selected-options').multiSelect();
-        $('#optgroup').multiSelect({
-            selectableOptgroup: true
-        });
     }
 
     function formusuario(){  
@@ -239,7 +221,6 @@
 
     function mostrar(id_empleado, usuario, id_genero){
         $("#usuario").val(usuario);
-        alert("genero"+id_genero)
         document.getElementById("genero"+id_genero).checked = 1;
     }
 
@@ -263,73 +244,49 @@
         }
     }
 
-    function recorrer_roles(){
-        var roles = $("#pre-selected-options").children("option");
-        var usuario = $("#usuario").val();
-
-        for(i=0; i<roles.length; i++){
-            if($(roles[i]).is(':selected')){
-                gestionar_roles($(roles[i]).val(),usuario,"insertar");
-            }else{
-                gestionar_roles($(roles[i]).val(),usuario,"eliminar");
-            }
-            
-        }
+    function nuevo_rol(){
+        var id_rol = $("#id_rol").val();
+        var id_usuario = $("#idusuario").val();
+        gestionar_roles(id_rol, id_usuario, "insertar");
     }
 
-    function gestionar_roles(id_rol, usuario,band){       
-
+    function gestionar_roles(id_rol, usuario, band){
         jugador = document.getElementById('jugador');
-        
         ajax = objetoAjax();
         ajax.open("POST", "<?php echo site_url(); ?>/usuarios/gestionar_roles", true);
         ajax.onreadystatechange = function() {
             if (ajax.readyState == 4){
                 jugador.value = (ajax.responseText);
-                tablausuarios();
+                if(jugador.value == "exito"){                    
+                    if(band == "insertar"){
+                        $.toast({ heading: '¡Rol registrado!', text: 'El rol se registró exitosamente', position: 'top-right', loaderBg:'#000', icon: 'success', hideAfter: 3000, stack: 6 });
+                    }else if(band == "eliminar"){
+                        $.toast({ heading: 'Rol eliminado', text: 'El rol fué eliminado', position: 'top-right', loaderBg:'#000', icon: 'success', hideAfter: 3000, stack: 6 });
+                    }
+                    tablaroles();
+                }else if(jugador.value == "existe"){
+                    swal({ title: "¡Ya existe!", text: "El rol ya está asignado a este usuario", type: "warning", showConfirmButton: true });
+                }else{
+                    swal({ title: "¡Ups! Error", text: "Intentalo nuevamente.", type: "error", showConfirmButton: true });
+                }
             }
         } 
         ajax.setRequestHeader("Content-Type","application/x-www-form-urlencoded"); 
         ajax.send("&id_rol="+id_rol+"&usuario="+usuario+"&bandera="+band)
     }
 
-    function obtener_usuario(){       
-        var id_empleado = $("#id_empleado").val();
-        jugador = document.getElementById('jugador');
-        
-        ajax = objetoAjax();
-        ajax.open("POST", "<?php echo site_url(); ?>/usuarios/obtener_usuario", true);
-        ajax.onreadystatechange = function() {
-            if (ajax.readyState == 4){
-                $("#usuario").val(ajax.responseText);
-                recorrer_roles2();
-            }
-        } 
-        ajax.setRequestHeader("Content-Type","application/x-www-form-urlencoded"); 
-        ajax.send("&id_empleado="+id_empleado)
-    }
+    function open_form(num){
+        $("#form"+num).show(0);
+        $("#form"+num).siblings("div").hide(0);
 
-    function recorrer_roles2(){
-        var roles = $("#pre-selected-options").children("option");
-        var usuario = $("#usuario").val();
-
-        for(i=0; i<roles.length; i++){
-            if($(roles[i]).is(':selected')){
-                gestionar_roles($(roles[i]).val(),usuario,"insertar");
-            }else{
-                gestionar_roles($(roles[i]).val(),usuario,"eliminar");
-            }
-            
+        if($("#band").val() == "save"){
+            $("#btnadd"+num).show(0);
+            $("#btnedit"+num).hide(0);
+        }else{
+            $("#btnadd"+num).hide(0);
+            $("#btnedit"+num).show(0);
         }
-        tablausuarios();
     }
-
-    function stopRKey(evt) {
-    var evt = (evt) ? evt : ((event) ? event : null);
-    var node = (evt.target) ? evt.target : ((evt.srcElement) ? evt.srcElement : null);
-    if ((evt.keyCode == 13) && (node.type=="text")) {return false;}
-    }
-    document.onkeypress = stopRKey; 
 
 </script>
 
@@ -367,7 +324,7 @@
                         <h4 class="card-title m-b-0 text-white">Listado de personas usuarias</h4>
                     </div>
                     <div class="card-body b-t">
-                        <div id="form_user"></div>
+                        <div id="form1">
                         <?php echo form_open('', array('id' => 'formajax', 'style' => 'margin-top: 0px;', 'class' => 'm-t-40')); ?>
                             <input type="hidden" id="band" name="band" value="save">
                             <input type="hidden" id="idusuario" name="idusuario" value="">
@@ -385,8 +342,6 @@
                                                 }
                                             }
                                         ?>
-
-                                        
                                     </select>
                                 </div>
                                 <div class="form-group col-lg-6"> 
@@ -401,8 +356,6 @@
                                                 }
                                             }
                                         ?>
-
-                                        
                                     </select>
                                 </div>
                                 <div class="form-group col-lg-6" id="div_tipo_pass">
@@ -436,21 +389,56 @@
                                 </div>
                             </div>                                   
 
-                            <div id="tabla_roles">
-                                
-                            </div>
-
                             <button id="submit" type="submit" style="display: none;"></button>
-                            <div align="right" id="btnadd">
+                            <div align="right" id="btnadd1">
                                 <button type="reset" class="btn waves-effect waves-light btn-success"><i class="mdi mdi-recycle"></i> Limpiar</button>
-                                <button type="input" class="btn waves-effect waves-light btn-success2"><i class="mdi mdi-plus"></i> Guardar</button>
+                                <button type="submit" class="btn waves-effect waves-light btn-success2">Siguiente <span class="fa fa-chevron-right"></span></button>
                             </div>
-                            <div align="right" id="btnedit" style="display: none;">
+                            <div align="right" id="btnedit1" style="display: none;">
                                 <button type="reset" class="btn waves-effect waves-light btn-success"><i class="mdi mdi-recycle"></i> Limpiar</button>
-                                <button type="button" onclick="editar_usuario()" class="btn waves-effect waves-light btn-info"><i class="mdi mdi-pencil"></i> Editar</button>
+                                <button type="submit" class="btn waves-effect waves-light btn-info">Siguiente <span class="fa fa-chevron-right"></span></button>
                             </div>
 
                         <?php echo form_close(); ?>
+                        </div>
+                        <div id="form2" style="display: none;">
+                        <?php echo form_open('', array('id' => 'formajax2', 'style' => 'margin-top: 0px;', 'class' => 'm-t-40')); ?>
+
+                            <div class="card">
+                                <div class="card-header">
+                                    <h4 class="card-title m-b-0">Lista de roles</h4>
+                                </div>
+                                <div class="card-body b-t" style="padding-top: 7px;">
+                                    <div class="row">
+                                        <div class="form-group col-lg-12">
+                                            <h5>Rol: <span class="text-danger">*</span></h5>
+                                            <div class="input-group">                           
+                                                <select id="id_rol" name="id_rol" class="select2" style="width: 100%">
+                                                    <option value="">[Elija el rol]</option>
+                                                    <?php 
+                                                        $rol = $this->db->query("SELECT * FROM org_rol WHERE id_rol ORDER BY nombre_rol");
+                                                        if($rol->num_rows() > 0){
+                                                            foreach ($rol->result() as $fila2) {              
+                                                               echo '<option class="m-l-50" value="'.$fila2->id_rol.'">'.$fila2->nombre_rol.'</option>';
+                                                            }
+                                                        }
+                                                    ?>
+                                                </select>
+                                                <div onclick="nuevo_rol();" class="input-group-addon btn-success2" style="cursor: pointer; position: relative; right: 3px;"><i class="mdi mdi-plus"></i></div> 
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div id="tabla_roles"></div>  
+                                </div>
+                            </div>
+                            <div align="right" id="btnadd2">
+                                <button type="button" class="btn waves-effect waves-light btn-success2" onclick="cerrar_mantenimiento();"><span class="fa fa-check"> Listo</span></button>
+                            </div>
+                            <div align="right" id="btnedit2" style="display: none;">
+                                <button type="button" class="btn waves-effect waves-light btn-info" onclick="cerrar_mantenimiento();"><span class="fa fa-check"> Listo</span></button>
+                            </div>
+                        <?php echo form_close(); ?>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -462,7 +450,36 @@
             <!-- Inicio de la TABLA -->
             <!-- ============================================================== -->
             <div class="col-lg-12" id="cnt-tabla">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title m-b-0">Listado de personas usuarias</h4>
+                    </div>
+                    <div class="card-body b-t" style="padding-top: 7px;">
 
+                        <div class="row clearfix">
+                        <div class="col-lg-6">
+                            <div class="form-group"> 
+                                <select id="oficina" name="oficina" class="select2" style="width: 100%" onchange="tablausuarios();">
+                                    <option value="">OFICINA CENTRAL SAN SALVADOR</option>
+                                    <?php 
+                                        $oficinas = $this->db->query("SELECT * FROM `org_seccion` WHERE id_seccion IN (52,53,54,55,56,57,58,59,60,61,64,65,66) ORDER BY nombre_seccion");
+                                        if($oficinas->num_rows() > 0){
+                                            foreach ($oficinas->result() as $fila) {              
+                                               echo '<option class="m-l-50" value="'.$fila->id_seccion.'">'.$fila->nombre_seccion.'</option>';
+                                            }
+                                        }
+                                    ?>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-lg-6" align="right">
+                            <button type="button" onclick="cambiar_nuevo();" class="btn btn-success2"><span class="mdi mdi-plus"></span> Nuevo registro</button>
+                        </div>
+                    </div>
+                        <div class="table-responsive" id="cnt_tabla_user">
+                        </div>
+                    </div>
+                </div>
             </div>
             
             <!-- ============================================================== -->
@@ -505,7 +522,6 @@ $(function(){
                 }
             }
         }
-
         if(band){
             $.ajax({
                 url: "<?php echo site_url(); ?>/usuarios/gestionar_usuarios",
@@ -517,15 +533,18 @@ $(function(){
                 processData: false
             })
             .done(function(res){
-                if(res == "exito"){
-                    cerrar_mantenimiento();
+                var res = res.split(",");
+                if(res[0] == "exito"){                    
                     if($("#band").val() == "save"){
-                        swal({ title: "¡Registro exitoso!", type: "success", showConfirmButton: true });
-                        window.location.reload
+                        //swal({ title: "¡Registro exitoso!", type: "success", showConfirmButton: true });
+                        $.toast({ heading: '¡Registro exito!', text: 'Usuario registrado', position: 'top-right', loaderBg:'#000', icon: 'success', hideAfter: 3000, stack: 6 });
+                        $("#idusuario").val(res[1]);
                     }else if($("#band").val() == "edit"){
-                        swal({ title: "¡Modificación exitosa!", type: "success", showConfirmButton: true });
-                        recorrer_roles();
+                        //swal({ title: "¡Modificación exitosa!", type: "success", showConfirmButton: true });
+                        $.toast({ heading: 'Modificación exitosa!', text: 'Usuario modificado', position: 'top-right', loaderBg:'#000', icon: 'success', hideAfter: 3000, stack: 6 });
                     }
+                    tablaroles();
+                    open_form(2);
                 }else if(res == "existe"){
                     swal({ title: "¡Ya existe!", text: "El usuario ya posee una cuenta", type: "warning", showConfirmButton: true });
                 }else{
@@ -533,7 +552,7 @@ $(function(){
                 }
             });
         }else{
-            $.toast({ heading: 'Contraseña no válida', text: 'La contraseña debe empatar y no puede estar vacía', position: 'top-right', loaderBg:'#3c763d', icon: 'warning', hideAfter: 4000, stack: 6 });
+            $.toast({ heading: 'Contraseña no válida', text: 'La contraseña debe empatar y no puede estar vacía', position: 'top-right', loaderBg:'#000', icon: 'warning', hideAfter: 4000, stack: 6 });
         }
             
     });

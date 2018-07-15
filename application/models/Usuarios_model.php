@@ -24,7 +24,7 @@ class Usuarios_model extends CI_Model {
 				/************** Inicio de fragmento bitácora *********************/
 				$this->bitacora_model->bitacora("Se registró el usuario '".$data["nombre"]."' con id: ".$id,"3");
 	            /************** Fin de fragmento bitácora *********************/
-				return "exito";
+				return "exito,".$id;
 			}else{
 				return "fracaso";
 			}
@@ -32,15 +32,13 @@ class Usuarios_model extends CI_Model {
 	}
 
 	function insertar_roles($data){
-		$id_usuario = $this->obtener("SELECT id_usuario FROM org_usuario WHERE usuario = '".$data['usuario']."'","id_usuario");
-
-		$query = $this->db->query("SELECT * FROM org_usuario_rol WHERE id_usuario = '".$id_usuario."' AND id_rol = '".$data['id_rol']."'");
+		$query = $this->db->query("SELECT * FROM org_usuario_rol WHERE id_usuario = '".$data['usuario']."' AND id_rol = '".$data['id_rol']."'");
 		if($query->num_rows() > 0){
 			return "existe";
 		}else{
 			$id = $this->obtener_ultimo_id("org_usuario_rol","id_usuario_rol");
 
-			if($this->db->insert('org_usuario_rol', array('id_usuario_rol' => $id, 'id_usuario' => $id_usuario, 'id_rol' => $data['id_rol']))){
+			if($this->db->insert('org_usuario_rol', array('id_usuario_rol' => $id, 'id_usuario' => $data['usuario'], 'id_rol' => $data['id_rol']))){
 				return "exito";
 							}else{
 				return "fracaso";
@@ -49,16 +47,10 @@ class Usuarios_model extends CI_Model {
 	}
 
 	function eliminar_roles($data){
-		$id_usuario = $this->obtener("SELECT id_usuario FROM org_usuario WHERE usuario = '".$data['usuario']."'","id_usuario");
-		$query = $this->db->query("SELECT * FROM org_usuario_rol WHERE id_usuario = '".$id_usuario."' AND id_rol = '".$data['id_rol']."'");
-		if($query->num_rows() > 0){
-			foreach ($query->result() as $fila) {
-				if($this->db->delete("org_usuario_rol",array('id_usuario_rol' => $fila->id_usuario_rol))){
-					return "exito";
-				}else{
-					return "fracaso";
-				} 
-			}
+		if($this->db->query("DELETE FROM org_usuario_rol WHERE id_usuario = '".$data['usuario']."' AND id_rol = '".$data['id_rol']."'")){
+			return "exito";
+		}else{
+			return "fracaso";
 		}
 	}
 

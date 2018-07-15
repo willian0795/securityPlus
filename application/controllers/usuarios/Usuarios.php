@@ -6,7 +6,6 @@ class Usuarios extends CI_Controller {
 	function __construct(){
 		parent::__construct();
 		/************ Librerias para llamar funciones predefenidas **********/
-		$this->load->helper(array('url','form','funciones_rapidas'));
 		$this->load->model('usuarios_model');
 	}
 

@@ -1,4 +1,19 @@
+<?php
+    $mantenimiento = false;
+    if($mantenimiento){
+        header("Location: ".site_url()."/mantenimiento");
+        exit();
+    }
 
+    $user = $this->session->userdata('usuario');
+    $nr = $this->db->query("SELECT * FROM org_usuario WHERE usuario = '".$user."' LIMIT 1");
+    $nr_usuario = "";
+    if($nr->num_rows() > 0){
+        foreach ($nr->result() as $fila) { 
+            $nr_usuario = $fila->nr; 
+        }
+    }
+?>
 <script type="text/javascript">
     function iniciar(){
     	tabla_bitacora();  
@@ -14,14 +29,12 @@
         }else{// code for IE6, IE5
             xmlhttpB=new ActiveXObject("Microsoft.XMLHTTPB");
         }
-
         xmlhttpB.onreadystatechange=function(){
             if (xmlhttpB.readyState==4 && xmlhttpB.status==200){
                   document.getElementById("cnt-tabla").innerHTML=xmlhttpB.responseText;
-                  $('#myTable').DataTable();
+                  $('#myTable').DataTable({"order": [[ 0, "desc" ]]});
             }
         }
-
         xmlhttpB.open("GET","<?php echo site_url(); ?>/bitacora/bitacora/tabla_bitacora?id_sistema="+sistema+"&id_accion="+accion+"&id_usuario="+usuario,true);
         xmlhttpB.send();
     }
@@ -31,11 +44,7 @@
 <!-- Inicio de DIV de inicio (ENVOLTURA) -->
 <!-- ============================================================== -->
 <div class="page-wrapper">
-
-
     <div class="container-fluid">
-
-
         <!-- ============================================================== -->
         <!-- TITULO de la página de sección -->
         <!-- ============================================================== -->
@@ -50,17 +59,12 @@
         <!-- ============================================================== -->
         <!-- Inicio del CUERPO DE LA SECCIÓN -->
         <!-- ============================================================== -->
-       
         <div class="row">
- 
-       
-
             <!-- ============================================================== -->
             <!-- Inicio de la TABLA -->
             <!-- ============================================================== -->       
 
             <div class="col-lg-12">
-
                 <div class="card">
                 <div class="card-header">
                     <h4 class="card-title m-b-0">Listado de sistemas</h4>
@@ -74,8 +78,12 @@
                                 <?php 
                                     $sistemas = $this->db->get("org_sistema");
                                     if($sistemas->num_rows() > 0){
-                                        foreach ($sistemas->result() as $fila) {              
-                                           echo '<option class="m-l-50" value="'.$fila->id_sistema.'">'.$fila->nombre_sistema.'</option>';
+                                        foreach ($sistemas->result() as $fila) {
+                                            if($fila->id_sistema == "14"){
+                                                echo '<option class="m-l-50" value="'.$fila->id_sistema.'" selected>'.$fila->nombre_sistema.'</option>';
+                                            }else{
+                                                echo '<option class="m-l-50" value="'.$fila->id_sistema.'">'.$fila->nombre_sistema.'</option>';
+                                            }          
                                         }
                                     }
                                 ?>
@@ -90,7 +98,11 @@
                                     $usuario = $this->db->get("org_usuario");
                                     if($usuario->num_rows() > 0){
                                         foreach ($usuario->result() as $fila2) {              
-                                           echo '<option class="m-l-50" value="'.$fila2->id_usuario.'">'.$fila2->nombre_completo.'</option>';
+                                            if($fila2->nr == $nr_usuario){
+                                                echo '<option class="m-l-50" value="'.$fila2->id_usuario.'" selected>'.$fila2->nombre_completo.'</option>';
+                                            }else{
+                                                echo '<option class="m-l-50" value="'.$fila2->id_usuario.'">'.$fila2->nombre_completo.'</option>';
+                                            }   
                                         }
                                     }
                                 ?>

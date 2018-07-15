@@ -30,9 +30,6 @@
     <link href="<?php echo base_url(); ?>assets/plugins/toast-master/css/jquery.toast.css" rel="stylesheet">
     <!-- Select plugins css -->
     <link href="<?php echo base_url(); ?>assets/plugins/select2/dist/css/select2.min.css" rel="stylesheet" type="text/css" />
-    <link href="<?php echo base_url(); ?>assets/plugins/switchery/dist/switchery.min.css" rel="stylesheet" />
-    <link href="<?php echo base_url(); ?>assets/plugins/bootstrap-select/bootstrap-select.min.css" rel="stylesheet" />
-    <link href="<?php echo base_url(); ?>assets/plugins/multiselect/css/multi-select.css" rel="stylesheet" type="text/css" />
     <!-- Custom CSS -->
     <link href="<?php echo base_url(); ?>assets/css/style.css" rel="stylesheet">
     <!-- You can change the theme colors from here -->
@@ -262,14 +259,14 @@
 ?>
 <input type="hidden" name="jugador" id="jugador">
 
-    <!-- ============================================================== -->
-    <!-- Icono de cargando página... -->
-    <!-- ============================================================== -->
-    <div class="preloader">
+<div class="preloader">
         <svg class="circular" viewBox="25 25 50 50">
             <circle class="path" cx="50" cy="50" r="20" fill="none" stroke-width="2" stroke-miterlimit="10" /> </svg>
     </div>
 
+    <!-- ============================================================== -->
+    <!-- Icono de cargando página... -->
+    <!-- ============================================================== -->
 <section id="congelar" style="display: none;">
     <div class="login-register" style="background-image: url(<?php echo base_url()."assets/images/portadas/seguridad7.jpg"; ?>); background-color: rgb(238, 245, 249);" >        
         <div class="login-box card">
