@@ -235,6 +235,8 @@
             for(j=1; j<=4; j++){
                 if($(inputs[j]).val() == 1){
                     query += "\n('*id"+id+"*','"+$("#id_rol").val()+"','"+$(inputs[0]).val()+"','"+j+"','1'),";
+                }else{
+                    query += "\n('*id"+id+"*','"+$("#id_rol").val()+"','"+$(inputs[0]).val()+"','"+j+"','0'),";
                 }
                 id++;
             }
@@ -451,9 +453,30 @@ WHERE id_empleado IN (12, 254, 87, 23);
         formData.append("id_permiso", id_permiso);
         formData.append("estado", estado);
 
-
         $.ajax({
             url: "<?php echo site_url(); ?>/roles/roles/insertar_rol_individual",
+            type: "post",
+            dataType: "html",
+            data: formData,
+            cache: false,
+            contentType: false,
+            processData: false
+        })
+        .done(function(res){
+            if(res == "exito"){
+                $.toast({ heading: '¡Exito!', text: 'Cambio aplicado', position: 'top-left', loaderBg:'#000', icon: 'success', hideAfter: 2000, stack: 6 });
+            }else{
+                $.toast({ heading: 'Error!', text: 'No se pudo aplicar el cambio', position: 'top-left', loaderBg:'#000', icon: 'error', hideAfter: 2000, stack: 6 });
+            }
+        });
+    }
+
+    function cambiar_rango(id_rango, id_rol_permiso){
+        var formData = new FormData();
+        formData.append("id_rol_permiso", id_rol_permiso);
+        formData.append("id_rango",id_rango);
+        $.ajax({
+            url: "<?php echo site_url(); ?>/roles/roles/cambiar_rango",
             type: "post",
             dataType: "html",
             data: formData,
@@ -470,6 +493,25 @@ WHERE id_empleado IN (12, 254, 87, 23);
         });
     }
 
+    function combos_rango(id_modulo){
+        var id_rol = $("#id_rol").val();
+        if(window.XMLHttpRequest){ xmlhttpB=new XMLHttpRequest();
+        }else{ xmlhttpB=new ActiveXObject("Microsoft.XMLHTTPB"); }
+        xmlhttpB.onreadystatechange=function(){
+            if (xmlhttpB.readyState==4 && xmlhttpB.status==200){
+                document.getElementById("cnt_modulo_rango").innerHTML=xmlhttpB.responseText;
+                $("#modal_rango").modal('show');
+            }
+        }
+        xmlhttpB.open("GET","<?php echo site_url(); ?>/roles/roles/combos_rango?id_modulo="+id_modulo+"&id_rol="+id_rol,true);
+        xmlhttpB.send();
+    }
+
+    function cerrar_modal(){
+        mostrarSistemas($('#id_sistema').val(),$('#id_rol').val())
+        $("#modal_rango").modal('hide');
+    }
+
     function stopRKey(evt) {
     var evt = (evt) ? evt : ((event) ? event : null);
     var node = (evt.target) ? evt.target : ((evt.srcElement) ? evt.srcElement : null);
@@ -480,58 +522,51 @@ WHERE id_empleado IN (12, 254, 87, 23);
 
 </script>
 <style type="text/css">
-
-
-
     /* second level */
-#nestable > ol > li:hover > .dd-handle {
-    background: #f1f2f3;
-    font-size: 15px;
-    border-radius: 5px;
-    box-sizing: border-box;
-    transition: all 150ms ease;
-}
-
-#nestable > ol > li > ol > li:hover > .dd-handle {
-    background: #f6fde6;
-    font-size: 15px;
-    border-radius: 5px;
-    box-sizing: border-box;
-    transition: all 150ms ease;
-}
-
-#nestable > ol > li > ol > li > ol > li:hover > .dd-handle {
-    background: #ffeefe;
-    font-size: 15px;
-    border-radius: 5px;
-    box-sizing: border-box;
-    transition: all 150ms ease;
-}
-
-.rombo .contenido{
-    width: 15px;
-    height: 15px;
-    -moz-border-radius: 50%; 
-    -webkit-border-radius: 50%; 
-    border-radius: 50%;
-    background: #4679BD;
-}
-.rombo {
-  padding: 0px;
-  float:left;
-}
-.rombo .contenido .texto {
-  border-radius:0px;
- font-family: Verdana;
-  color:white;
-    position: relative;
-  left: 25%;
-  padding:0px;
-  top: 3%;
-  font-size: 10px;
-  text-transform:uppercase;
-}
-
+    #nestable > ol > li:hover > .dd-handle {
+        background: #f1f2f3;
+        font-size: 15px;
+        border-radius: 5px;
+        box-sizing: border-box;
+        transition: all 150ms ease;
+    }
+    #nestable > ol > li > ol > li:hover > .dd-handle {
+        background: #f6fde6;
+        font-size: 15px;
+        border-radius: 5px;
+        box-sizing: border-box;
+        transition: all 150ms ease;
+    }
+    #nestable > ol > li > ol > li > ol > li:hover > .dd-handle {
+        background: #ffeefe;
+        font-size: 15px;
+        border-radius: 5px;
+        box-sizing: border-box;
+        transition: all 150ms ease;
+    }
+    .rombo .contenido{
+        width: 15px;
+        height: 15px;
+        -moz-border-radius: 50%; 
+        -webkit-border-radius: 50%; 
+        border-radius: 50%;
+        background: #4679BD;
+    }
+    .rombo {
+      padding: 0px;
+      float:left;
+    }
+    .rombo .contenido .texto {
+      border-radius:0px;
+     font-family: Verdana;
+      color:white;
+        position: relative;
+      left: 25%;
+      padding:0px;
+      top: 3%;
+      font-size: 10px;
+      text-transform:uppercase;
+    }
 </style>
 
 <!-- ============================================================== -->
@@ -615,7 +650,7 @@ WHERE id_empleado IN (12, 254, 87, 23);
                                 <button type="button" onclick="recorrer()" class="btn waves-effect waves-light btn-success2"><i class="mdi mdi-plus"></i> Guardar</button>
                             </div>
                             <div align="right" id="btnedit" style="display: none;">
-                                <button type="button" class="btn waves-effect waves-light btn-info"><i class="mdi mdi-pencil"></i> Editar</button>
+                                <button type="button" class="btn waves-effect waves-light btn-info" onclick="cerrar_mantenimiento();"><i class="mdi mdi-pencil"></i> Editar</button>
                             </div>
 
                         <?php echo form_close(); ?>
@@ -632,6 +667,27 @@ WHERE id_empleado IN (12, 254, 87, 23);
     </div>
 </div>
 
+
+<!-- sample modal content -->
+<div id="modal_rango" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Seleccione los rangos del módulo</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            </div>
+            <div class="modal-body">
+                <div id="cnt_modulo_rango"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-info waves-effect" onclick="cerrar_modal();">Aceptar</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
 
 <!-- sample modal content -->
 <div id="myModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">

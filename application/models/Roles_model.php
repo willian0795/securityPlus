@@ -203,6 +203,15 @@ class Roles_model extends CI_Model {
 		}
 	}
 
+	function cambiar_rango($data){
+		$this->db->where("id_rol_permiso",$data["id_rol_permiso"]);
+		if($this->db->update('org_rol_modulo_permiso', array('id_rango' => $data['id_rango']))){
+			return "exito";
+		}else{
+			return "fracaso";
+		}
+	}
+
 	function eliminar_rol_modulo_permiso($data){
 		if( $this->db->delete("org_rol_modulo_permiso",array('id_rol_permiso' => $data['id_rol_permiso'])) ){
 			return "exito";

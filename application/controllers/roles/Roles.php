@@ -18,6 +18,9 @@ class Roles extends CI_Controller {
 		$objeto['id_sistema'] = $id;
 		$this->load->view('roles/tabla_modulos',$objeto);
 	}
+	public function combos_rango(){
+		$this->load->view('roles/combos_rango');
+	}
 	public function tabla_rol_chequed($ids){
 		$objeto = explode("x", $ids);
 		$nuevo['id_sistema']=$objeto[0];
@@ -155,6 +158,15 @@ class Roles extends CI_Controller {
 		);
 
 		echo $this->roles_model->insertar_rol_individual($data);
+	}
+
+	function cambiar_rango(){
+		$data = array(
+			'id_rol_permiso' => $this->input->post('id_rol_permiso'),
+			'id_rango' => $this->input->post('id_rango')
+		);
+
+		echo $this->roles_model->cambiar_rango($data);
 	}
 
 }

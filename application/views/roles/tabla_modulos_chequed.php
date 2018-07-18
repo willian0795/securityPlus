@@ -9,13 +9,13 @@ function generar_vineta($estado, $tipo){
     $color = "67757c";
     $posleft = '0px';
     $letra = "";
-    if($estado == 'S'){
+    if($estado == '2'){
         $color = "0062cc";
         $letra = "s";
-    }else if($estado == 'D'){
+    }else if($estado == '3'){
         $color = "ff9712";
         $letra = "d";
-    }else if($estado == 'N'){
+    }else if($estado == '4'){
         $color = "dc3545";
         $letra = "n";
     }else{
@@ -34,24 +34,15 @@ function generar_vineta($estado, $tipo){
     }
 
     $variable = "";
-    $variable .='<div class="rombo" style="position: absolute; left: '.$posleft.'; top:-10px; display: inline-flex;">
+    if($letra != 'p'){
+        $variable .='<div class="rombo" style="position: absolute; left: '.$posleft.'; top:-10px; display: inline-flex;">
           <div class="contenido" style="background-color: #'.$color.';">
             <div class="texto">
-            <p align="center">
-                <span class="mytooltip tooltip-effect-5">
-                    <span class="tooltip-item" style="background-color: transparent; padding: 0px;">'.$letra.'</span> <span class="tooltip-content clearfix" style="width: 120px; margin-left: -60px;">
-                        <span class="tooltip-text" style="padding: 5px 10px; font-size: 11px; line-height: 18px;">
-                            <a href="javascript:void(0)" class="link">Personal</a>
-                            <a href="javascript:void(0)" class="link">Sección</a>
-                            <a href="javascript:void(0)" class="link">Departamental</a>
-                            <a href="javascript:void(0)" class="link">Nacional</a>
-                        </span> 
-                    </span>
-                </span>
-            </p> 
+            <p align="center">'.$letra.'</p> 
             </div>
           </div>
         </div>';
+    }
     return $variable;
 }
 
@@ -79,6 +70,7 @@ if($id_sistema != 0){
                 <div class="pull-right">
                     <div class="input-group" style="z-index: 1; font-size: 16px; margin-top: 7px;">
                         <input type="hidden" value="<?php echo $fila->id_modulo; ?>" style="width: 30px; margin-right: 10px;">
+                        <?php echo generar_vineta($row1['id_rango'][0], '1'); ?>
                         <label class="custom-control custom-checkbox" data-toggle="tooltip" title="Consultar" style="margin-right: 5px;">
                             <input type="checkbox" <?php if($row1['id_permiso'][0]==1){ if($row1['estado'][0]==1){ $contador1++; ?> checked value="1" <?php }else{ echo 'value="0"'; } $row1 = $datosChequeados1->next_row('array'); }else{?> value="0" <?php }?>  class="custom-control-input"  onchange="cambiar_check(this, '<?php echo $fila->id_modulo; ?>', '1')">
                             <span class="custom-control-indicator" style="width: 20px; height: 20px;"></span>
@@ -86,7 +78,7 @@ if($id_sistema != 0){
                                 <i class="fa fa-hand-pointer-o"></i>
                             </span>
                         </label>
-                        <?php echo generar_vineta('P', '1'); ?>
+                        <?php echo generar_vineta($row1['id_rango'][0], '2'); ?>
                         <label class="custom-control custom-checkbox" data-toggle="tooltip" title="Insertar" style="margin-right: 5px;">
                             <input type="checkbox" <?php if($row1['id_permiso'][0]==2){ if($row1['estado'][0]==1){ $contador1++; ?> checked value="1" <?php }else{ echo 'value="0"'; } $row1 = $datosChequeados1->next_row('array'); }else{?> value="0" <?php }?> class="custom-control-input"  onchange="cambiar_check(this, '<?php echo $fila->id_modulo; ?>', '2')">
                             <span class="custom-control-indicator" style="width: 20px; height: 20px;"></span>
@@ -94,7 +86,7 @@ if($id_sistema != 0){
                                 <i class="fa fa-plus"></i>
                             </span>
                         </label>
-                        <?php echo generar_vineta('S', '2'); ?>
+                        <?php echo generar_vineta($row1['id_rango'][0], '3'); ?>
                         <label class="custom-control custom-checkbox" data-toggle="tooltip" title="Eliminar" style="margin-right: 5px;">
                             <input type="checkbox" <?php if($row1['id_permiso'][0]==3){ if($row1['estado'][0]==1){ $contador1++; ?> checked value="1" <?php }else{ echo 'value="0"'; } $row1 = $datosChequeados1->next_row('array'); }else{?> value="0" <?php }?> class="custom-control-input"  onchange="cambiar_check(this, '<?php echo $fila->id_modulo; ?>', '3')">
                             <span class="custom-control-indicator" style="width: 20px; height: 20px;"></span>
@@ -102,7 +94,7 @@ if($id_sistema != 0){
                                 <i class="fa fa-close"></i>
                             </span>
                         </label>
-                        <?php echo generar_vineta('D', '3'); ?>
+                        <?php echo generar_vineta($row1['id_rango'][0], '4'); ?>
                         <label class="custom-control custom-checkbox" data-toggle="tooltip" title="Modificar" style="margin-right: 5px;">
                             <input type="checkbox" <?php if($row1['id_permiso'][0]==4){ if($row1['estado'][0]==1){ $contador1++; ?> checked value="1" <?php }else{ echo 'value="0"'; } $row1 = $datosChequeados1->next_row('array'); }else{?> value="0" <?php }?> class="custom-control-input"  onchange="cambiar_check(this, '<?php echo $fila->id_modulo; ?>', '4')">
                             <span class="custom-control-indicator" style="width: 20px; height: 20px;"></span>
@@ -110,7 +102,6 @@ if($id_sistema != 0){
                                 <i class="ti-marker-alt"></i>
                             </span>
                         </label>
-                        <?php echo generar_vineta('N', '4'); ?>
                         <label class="custom-control custom-checkbox m-0" data-toggle="tooltip" title="Seleccionar todos">
                             <input type="checkbox" class="custom-control-input" <?php if($contador1 == 4){ ?> checked value="1" <?php }else{ ?> value="0" <?php }?> onchange="marcar_check(this, '<?php echo $fila->id_modulo; ?>')">
                             <span class="custom-control-indicator" style="width: 20px; height: 20px;"></span>
@@ -118,8 +109,8 @@ if($id_sistema != 0){
                                 <i class="fa fa-check-circle-o"></i>
                             </span>
                         </label>
-                         &nbsp;
-                        <button type="button" class="btn waves-effect waves-light btn-rounded btn-sm btn-info" style="padding: 2px 6px; height: 25px;" data-toggle="tooltip" title="Editar acceso"><span class="fa fa-wrench"></span></button>
+                        &nbsp;
+                        <button type="button" onclick="combos_rango('<?php echo $fila->id_modulo; ?>');" class="btn waves-effect waves-light btn-rounded btn-sm btn-info" style="padding: 2px 6px; height: 25px;" data-toggle="tooltip" title="Editar acceso"><span class="fa fa-wrench"></span></button>
                     </div>
                 </div>
            
@@ -142,6 +133,7 @@ if($id_sistema != 0){
                 <div class="pull-right">
                     <div class="input-group" style="z-index: 1; font-size: 16px; margin-top: 7px;">
                         <input type="hidden" value="<?php echo $fila2->id_modulo; ?>" style="width: 30px; margin-right: 10px;">
+                        <?php echo generar_vineta($row['id_rango'][0], '1'); ?>
                         <label class="custom-control custom-checkbox" data-toggle="tooltip" title="Consultar" style="margin-right: 5px;">
                             <input type="checkbox" <?php if($row['id_permiso'][0]==1){ if($row['estado'][0]==1){ $contador2++; ?> checked value="1" <?php }else{ echo 'value="0"'; } $row = $datosChequeados->next_row('array'); }else{?> value="0" <?php }?> class="custom-control-input"  onchange="cambiar_check(this, '<?php echo $fila2->id_modulo; ?>', '1')">
                              
@@ -150,6 +142,7 @@ if($id_sistema != 0){
                                 <i class="fa fa-hand-pointer-o"></i>
                             </span>
                         </label>
+                        <?php echo generar_vineta($row['id_rango'][0], '2'); ?>
                         <label class="custom-control custom-checkbox" data-toggle="tooltip" title="Insertar" style="margin-right: 5px;">
                             <input type="checkbox" <?php  if($row['id_permiso'][0]==2){ if($row['estado'][0]==1){ $contador2++; ?> checked value="1" <?php }else{ echo 'value="0"'; } $row = $datosChequeados->next_row('array'); }else{?> value="0" <?php }?> class="custom-control-input"  onchange="cambiar_check(this, '<?php echo $fila2->id_modulo; ?>', '2')">
                             <span class="custom-control-indicator" style="width: 20px; height: 20px;"></span>
@@ -157,6 +150,7 @@ if($id_sistema != 0){
                                 <i class="fa fa-plus"></i>
                             </span>
                         </label>
+                        <?php echo generar_vineta($row['id_rango'][0], '3'); ?>
                         <label class="custom-control custom-checkbox m-0" data-toggle="tooltip" title="Eliminar">
                             <input type="checkbox" <?php  if($row['id_permiso'][0]==3){ if($row['estado'][0]==1){ $contador2++; ?> checked value="1" <?php }else{ echo 'value="0"'; } $row = $datosChequeados->next_row('array'); }else{?> value="0" <?php }?> class="custom-control-input"  onchange="cambiar_check(this, '<?php echo $fila2->id_modulo; ?>', '3')">
                             <span class="custom-control-indicator" style="width: 20px; height: 20px;"></span>
@@ -164,6 +158,7 @@ if($id_sistema != 0){
                                 <i class="fa fa-close"></i>
                             </span>
                         </label>
+                        <?php echo generar_vineta($row['id_rango'][0], '4'); ?>
                         <label class="custom-control custom-checkbox" data-toggle="tooltip" title="Modificar" style="margin-right: 5px; margin-left: 5px;">
                             <input type="checkbox" <?php  if($row['id_permiso'][0]==4){ if($row['estado'][0]==1){ $contador2++; ?> checked value="1" <?php }else{ echo 'value="0"'; } $row = $datosChequeados->next_row('array'); }else{?> value="0" <?php }?> class="custom-control-input"  onchange="cambiar_check(this, '<?php echo $fila2->id_modulo; ?>', '4')">
                             <span class="custom-control-indicator" style="width: 20px; height: 20px;"></span>
@@ -171,7 +166,6 @@ if($id_sistema != 0){
                                 <i class="ti-marker-alt"></i>
                             </span>
                         </label>
-                        
                         <label class="custom-control custom-checkbox m-0" data-toggle="tooltip" title="Seleccionar todos">
                             <input type="checkbox" class="custom-control-input" <?php if($contador2 == 4){ ?> checked value="1" <?php }else{ ?> value="0" <?php }?> onchange="marcar_check(this, '<?php echo $fila2->id_modulo; ?>')">
                             <span class="custom-control-indicator" style="width: 20px; height: 20px;"></span>
@@ -179,6 +173,8 @@ if($id_sistema != 0){
                                 <i class="fa fa-check-circle-o"></i>
                             </span>
                         </label>
+                        &nbsp;
+                        <button type="button" onclick="combos_rango('<?php echo $fila2->id_modulo; ?>');" class="btn waves-effect waves-light btn-rounded btn-sm btn-info" style="padding: 2px 6px; height: 25px;" data-toggle="tooltip" title="Editar acceso"><span class="fa fa-wrench"></span></button>
                     </div>
                 </div>
 
@@ -198,6 +194,7 @@ if($id_sistema != 0){
                 <div class="pull-right">
                     <div class="input-group" style="z-index: 1; font-size: 16px; margin-top: 7px;">
                         <input type="hidden" value="<?php echo $fila3->id_modulo; ?>" style="width: 30px; margin-right: 10px;">
+                        <?php echo generar_vineta($row2['id_rango'][0], '1'); ?>
                         <label class="custom-control custom-checkbox" data-toggle="tooltip" title="Consultar" style="margin-right: 5px;">
                             <input type="checkbox" <?php  if($row2['id_permiso'][0]==1){ if($row2['estado'][0]==1){ $contador3++; ?> checked value="1" <?php }else{ echo 'value="0"'; } $row2 = $datosChequeados2->next_row('array'); }else{?> value="0" <?php }?> class="custom-control-input"  onchange="cambiar_check(this, '<?php echo $fila3->id_modulo; ?>', '1')">
                             <span class="custom-control-indicator" style="width: 20px; height: 20px;"></span>
@@ -205,6 +202,7 @@ if($id_sistema != 0){
                                 <i class="fa fa-hand-pointer-o"></i>
                             </span>
                         </label>
+                        <?php echo generar_vineta($row2['id_rango'][0], '2'); ?>
                         <label class="custom-control custom-checkbox" data-toggle="tooltip" title="Insertar" style="margin-right: 5px;">
                             <input type="checkbox" <?php  if($row2['id_permiso'][0]==2){ if($row2['estado'][0]==1){ $contador3++; ?> checked value="1" <?php }else{ echo 'value="0"'; } $row2 = $datosChequeados2->next_row('array'); }else{?> value="0" <?php }?>  class="custom-control-input"  onchange="cambiar_check(this, '<?php echo $fila3->id_modulo; ?>', '2')">
                             <span class="custom-control-indicator" style="width: 20px; height: 20px;"></span>
@@ -212,6 +210,7 @@ if($id_sistema != 0){
                                 <i class="fa fa-plus"></i>
                             </span>
                         </label>
+                        <?php echo generar_vineta($row2['id_rango'][0], '3'); ?>
                         <label class="custom-control custom-checkbox m-0" data-toggle="tooltip" title="Eliminar">
                             <input type="checkbox" <?php  if($row2['id_permiso'][0]==3){ if($row2['estado'][0]==1){ $contador3++; ?> checked value="1" <?php }else{ echo 'value="0"'; } $row2 = $datosChequeados2->next_row('array'); }else{?> value="0" <?php }?> class="custom-control-input"  onchange="cambiar_check(this, '<?php echo $fila3->id_modulo; ?>', '3')">
                             <span class="custom-control-indicator" style="width: 20px; height: 20px;"></span>
@@ -219,6 +218,7 @@ if($id_sistema != 0){
                                 <i class="fa fa-close"></i>
                             </span>
                         </label>
+                        <?php echo generar_vineta($row2['id_rango'][0], '4'); ?>
                         <label class="custom-control custom-checkbox" data-toggle="tooltip" title="Modificar" style="margin-right: 5px; margin-left: 5px;">
                             <input type="checkbox" <?php  if($row2['id_permiso'][0]==4){ if($row2['estado'][0]==1){ $contador3++; ?> checked value="1" <?php }else{ echo 'value="0"'; } $row2 = $datosChequeados2->next_row('array'); }else{?> value="0" <?php }?> class="custom-control-input" onchange="cambiar_check(this, '<?php echo $fila3->id_modulo; ?>', '4')">
                             <span class="custom-control-indicator" style="width: 20px; height: 20px;"></span>
@@ -234,6 +234,8 @@ if($id_sistema != 0){
                                 <i class="fa fa-check-circle-o"></i>
                             </span>
                         </label>
+                        &nbsp;
+                        <button type="button" onclick="combos_rango('<?php echo $fila3->id_modulo; ?>');" class="btn waves-effect waves-light btn-rounded btn-sm btn-info" style="padding: 2px 6px; height: 25px;" data-toggle="tooltip" title="Editar acceso"><span class="fa fa-wrench"></span></button>
                     </div>
                 </div>
                 <li class="dd-item">

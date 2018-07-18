@@ -15,9 +15,6 @@ if($id_sistema != 0){
                 foreach ($modelo->result() as $fila) { 
                     $modelo2 = $this->db->query("SELECT * FROM org_modulo WHERE dependencia = $fila->id_modulo AND id_sistema = $id_sistema ORDER BY orden");          
         ?>
-            <?php                
-                if($modelo2->num_rows() == 0){
-            ?>
                 <div class="pull-right">
                     <div class="input-group" style="z-index: 1; font-size: 16px;">
                         <input type="hidden" value="<?php echo $fila->id_modulo; ?>" style="width: 30px; margin-right: 10px;">
@@ -58,9 +55,6 @@ if($id_sistema != 0){
                         </label>
                     </div>
                 </div>
-            <?php
-                }
-            ?>
 
         <li class="dd-item">
           <div class="dd-handle" id="no-drag" style="cursor: auto; pointer-events: none;"><span class="<?php echo $fila->img_modulo; ?>"></span> <?php echo $fila->nombre_modulo; ?></div>
@@ -71,10 +65,6 @@ if($id_sistema != 0){
                     foreach ($modelo2->result() as $fila2) { 
                         $modelo3 = $this->db->query("SELECT * FROM org_modulo WHERE dependencia = $fila2->id_modulo AND id_sistema = $id_sistema ORDER BY orden");             
             ?>    
-
-            <?php                
-                if($modelo3->num_rows() == 0){
-            ?>
                 <div class="pull-right">
                     <div class="input-group" style="z-index: 1; font-size: 16px;">
                         <input type="hidden" value="<?php echo $fila2->id_modulo; ?>" style="width: 30px; margin-right: 10px;">
@@ -115,9 +105,6 @@ if($id_sistema != 0){
                         </label>
                     </div>
                 </div>
-            <?php
-                }
-            ?>        
 
             <li class="dd-item">
               <div class="dd-handle" style="cursor: auto; pointer-events: none;"><span class="<?php echo $fila2->img_modulo; ?>"></span> <?php echo $fila2->nombre_modulo; ?></div>
