@@ -152,10 +152,38 @@ class Roles_model extends CI_Model {
     /***************** Inicio Rol_modulo_permiso_model *********************************/
     function insertar_rol_modulo_permiso($data){
 		//$id = $this->obtener_ultimo_id("vyp_oficinas","id_oficina");
-		if($this->db->insert('org_rol_modulo_permiso', array('id_rol' => $data['id_rol'], 'id_modulo' => $data['id_modulo'],'id_permiso' => $data['id_permiso'],'estado' => $data['estado']))){
+		if($this->db->insert('org_rol_modulo_permiso', array('id_rol' => $data['id_rol'], 'id_modulo' => $data['id_modulo'],'id_permiso' => $data['id_permiso'], 'estado' => $data['estado']))){
 			return "exito";
 		}else{
 			return "fracaso";
+		}
+	}
+
+	function existe_rol($data){
+		$query = $this->db->query("SELECT * FROM org_rol_modulo_permiso WHERE id_rol = '".$data['id_rol']."' AND id_modulo = '".$data['id_modulo']."' AND id_permiso = '".$data['id_permiso']."'");
+		$ultimoid = false;
+		if($query->num_rows() > 0){
+			foreach ($query->result() as $fila) {
+				$ultimoid = true; 
+			}
+			 
+		}
+		return $ultimoid;
+	}
+
+	function insertar_rol_individual($data){
+		if($this->existe_rol($data)){
+			if($this->db->query("UPDATE org_rol_modulo_permiso SET estado = '".$data['estado']."' WHERE id_rol = '".$data['id_rol']."' AND id_modulo = '".$data['id_modulo']."' AND id_permiso = '".$data['id_permiso']."'")){
+				return "exito";
+			}else{
+				return "fracaso";
+			}
+		}else{
+			if($this->db->query("INSERT INTO org_rol_modulo_permiso (id_rol, id_modulo, id_permiso, estado) SELECT * FROM (SELECT '".$data['id_rol']."' AS id_rol, '".$data['id_modulo']."' AS id_modulo, '".$data['id_permiso']."' AS id_permiso, '".$data['estado']."' AS estado) AS tmp WHERE NOT EXISTS ( SELECT id_rol, id_modulo, id_permiso FROM org_rol_modulo_permiso WHERE id_rol = '".$data['id_rol']."' AND id_modulo = '".$data['id_modulo']."' AND id_permiso = '".$data['id_permiso']."') LIMIT 1;")){
+				return "exito";
+			}else{
+				return "fracaso";
+			}
 		}
 	}
 

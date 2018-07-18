@@ -146,6 +146,16 @@ class Roles extends CI_Controller {
 		}
 	}
 	
+	function insertar_rol_individual(){
+		$data = array(
+			'id_rol' => $this->input->post('id_rol'),
+			'id_modulo' => $this->input->post('id_modulo'),
+			'id_permiso' => $this->input->post('id_permiso'),
+			'estado' => $this->input->post('estado')
+		);
+
+		echo $this->roles_model->insertar_rol_individual($data);
+	}
 
 }
 ?>

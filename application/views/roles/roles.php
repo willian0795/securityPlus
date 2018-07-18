@@ -219,7 +219,6 @@
         }else if($("#band").val()=="edit"){
             if($("#nombre_rol").val()!=""){
                 mantto_rol($("#id_rol").val(),"edit",$("#nombre_rol").val(),$("#descripcion_rol").val());
-                eliminar_roles($("#id_rol").val());
                 sentinela=1;
             }
         }
@@ -278,48 +277,76 @@
         xhr.send('name='+newName+"&query="+query);
     }
 
-    /*function guardar_rol_modulo_permiso(query){               
-        ajax = objetoAjax();
-        ajax.open("POST", "<?php echo site_url(); ?>/roles/roles/guardar_rol_modulo_permiso", true);
-        ajax.onreadystatechange = function() {
-            if (ajax.readyState == 4){
-                if(ajax.responseText == "exito"){
-                    if($("#band").val() == "save"){
-                        swal({ title: "¡Registro exitoso!", type: "success", showConfirmButton: true });
-                    }else if($("#band").val() == "edit"){
-                        swal({ title: "¡Modificación exitosa!", type: "success", showConfirmButton: true });
-                    }
-                }else{
-                    swal({ title: "¡Ups! Error", text: "Intentalo nuevamente.", type: "error", showConfirmButton: true }); 
-                }  
-            }
-        } 
-        ajax.setRequestHeader("Content-Type","application/x-www-form-urlencoded"); 
-        ajax.send("&query="+query)
-    }*/
-
-    function cambiar_check(obj){
+    function cambiar_check(obj, id_modulo, permiso){
+        var id_rol = $("#id_rol").val();
         if( $(obj).prop('checked') ) {
             $(obj).val('1');
+            if($("#band").val() == "edit"){
+                insertar_rol_individual(id_rol, id_modulo, permiso, 1);
+            }
         }else{
             $(obj).val('0');
+            if($("#band").val() == "edit"){
+                insertar_rol_individual(id_rol, id_modulo, permiso, 0);
+            }
         }
     }
 
-    function marcar_check(obj){
+    function marcar_check(obj, modulo){
         var labels = $(obj).parent().siblings('label');
         var hijo;
         for(i=0; i<4;i++){
             hijo = $(labels[i]).children('input');
             if( $(obj).prop('checked') ) {
                 hijo[0].checked = 1;
-                cambiar_check(hijo[0]);
+                cambiar_check(hijo[0], modulo, (i+1));
             }else{
                 hijo[0].checked = 0;
-                cambiar_check(hijo[0]);
+                cambiar_check(hijo[0], modulo, (i+1));
             }
         }
+
+        /*ar grupos_de_inputs = $(obj).parent().parent(); // Recuperando agrupacion de inputs
+        var id_modulo = $(grupos_de_inputs).children('input').val(); // Recuperando agrupacion de inputs
+        var grupo_de_label = $(grupos_de_inputs).children('label'); // Recuperando agrupacion de inputs
+        var query = "";
+        var idmodulo, seleccionar, insertar, modificar, eliminar,id = 1;
+
+        var inputs = $(grupo_de_label[0]).find("input"); // Sacando inputs de 5 en 5. (Cinco por cada agrupación)
+        var ids = "";
+        for(j=1; j<=4; j++){
+            query += "\nWHEN '"+$("#id_rol").val()+"' THEN '"+$(inputs[0]).val()+"'";
+            if(j == 4){
+                ids += $("#id_rol").val();
+            }else{
+                ids += $("#id_rol").val()+", ";
+            }
+        }
+
+        query = "UPDATE org_rol_modulo_permiso \n SET estado = CASE id_rol "+query.substr(0,(query.length-1))+" \nWHERE id_rol IN ("+ids+");";
+
+        alert(query)*/
     }
+
+    /*******************************************************
+    WHEN <<id>> then <<valor>>
+
+
+UPDATE empleados
+    SET orden = CASE id_empleado
+        WHEN 12 THEN 1
+        WHEN 254 THEN 4
+        WHEN 87 THEN 8
+        WHEN 23 THEN 14
+    END,
+    edad = CASE id_empleado
+        WHEN 12 THEN 32
+        WHEN 254 THEN 19
+        WHEN 87 THEN 43
+        WHEN 23 THEN 51
+    END
+WHERE id_empleado IN (12, 254, 87, 23);
+*******************************************************/
 
     function verificar_eliminacion(id_rol, nombre){        
         var parametros = {
@@ -417,16 +444,95 @@
         });
     }
 
+    function insertar_rol_individual(id_rol, id_modulo, id_permiso, estado){
+        var formData = new FormData();
+        formData.append("id_rol", id_rol);
+        formData.append("id_modulo",id_modulo);
+        formData.append("id_permiso", id_permiso);
+        formData.append("estado", estado);
+
+
+        $.ajax({
+            url: "<?php echo site_url(); ?>/roles/roles/insertar_rol_individual",
+            type: "post",
+            dataType: "html",
+            data: formData,
+            cache: false,
+            contentType: false,
+            processData: false
+        })
+        .done(function(res){
+            if(res == "exito"){
+                $.toast({ heading: '¡Exito!', text: 'Cambio aplicado', position: 'top-right', loaderBg:'#000', icon: 'success', hideAfter: 3000, stack: 6 });
+            }else{
+                $.toast({ heading: 'Error!', text: 'No se pudo aplicar el cambio', position: 'top-right', loaderBg:'#000', icon: 'error', hideAfter: 3000, stack: 6 });
+            }
+        });
+    }
+
     function stopRKey(evt) {
     var evt = (evt) ? evt : ((event) ? event : null);
     var node = (evt.target) ? evt.target : ((evt.srcElement) ? evt.srcElement : null);
     if ((evt.keyCode == 13) && (node.type=="text")) {return false;}
     }
     document.onkeypress = stopRKey; 
-
     
 
 </script>
+<style type="text/css">
+
+
+
+    /* second level */
+#nestable > ol > li:hover > .dd-handle {
+    background: #f1f2f3;
+    font-size: 15px;
+    border-radius: 5px;
+    box-sizing: border-box;
+    transition: all 150ms ease;
+}
+
+#nestable > ol > li > ol > li:hover > .dd-handle {
+    background: #f6fde6;
+    font-size: 15px;
+    border-radius: 5px;
+    box-sizing: border-box;
+    transition: all 150ms ease;
+}
+
+#nestable > ol > li > ol > li > ol > li:hover > .dd-handle {
+    background: #ffeefe;
+    font-size: 15px;
+    border-radius: 5px;
+    box-sizing: border-box;
+    transition: all 150ms ease;
+}
+
+.rombo .contenido{
+    width: 15px;
+    height: 15px;
+    -moz-border-radius: 50%; 
+    -webkit-border-radius: 50%; 
+    border-radius: 50%;
+    background: #4679BD;
+}
+.rombo {
+  padding: 0px;
+  float:left;
+}
+.rombo .contenido .texto {
+  border-radius:0px;
+ font-family: Verdana;
+  color:white;
+    position: relative;
+  left: 25%;
+  padding:0px;
+  top: 3%;
+  font-size: 10px;
+  text-transform:uppercase;
+}
+
+</style>
 
 <!-- ============================================================== -->
 <!-- Inicio de DIV de inicio (ENVOLTURA) -->
@@ -448,6 +554,7 @@
         <!-- Inicio del CUERPO DE LA SECCIÓN -->
         <!-- ============================================================== -->
         <div class="row">
+
             <!-- ============================================================== -->
             <!-- Inicio del FORMULARIO de gestión -->
             <!-- ============================================================== -->
@@ -464,11 +571,8 @@
 
                         <?php echo form_open('', array('id' => 'formajax', 'style' => 'margin-top: 0px;', 'class' => 'm-t-40')); ?>
                             <input type="hidden" id="band" name="band" value="save" placeholder="band">
-                           
                             <input type="hidden" id="id_rol" name="id_rol" placeholder="id_rol">
                             
-
-
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="form-group">
@@ -511,9 +615,7 @@
                                 <button type="button" onclick="recorrer()" class="btn waves-effect waves-light btn-success2"><i class="mdi mdi-plus"></i> Guardar</button>
                             </div>
                             <div align="right" id="btnedit" style="display: none;">
-                                
-                                <button type="button" onclick="recorrer()" class="btn waves-effect waves-light btn-info"><i class="mdi mdi-pencil"></i> Editar</button>
-                                
+                                <button type="button" class="btn waves-effect waves-light btn-info"><i class="mdi mdi-pencil"></i> Editar</button>
                             </div>
 
                         <?php echo form_close(); ?>
