@@ -5,7 +5,7 @@
         $("#nombre").val(nombre);
         $("#descripcion").val(descripcion);
         $("#dependencia").val(dependencia);
-        $( "#dependencia" ).prop( "disabled", true );
+        $("#dependencia" ).prop( "disabled", true );
         $("#url").val(url);
         $("#icono").val(icono);
         $("#opciones").val(opciones);        
@@ -91,7 +91,7 @@
 
     function combosistemas(){    
         var id_sistema = $("#sistema").val();
-
+        
         if(window.XMLHttpRequest){// code for IE7+, Firefox, Chrome, Opera, Safari
             xmlhttpB=new XMLHttpRequest();
         }else{// code for IE6, IE5
@@ -120,6 +120,7 @@
         xmlhttpB.onreadystatechange=function(){
             if (xmlhttpB.readyState==4 && xmlhttpB.status==200){
                 document.getElementById("cnt_tabla").innerHTML=xmlhttpB.responseText;
+                combosistemas();
                 $('[data-toggle="tooltip"]').tooltip();
             }
         }
