@@ -115,13 +115,6 @@ class Usuarios extends CI_Controller {
 				}
 			}
 
-		}else if($this->input->post('band') == "delete"){
-
-			$data = array(
-			'idusuario' => $this->input->post('idusuario')
-			);
-			echo $this->usuarios_model->eliminar_usuario($data);
-
 		}
 	}
 

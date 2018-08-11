@@ -432,10 +432,10 @@
                                 </div>
                             </div>
                             <div align="right" id="btnadd2">
-                                <button type="button" class="btn waves-effect waves-light btn-success2" onclick="cerrar_mantenimiento();"><span class="fa fa-check"> Listo</span></button>
+                                <button type="button" class="btn waves-effect waves-light btn-success2" onclick="cerrar_mantenimiento();"><span class="fa fa-check"></span> Listo</button>
                             </div>
                             <div align="right" id="btnedit2" style="display: none;">
-                                <button type="button" class="btn waves-effect waves-light btn-info" onclick="cerrar_mantenimiento();"><span class="fa fa-check"> Listo</span></button>
+                                <button type="button" class="btn waves-effect waves-light btn-info" onclick="cerrar_mantenimiento();"><span class="fa fa-check"></span> Listo</button>
                             </div>
                         <?php echo form_close(); ?>
                         </div>

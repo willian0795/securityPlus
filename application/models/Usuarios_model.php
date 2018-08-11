@@ -91,17 +91,6 @@ class Usuarios_model extends CI_Model {
 		}
 	}
 
-	function eliminar_usuario($data){
-		if($this->db->delete("org_usuario",array('id_usuario' => $data['idusuario']))){
-			/************** Inicio de fragmento bitácora *********************/
-			$this->bitacora_model->bitacora("Se eliminó el usuario con id: ".$data["idusuario"],"5");
-            /************** Fin de fragmento bitácora *********************/
-			return "exito";
-		}else{
-			return "fracaso";
-		}
-	}
-
 	function obtener($consulta,$nombreid){
 		$query = $this->db->query($consulta);
 		$ultimoid = "";
