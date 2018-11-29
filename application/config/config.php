@@ -29,7 +29,7 @@ if("192.168.1.200" == $_SERVER['SERVER_NAME']){
 }else if("192.168.0.114" == $_SERVER['SERVER_NAME']){
 	$config['base_url'] = 'http://192.168.0.114/seguridad/';
 }else{
-	$config['base_url'] = 'http://localhost/seguridad/';
+	$config['base_url'] = 'http://192.168.0.16/seguridad/';
 }
 
 /*
